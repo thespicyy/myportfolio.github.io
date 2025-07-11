@@ -3862,25 +3862,18 @@ input, select, textarea {
 				width: 50%;
 			}
 
-			#main > .posts > article {
-				border-color: #eeeeee;
-				border-left-width: 2px;
-				border-style: solid;
-				border-top-width: 2px;
-				text-align: center;
-			}
+                       #main > .posts > article {
+                               background: #ffffff;
+                               margin: 1rem;
+                               border-radius: 0.5rem;
+                               box-shadow: 0 0 10px rgba(0,0,0,0.15);
+                               text-align: center;
+                       }
 
 				#main > .posts > article > :last-child {
 					margin-bottom: 0;
 				}
 
-				#main > .posts > article:nth-child(2n - 1) {
-					border-left-width: 0;
-				}
-
-				#main > .posts > article:nth-child(-n + 2) {
-					border-top-width: 0;
-				}
 
 			@media screen and (max-width: 980px) {
 
@@ -3906,21 +3899,6 @@ input, select, textarea {
 					width: 100%;
 				}
 
-				#main > .posts > article:nth-child(2n - 1) {
-					border-left-width: 2px;
-				}
-
-				#main > .posts > article:nth-child(-n + 2) {
-					border-top-width: 2px;
-				}
-
-				#main > .posts > article:nth-child(n) {
-					border-left-width: 0;
-				}
-
-				#main > .posts > article:nth-child(-n + 1) {
-					border-top-width: 0;
-				}
 
 				#main > .posts > article .image {
 					max-width: 25rem;
