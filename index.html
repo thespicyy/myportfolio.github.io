@@ -1,170 +1,1053 @@
-<!DOCTYPE HTML>
-<!--
-	Massively by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>My Portfolio</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rémy Grabet — Data & Software</title>
+<meta name="description" content="Rémy Grabet — data-focused developer &amp; builder. Data dashboards, analysis &amp; visualization, trading systems, automation bots and cloud deployment in Python."/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><circle cx='50' cy='50' r='38' stroke='%23a78bfa' stroke-width='4'/><circle cx='50' cy='50' r='13' fill='%238b5cf6'/><circle cx='69' cy='17.09' r='9' fill='%23f3f1fa'/></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07071a;
+  --bg-2:#0b0b24;
+  --surface:rgba(255,255,255,0.04);
+  --surface-2:rgba(255,255,255,0.06);
+  --border:rgba(255,255,255,0.09);
+  --border-strong:rgba(255,255,255,0.16);
+  --text:#ffffff;
+  --text-2:rgba(255,255,255,0.72);
+  --text-3:rgba(255,255,255,0.45);
+  --text-4:rgba(255,255,255,0.26);
+  --violet:#8b5cf6;
+  --violet-2:#a78bfa;
+  --violet-3:#c4b5fd;
+  --violet-deep:#7c3aed;
+  --cyan:#06b6d4;
+  --green:#10b981;
+  --red:#ef4444;
+  --amber:#f59e0b;
+  --grad:linear-gradient(120deg,#ffffff,#a78bfa);
+  --grad-violet:linear-gradient(120deg,#a78bfa,#7c3aed);
+  --shadow:0 24px 60px rgba(0,0,0,0.45);
+  --radius:18px;
+  --maxw:1160px;
+}
+[data-theme="light"]{
+  --bg:#f4f3ff;
+  --bg-2:#ecebff;
+  --surface:rgba(255,255,255,0.75);
+  --surface-2:rgba(255,255,255,0.95);
+  --border:rgba(24,10,60,0.10);
+  --border-strong:rgba(124,58,237,0.28);
+  --text:#140a34;
+  --text-2:rgba(20,10,52,0.74);
+  --text-3:rgba(20,10,52,0.52);
+  --text-4:rgba(20,10,52,0.34);
+  --grad:linear-gradient(120deg,#1e1060,#7c3aed);
+  --grad-violet:linear-gradient(120deg,#7c3aed,#4c1d95);
+  --shadow:0 24px 50px rgba(80,50,160,0.14);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',system-ui,sans-serif;
+  font-variant-numeric:tabular-nums;
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  transition:background .5s ease,color .5s ease;
+}
+a{color:inherit;text-decoration:none;}
+::selection{background:rgba(139,92,246,0.35);color:#fff;}
+img{max-width:100%;display:block;}
 
-		<!-- Wrapper -->
-			<div id="wrapper" class="fade-in">
+/* ── Background decor ── */
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(60px);transform:translateZ(0);transition:opacity .5s;}
+.orb-1{width:900px;height:900px;top:-380px;right:-260px;background:radial-gradient(circle,rgba(255,255,255,0.10) 0%,rgba(200,180,255,0.06) 28%,rgba(120,80,255,0.05) 50%,transparent 68%);}
+.orb-2{width:720px;height:620px;bottom:-260px;left:-220px;background:radial-gradient(ellipse,rgba(109,40,217,0.20) 0%,rgba(80,30,180,0.07) 50%,transparent 72%);filter:blur(80px);}
+.orb-3{width:520px;height:440px;top:44%;right:-8%;background:radial-gradient(ellipse,rgba(6,182,212,0.13) 0%,transparent 68%);filter:blur(70px);}
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.9;background-image:radial-gradient(1px 1px at 7% 11%,rgba(255,255,255,0.5),transparent),radial-gradient(1.5px 1.5px at 18% 68%,rgba(255,255,255,0.3),transparent),radial-gradient(1px 1px at 28% 6%,rgba(255,255,255,0.4),transparent),radial-gradient(1px 1px at 39% 53%,rgba(255,255,255,0.25),transparent),radial-gradient(1.5px 1.5px at 51% 28%,rgba(255,255,255,0.35),transparent),radial-gradient(1px 1px at 61% 84%,rgba(255,255,255,0.3),transparent),radial-gradient(1px 1px at 67% 17%,rgba(255,255,255,0.4),transparent),radial-gradient(1.5px 1.5px at 75% 62%,rgba(255,255,255,0.25),transparent),radial-gradient(1px 1px at 84% 4%,rgba(255,255,255,0.45),transparent),radial-gradient(1px 1px at 91% 47%,rgba(255,255,255,0.3),transparent),radial-gradient(1.5px 1.5px at 95% 85%,rgba(255,255,255,0.35),transparent),radial-gradient(1px 1px at 13% 38%,rgba(255,255,255,0.2),transparent),radial-gradient(1px 1px at 44% 91%,rgba(255,255,255,0.28),transparent),radial-gradient(1px 1px at 56% 9%,rgba(255,255,255,0.38),transparent);}
+[data-theme="light"] .stars{opacity:.12;}
+[data-theme="light"] #bg-canvas{opacity:.35;}
+[data-theme="light"] .orb{opacity:.5;}
 
-				<!-- Intro -->
-					<div id="intro">
-						<h1>My Portfolio</h1>
-						<p>A showcase of my projects and abilities</p>
-						<ul class="actions">
-							<li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Continue</a></li>
-						</ul>
-					</div>
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px;position:relative;z-index:2;}
 
-				<!-- Header -->
-                                        <header id="header">
-                                                <a href="index.html" class="logo">Rémy Grabet</a>
-                                        </header>
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:40;
+  display:flex;align-items:center;gap:14px;
+  padding:14px 26px;
+  background:rgba(7,7,26,0.55);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  transition:background .4s,border-color .4s,padding .3s;
+}
+[data-theme="light"] nav{background:rgba(248,246,255,0.72);}
+nav.scrolled{padding:10px 26px;background:rgba(7,7,26,0.82);}
+[data-theme="light"] nav.scrolled{background:rgba(248,246,255,0.9);}
+.brand{display:inline-flex;align-items:center;gap:11px;cursor:pointer;}
+.mark{filter:drop-shadow(0 0 12px rgba(139,92,246,0.55));flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.mark .dot{transform-box:view-box;transform-origin:50% 50%;animation:spin 7s linear infinite;}
+@media(prefers-reduced-motion:reduce){.mark .dot{animation:none;}}
+.wordmark{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;letter-spacing:-0.02em;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 16px rgba(139,92,246,0.35));}
+.nav-spacer{flex:1;}
+.nav-links{display:flex;gap:4px;}
+.nav-links a{
+  padding:7px 15px;border-radius:9px;font-size:13.5px;font-weight:500;color:var(--text-3);
+  transition:background .16s,color .16s;
+}
+.nav-links a:hover{background:var(--surface-2);color:var(--text);}
+.nav-ico{
+  display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;
+  border:1px solid var(--border);background:var(--surface);color:var(--text-3);cursor:pointer;
+  transition:all .16s;
+}
+.nav-ico:hover{color:var(--text);border-color:var(--border-strong);background:var(--surface-2);transform:translateY(-1px);}
+.nav-ico svg{width:17px;height:17px;}
+.menu-btn{display:none;}
 
-				<!-- Nav -->
-					<nav id="nav">
-                                                <ul class="links">
-                                                        <li class="active"><a>Projects</a></li>
-                                                        <li><a href="about.html">About</a></li>
-                                                </ul>
-						<ul class="icons">
-							<li><a href="mailto:remy.grabet@polytechnique.edu" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-							<li><a href="https://www.linkedin.com/in/remy-grabet-832375289/" class="icon brands fa-linkedin" target="_blank"><span class="label">Linkedin</span></a></li>
-							<li><a href="https://github.com/thespicyy" class="icon brands fa-github" target="_blank"><span class="label">GitHub</span></a></li>
-						</ul>						
-					</nav>
+/* ── HERO ── */
+.hero{position:relative;padding:172px 0 90px;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:100px;
+  background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:500;color:var(--text-2);
+  margin-bottom:26px;
+}
+.hero-badge .pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);
+  animation:blip 2s ease-in-out infinite;}
+@keyframes blip{0%,100%{opacity:1;}50%{opacity:.35;}}
+.hero h1{
+  font-family:'Syne',sans-serif;font-weight:800;letter-spacing:-0.02em;line-height:1.02;
+  font-size:clamp(42px,7.2vw,86px);margin-bottom:18px;
+}
+.hero h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 30px rgba(139,92,246,0.28));}
+.hero .lede{font-size:clamp(16px,2.1vw,20px);color:var(--text-2);max-width:640px;margin-bottom:16px;}
+.hero .sub{font-size:15px;color:var(--text-3);max-width:600px;margin-bottom:34px;}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:52px;}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;padding:12px 22px;border-radius:12px;
+  font-size:14.5px;font-weight:600;cursor:pointer;transition:all .18s;border:1px solid transparent;
+}
+.btn svg{width:16px;height:16px;}
+.btn-primary{background:var(--grad-violet);color:#fff;box-shadow:0 10px 30px rgba(124,58,237,0.35);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(124,58,237,0.5);}
+.btn-ghost{background:var(--surface);border-color:var(--border);color:var(--text);}
+.btn-ghost:hover{background:var(--surface-2);border-color:var(--border-strong);transform:translateY(-2px);}
+.hero-stats{display:flex;flex-wrap:wrap;gap:14px 40px;}
+.hstat .n{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,34px);
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;}
+.hstat .l{font-size:12.5px;color:var(--text-3);margin-top:5px;letter-spacing:.02em;}
 
-				<!-- Main -->
-					<div id="main">
+/* ── Section base ── */
+section{position:relative;padding:64px 0;}
+.sec-head{margin-bottom:40px;}
+.sec-kicker{font-family:'Syne',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--violet-2);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.sec-kicker::before{content:'';width:26px;height:2px;border-radius:2px;background:var(--violet);}
+.sec-title{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:-0.02em;
+  font-size:clamp(28px,4.4vw,42px);line-height:1.08;}
+.sec-desc{color:var(--text-3);max-width:600px;margin-top:14px;font-size:15.5px;}
 
-						<!-- Featured Post -->
-							<article class="post featured">
-								<header class="major">
-									<h2>My professional and personnal projects</h2>
-								</header>
-							</article>
+/* ── Featured project cards ── */
+.projects{display:flex;flex-direction:column;gap:28px;}
+.pcard{
+  position:relative;border-radius:var(--radius);overflow:hidden;
+  background:var(--surface);border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  display:grid;grid-template-columns:1.05fr 1fr;gap:0;
+  transition:border-color .3s,transform .3s;
+}
+.pcard:hover{border-color:var(--border-strong);}
+.pcard::before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.22) 50%,transparent);pointer-events:none;}
+.pcard.rev{grid-template-columns:1fr 1.05fr;}
+.pcard.rev .pbody{order:2;}
+.pcard.rev .pvisual{order:1;}
+.pbody{padding:38px 38px 34px;display:flex;flex-direction:column;}
+.ptag{display:inline-flex;align-items:center;gap:7px;align-self:flex-start;
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--violet-2);padding:5px 11px;border-radius:8px;background:rgba(139,92,246,0.10);
+  border:1px solid rgba(139,92,246,0.22);margin-bottom:18px;}
+.pcard h3{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;letter-spacing:-0.01em;margin-bottom:6px;}
+.psub{color:var(--violet-3);font-size:13.5px;font-weight:600;margin-bottom:16px;}
+[data-theme="light"] .psub{color:var(--violet-deep);}
+.pcard p{color:var(--text-2);font-size:14.5px;margin-bottom:18px;}
+.pfeat{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:22px;}
+.pfeat li{position:relative;padding-left:24px;color:var(--text-2);font-size:13.8px;}
+.pfeat li::before{content:'';position:absolute;left:4px;top:8px;width:7px;height:7px;border-radius:2px;
+  background:var(--grad-violet);box-shadow:0 0 8px rgba(139,92,246,0.6);}
+.pmetrics{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px;}
+.pmetric{background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:9px 14px;min-width:96px;}
+.pmetric .mv{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:var(--cyan);line-height:1;}
+.pmetric .ml{font-size:11px;color:var(--text-3);margin-top:4px;text-transform:uppercase;letter-spacing:.03em;}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto;}
+.chip{font-size:11.5px;font-weight:500;color:var(--text-2);padding:5px 11px;border-radius:100px;
+  background:var(--surface-2);border:1px solid var(--border);}
+.plinks{display:flex;gap:14px;margin-top:20px;flex-wrap:wrap;}
+.plink{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--violet-2);}
+.plink svg{width:15px;height:15px;}
+.plink:hover{color:var(--text);}
+.plink.muted{color:var(--text-3);cursor:default;}
+.plink.muted:hover{color:var(--text-3);}
 
-						<!-- Posts -->
-							<section class="posts">
-								<article>
-									<header>
-										<h2><a href="iot_project.html">IOT<br>Project</a></h2> <!-- Lier ça aux images de Power Bi que j'affiche sur une autre page -->
-									</header>									
-									<img src="images/iot_project.jpg" alt="" class="image fit" /> <!-- base image size 992-661 -->
-									<p>Data visualization from multiple sensors implanted in rice fields in Kumamoto, Japan, using Power BI and Python, with server communication management.</p>
-									<ul class="actions special">
-										<li><a href="https://github.com/thespicyy/IOT-Project" class="button" target="_blank">Github files</a></li>
-										<li><a href="iot_project.html" class="button">Learn More</a></li>
-									</ul>									
-								</article>
-								<article>
-									<header>
-										<h2><a href="pbi_dashboard.html">Power Bi Investment Dashboard</a></h2> <!-- Lier ça aux images de Power Bi que j'affiche sur une autre page -->
-									</header>
-									<img src="images/invest_pbi.jpeg" alt="" class="image fit" />
-									<p>A personal project developed to monitor and analyze my investments in both the stock market and cryptocurrencies, tracking performance over time.</p>
-									<ul class="actions special">
-										<li><a href="https://github.com/thespicyy/Investment-dashboard" class="button" target="_blank">Github files</a></li>
-										<li><a href="pbi_dashboard.html" class="button">Learn More</a></li>
-									</ul>
-								</article>
-								<article>
-									<header>
-										<h2><a href="excel_dashboard.html">Excel Investment Dashboard</a></h2> <!-- Lier ça aux images de Power Bi que j'affiche sur une autre page -->
-									</header>
-									<img src="images/invest_excel.jpeg" alt="" class="image fit" />
-									<p>The objective is similar to my Power BI project, but with the added benefit of Excel's greater flexibility and ease of daily use.</p>
-									<ul class="actions special">
-										<li><a href="https://github.com/thespicyy/Excel-Investment-Dashboard" class="button" target="_blank">Github files</a></li>
-										<li><a href="excel_dashboard.html" class="button">Learn More</a></li>
-									</ul>
-								</article>
-								<article>
-									<header>
-										<h2><a href="bombparty.html">Bombparty<br>algorithm</a></h2> <!-- Lier ça aux images de Power Bi que j'affiche sur une autre page -->
-									</header>
-									<img src="images/bombparty.png" alt="" class="image fit" />
-									<p>An algorithm designed to identify the correct word based on a given syllable, following a set of simple linguistic rules to ensure accuracy and coherence in the results.</p>
-									<ul class="actions special">
-										<li><a href="https://github.com/thespicyy/Bombparty" class="button" target="_blank">Github files</a></li>
-										<li><a href="bombparty.html" class="button">Learn More</a></li>
-									</ul>
-								</article>
-								<article>
-									<header>
-										<h2><a href="elk.html">Global Product<br>Trends Dashboard</a></h2> <!-- Lier ça aux images de Power Bi que j'affiche sur une autre page -->
-									</header>
-									<img src="images/elastic_search.png" alt="" class="image fit" />
-									<p>This dashboard, built on the ELK Stack, displays objectives, data distribution by country, and other various key sales indicators.</p>
-									<ul class="actions special">
-										<li><a href="https://github.com/thespicyy/elk_dashboard" class="button" target="_blank">Github files</a></li>
-										<li><a href="elk.html" class="button">Learn More</a></li>
-									</ul>
-								</article>
-							</section>
+/* ── Visual panel ── */
+.pvisual{position:relative;padding:34px;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(120% 120% at 80% 0%,rgba(124,58,237,0.14),transparent 60%),linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.14));
+  border-left:1px solid var(--border);overflow:hidden;}
+.pcard.rev .pvisual{border-left:none;border-right:1px solid var(--border);}
+.pvisual .glow{position:absolute;width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle,rgba(139,92,246,0.22),transparent 65%);filter:blur(30px);top:-60px;right:-60px;pointer-events:none;}
 
-						<!-- Footer -->
-							<footer>
-								<div class="pagination">
-									<!--<a href="#" class="previous">Prev</a>-->
-									<a class="page active">1</a>
-								</div>
-							</footer>
+/* mini dashboard mock */
+.mock{width:100%;max-width:440px;border-radius:14px;background:rgba(6,6,20,0.72);
+  border:1px solid var(--border-strong);box-shadow:0 20px 44px rgba(0,0,0,0.5);overflow:hidden;
+  backdrop-filter:blur(4px);}
+[data-theme="light"] .mock{background:rgba(15,12,40,0.9);}
+.mock-bar{display:flex;align-items:center;gap:7px;padding:10px 13px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.mock-bar .d{width:9px;height:9px;border-radius:50%;}
+.mock-bar .d1{background:#ef4444;}.mock-bar .d2{background:#f59e0b;}.mock-bar .d3{background:#10b981;}
+.mock-bar .t{margin-left:8px;font-size:11px;color:rgba(255,255,255,0.4);font-family:'Space Grotesk',sans-serif;}
+.mock-body{padding:14px;}
+.mock-pills{display:flex;gap:7px;margin-bottom:13px;}
+.mpill{flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:9px;padding:8px 6px;text-align:center;}
+.mpill .l{font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,0.4);}
+.mpill .v{font-size:14px;font-weight:700;font-family:'Space Grotesk',sans-serif;margin-top:3px;color:#fff;}
+.mpill .v.pos{color:#10b981;}.mpill .v.cy{color:#06b6d4;}
+.mock-chart{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:11px;padding:11px 12px 6px;}
+.mock-chart .ct{font-size:9.5px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.mock-kpis{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:11px;}
+.mkpi{border-radius:9px;padding:9px 10px;border:1px solid rgba(255,255,255,0.08);position:relative;overflow:hidden;}
+.mkpi.v1{background:rgba(139,92,246,0.10);}
+.mkpi.v2{background:rgba(6,182,212,0.10);}
+.mkpi.v3{background:rgba(16,185,129,0.10);}
+.mkpi.v4{background:rgba(245,158,11,0.10);}
+.mkpi .kl{font-size:8.5px;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,0.45);}
+.mkpi .kv{font-size:15px;font-weight:700;font-family:'Space Grotesk',sans-serif;margin-top:2px;color:#fff;}
 
-					</div>
+/* real-image visual */
+.shot{width:100%;max-width:470px;border-radius:13px;overflow:hidden;border:1px solid var(--border-strong);
+  box-shadow:0 20px 44px rgba(0,0,0,0.5);background:#fff;}
+.shot img{width:100%;}
+.shot-cap{font-size:11px;color:var(--text-3);text-align:center;margin-top:10px;font-style:italic;}
 
-				<!-- Footer -->
-					<footer id="footer">
-						<section class="split contact">
-							<section class="alt">
-								<h3>Address</h3>
-								<p>91400 Orsay, France</p>
-							</section>
-							<section>
-								<h3>Phone</h3>
-								<p>(+33) 6 52 64 92 55</p>
-							</section>
-							<section>
-								<h3>Email</h3>
-								<p><a href="mailto:remy.grabet@polytechnique.edu">remy.grabet@polytechnique.edu</a></p>
-							</section>
-							<section>
-								<h3>Contact me</h3>
-								<ul class="icons alt">
-									<li><a href="mailto:remy.grabet@polytechnique.edu" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-									<li><a href="https://www.linkedin.com/in/remy-grabet-832375289/" class="icon brands fa-linkedin" target="_blank"><span class="label">Linkedin</span></a></li>
-									<li><a href="https://github.com/thespicyy" class="icon brands fa-github" target="_blank"><span class="label">GitHub</span></a></li>
-								</ul>
-							</section>
-						</section>
-					</footer>
+/* ── Hero note ── */
+.hero-note{margin-top:20px;font-size:13px;color:var(--text-3);}
+.hero-note b{color:var(--violet-2);font-weight:600;}
+[data-theme="light"] .hero-note b{color:var(--violet-deep);}
+.about-edu{display:inline-block;font-size:14px;color:var(--text-2);background:var(--surface);
+  border:1px solid var(--border);padding:11px 16px;border-radius:12px;margin-bottom:20px;line-height:1.5;}
+.about-edu b{color:var(--violet-2);font-weight:600;}
+[data-theme="light"] .about-edu b{color:var(--violet-deep);}
 
-					<!-- Copyright -->
-					<div id="copyright">
-						<ul><li>&copy; Rémy Grabet</li></ul>
-					</div>
+/* ── Orbit hub + gallery ── */
+.pcard--hub{display:block;padding:0;}
+.hub-head{padding:38px 38px 24px;}
+.hub-apps{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 20px;}
+.hub-app{font-size:12.5px;font-weight:500;color:var(--text-2);padding:7px 13px;border-radius:10px;
+  background:var(--surface-2);border:1px solid var(--border);}
+.hub-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;padding:0 38px;}
+.shot-thumb{margin:0;position:relative;border-radius:13px;overflow:hidden;border:1px solid var(--border);
+  cursor:zoom-in;background:#06061a;transition:border-color .25s,transform .25s,box-shadow .25s;}
+.shot-thumb:hover{border-color:var(--violet);transform:translateY(-3px);box-shadow:0 16px 34px rgba(0,0,0,0.4);}
+.shot-thumb img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top center;display:block;}
+.shot-thumb figcaption{position:absolute;left:0;right:0;bottom:0;padding:24px 13px 10px;font-size:12px;font-weight:600;
+  color:#fff;background:linear-gradient(180deg,transparent,rgba(4,4,14,0.85));letter-spacing:.01em;pointer-events:none;}
+.shot-thumb::after{content:'⤢';position:absolute;top:9px;right:9px;width:26px;height:26px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;background:rgba(10,10,28,0.72);
+  border:1px solid var(--border-strong);color:#fff;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;}
+.shot-thumb:hover::after{opacity:1;}
+.gallery-hint{padding:15px 38px 34px;font-size:12.5px;color:var(--text-3);font-style:italic;}
+img.zoomable{cursor:zoom-in;}
 
+/* ── Lightbox ── */
+.lb{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:28px;
+  background:rgba(4,4,14,0.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+.lb.open{display:flex;}
+.lb-stage{position:relative;max-width:96vw;max-height:92vh;display:flex;flex-direction:column;align-items:center;gap:12px;}
+.lb-stage img{max-width:96vw;max-height:84vh;border-radius:12px;border:1px solid var(--border-strong);
+  box-shadow:0 30px 80px rgba(0,0,0,0.6);}
+.lb-cap{font-size:13.5px;color:var(--text-2);font-weight:500;text-align:center;}
+.lb-close{position:fixed;top:18px;right:20px;width:44px;height:44px;border-radius:12px;border:1px solid var(--border-strong);
+  background:rgba(12,12,30,0.85);color:#fff;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:background .16s;}
+.lb-close:hover{background:rgba(139,92,246,0.35);}
+.lb-nav{position:fixed;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;
+  border:1px solid var(--border-strong);background:rgba(12,12,30,0.75);color:#fff;cursor:pointer;font-size:24px;
+  display:flex;align-items:center;justify-content:center;transition:background .16s;}
+.lb-nav:hover{background:rgba(139,92,246,0.35);}
+.lb-prev{left:20px;}.lb-next{right:20px;}
 
-			</div>
+/* generic mock for research/onchain/desktop */
+.viz-grid{width:100%;max-width:430px;display:flex;flex-direction:column;gap:11px;}
+.viz-row{display:flex;gap:11px;}
+.viz-box{flex:1;background:rgba(6,6,20,0.6);border:1px solid var(--border-strong);border-radius:12px;padding:14px;
+  position:relative;overflow:hidden;}
+[data-theme="light"] .viz-box{background:rgba(15,12,40,0.86);}
+.viz-box .big{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;line-height:1;
+  background:var(--grad-violet);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.viz-box .big.cy{background:linear-gradient(120deg,#22d3ee,#06b6d4);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.viz-box .cap{font-size:10.5px;color:rgba(255,255,255,0.5);margin-top:6px;letter-spacing:.02em;}
+[data-theme="light"] .viz-box .cap{color:rgba(255,255,255,0.7);}
+.viz-mono{font-family:'Space Grotesk',monospace;font-size:10.5px;line-height:1.7;color:rgba(255,255,255,0.6);}
+.viz-mono .k{color:#22d3ee;}.viz-mono .g{color:#34d399;}.viz-mono .a{color:#fbbf24;}.viz-mono .m{color:#c4b5fd;}
+.bars{display:flex;align-items:flex-end;gap:5px;height:60px;margin-top:8px;}
+.bars span{flex:1;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--violet-2),var(--violet-deep));opacity:.85;}
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+/* ── Skills ── */
+.skill-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;}
+.skill-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px 24px;
+  transition:border-color .3s,transform .3s;}
+.skill-card:hover{border-color:var(--border-strong);transform:translateY(-3px);}
+.skill-card .ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.24);color:var(--violet-2);margin-bottom:16px;}
+.skill-card .ico svg{width:22px;height:22px;}
+.skill-card h4{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin-bottom:14px;}
+.skill-card .tags{display:flex;flex-wrap:wrap;gap:7px;}
 
-	</body>
+/* ── Other projects ── */
+.grid-mini{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:18px;}
+.mini{background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:22px;
+  transition:border-color .3s,transform .3s;display:flex;flex-direction:column;}
+.mini:hover{border-color:var(--border-strong);transform:translateY(-3px);}
+.mini .emoji{font-size:24px;margin-bottom:12px;}
+.mini h4{font-family:'Syne',sans-serif;font-weight:700;font-size:16.5px;margin-bottom:7px;}
+.mini p{font-size:13px;color:var(--text-3);margin-bottom:14px;flex:1;}
+.mini .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.mini .tags .chip{font-size:10.5px;padding:4px 9px;}
+.mini a.repo{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--violet-2);}
+.mini a.repo:hover{color:var(--text);}
+.mini a.repo svg{width:14px;height:14px;}
+
+/* ── About ── */
+.about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:36px;align-items:start;}
+.about-lead{font-size:17px;color:var(--text-2);margin-bottom:18px;}
+.about-lead b{color:var(--text);font-weight:600;}
+.about p{color:var(--text-3);font-size:14.5px;margin-bottom:14px;}
+.method{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px;}
+.method h4{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:16px;color:var(--violet-2);}
+.method ul{list-style:none;display:flex;flex-direction:column;gap:13px;}
+.method li{display:flex;gap:11px;font-size:13.8px;color:var(--text-2);}
+.method li svg{width:18px;height:18px;color:var(--green);flex-shrink:0;margin-top:2px;}
+
+/* ── Contact ── */
+.contact{text-align:center;padding:80px 0 40px;}
+.contact h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(30px,5vw,52px);letter-spacing:-0.02em;margin-bottom:16px;}
+.contact h2 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.contact p{color:var(--text-3);max-width:480px;margin:0 auto 32px;font-size:16px;}
+.contact-btns{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;}
+
+footer{border-top:1px solid var(--border);margin-top:60px;padding:30px 0;}
+.foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;}
+.foot .cr{font-size:13px;color:var(--text-3);}
+.foot .loc{font-size:13px;color:var(--text-4);}
+.foot-links{display:flex;gap:8px;}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);}
+.reveal.in{opacity:1;transform:none;}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
+
+/* responsive */
+@media(max-width:900px){
+  .pcard,.pcard.rev{grid-template-columns:1fr;}
+  .pcard .pvisual,.pcard.rev .pvisual{border-left:none;border-right:none;border-top:1px solid var(--border);order:2;}
+  .pcard .pbody,.pcard.rev .pbody{order:1;}
+  .about-grid{grid-template-columns:1fr;}
+}
+@media(max-width:680px){
+  .nav-links{display:none;}
+  .menu-btn{display:inline-flex;}
+  .nav-links.open{display:flex;position:absolute;top:100%;right:14px;left:14px;flex-direction:column;
+    background:rgba(10,10,30,0.97);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:14px;padding:8px;gap:2px;margin-top:8px;}
+  [data-theme="light"] .nav-links.open{background:rgba(248,246,255,0.98);}
+  .nav-links.open a{padding:11px 14px;}
+  .hero{padding:140px 0 60px;}
+  .pbody{padding:28px 24px;}
+  .pvisual{padding:26px 20px;}
+  section{padding:48px 0;}
+  .hub-head{padding:28px 22px 20px;}
+  .hub-gallery{padding:0 22px;grid-template-columns:1fr;}
+  .gallery-hint{padding:14px 22px 26px;}
+  .lb-nav{display:none;}
+  .lb{padding:14px;}
+}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="stars" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="brand" href="#top" aria-label="Rémy Grabet — home">
+    <svg class="mark" viewBox="0 0 100 100" width="30" height="30" fill="none" aria-hidden="true">
+      <circle cx="50" cy="50" r="38" stroke="#a78bfa" stroke-width="3.5"/>
+      <circle cx="50" cy="50" r="12" fill="#8b5cf6"/>
+      <g class="dot"><circle cx="50" cy="12" r="8" fill="#f3f1fa"/></g>
+    </svg>
+    <span class="wordmark">Rémy Grabet</span>
+  </a>
+  <div class="nav-spacer"></div>
+  <div class="nav-links" id="navlinks">
+    <a href="#work" onclick="closeMenu()">Work</a>
+    <a href="#skills" onclick="closeMenu()">Skills</a>
+    <a href="#other" onclick="closeMenu()">More</a>
+    <a href="#about" onclick="closeMenu()">About</a>
+    <a href="#contact" onclick="closeMenu()">Contact</a>
+  </div>
+  <a class="nav-ico" href="https://github.com/thespicyy" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+  </a>
+  <a class="nav-ico" href="https://www.linkedin.com/in/remy-grabet-832375289/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 20.4h-3.5v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9v5.7H9.4V9h3.3v1.6h.1c.5-.9 1.6-1.9 3.3-1.9 3.5 0 4.2 2.3 4.2 5.3v6.4zM5.3 7.4a2 2 0 1 1 0-4.1 2 2 0 0 1 0 4.1zM7.1 20.4H3.6V9h3.5v11.4zM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0z"/></svg>
+  </a>
+  <button class="nav-ico" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle light / dark">
+    <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  </button>
+  <button class="nav-ico menu-btn" onclick="toggleMenu()" aria-label="Menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+</nav>
+
+<span id="top"></span>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-badge reveal"><span class="pulse"></span>Open to new opportunities</div>
+    <h1 class="reveal">Turning <span class="g">data</span><br/>into dashboards,<br/>tools &amp; decisions.</h1>
+    <p class="lede reveal">I'm <b>Rémy Grabet</b> — a data-focused developer. I collect, analyse and visualise data, then build the full tools around it: interactive dashboards, market-analysis pipelines, automation bots and cloud-deployed services in Python.</p>
+    <p class="sub reveal">Data analysis · dashboards &amp; data viz · full-stack engineering · automation &amp; DevOps — end to end.</p>
+    <div class="cta-row reveal">
+      <a class="btn btn-primary" href="#work"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>View my work</a>
+      <a class="btn btn-ghost" href="#contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 6l8 6 8-6"/></svg>Get in touch</a>
+    </div>
+    <div class="hero-stats reveal">
+      <div class="hstat"><div class="n">5.5M+</div><div class="l">Data points analysed</div></div>
+      <div class="hstat"><div class="n">6</div><div class="l">Full systems shipped</div></div>
+      <div class="hstat"><div class="n">24/7</div><div class="l">Cloud service in production</div></div>
+      <div class="hstat"><div class="n">100%</div><div class="l">Owned end-to-end</div></div>
+    </div>
+    <p class="hero-note reveal">Built on my own — with <b>Claude Code</b> as an AI pair-programmer. 🤖</p>
+  </div>
+</header>
+
+<!-- FEATURED WORK -->
+<section id="work">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">Featured work</div>
+      <h2 class="sec-title">Systems I designed &amp; built</h2>
+      <p class="sec-desc">Personal data, analytics &amp; engineering projects — each one taken from first idea to a working, tested, deployed system.</p>
+    </div>
+
+    <div class="projects">
+
+      <!-- ORBIT -->
+      <article class="pcard pcard--hub reveal">
+        <div class="hub-head">
+          <span class="ptag">🛰️ Flagship — a hub of data apps</span>
+          <h3>Orbit</h3>
+          <div class="psub">A personal data hub: trading, budget, planning, market news &amp; a live bot</div>
+          <p>A full local command-center built from scratch: a <b>FastAPI</b> launcher serving several HTML/CSS/JS dashboards inside one hub. Each app turns raw data into something readable — trades, money, tasks, markets — with charts, KPIs and projections everywhere. A Python bot wired to the Hyperliquid exchange places real orders (entry, stop-loss, take-profit), piloted from Telegram.</p>
+          <div class="hub-apps">
+            <span class="hub-app">📈 Trading journal &amp; analytics</span>
+            <span class="hub-app">💰 Budget, assets &amp; wealth projection</span>
+            <span class="hub-app">✅ To-do &amp; daily planning</span>
+            <span class="hub-app">🎯 Polymarket capital tracker</span>
+            <span class="hub-app">📰 Crypto-news watch</span>
+            <span class="hub-app">🤖 Hyperliquid bot (Telegram)</span>
+          </div>
+          <ul class="pfeat">
+            <li><b>Crypto-news watch with a local LLM:</b> aggregates RSS from CoinDesk, Cointelegraph, The Block &amp; Decrypt, then summarises any article in French with a model running <b>on my own GPU</b> (Ollama · qwen2.5) — main-text extraction with <code>trafilatura</code>, per-article cache, anti-SSRF checks, 100% on-device (no data leaves the machine).</li>
+            <li>Data everywhere: equity curves, P&amp;L distributions, wealth projection to retirement, financial-health scoring — all computed live from stored data.</li>
+            <li>Security: token-based API auth, HTTP headers (CSP, X-Frame-Options), secrets kept out of Git.</li>
+            <li>Refactored a 9,000-line monolith into clean HTML/CSS/JS — down to ~1,750 lines, zero regressions; fixed a periodic canvas-animation freeze.</li>
+          </ul>
+          <div class="pmetrics">
+            <div class="pmetric"><div class="mv">6 apps</div><div class="ml">In one hub</div></div>
+            <div class="pmetric"><div class="mv">Local LLM</div><div class="ml">On-device AI</div></div>
+            <div class="pmetric"><div class="mv">9k→1.75k</div><div class="ml">Lines refactored</div></div>
+            <div class="pmetric"><div class="mv">Real</div><div class="ml">Orders placed</div></div>
+          </div>
+          <div class="chips">
+            <span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">JavaScript</span>
+            <span class="chip">Data viz</span><span class="chip">WebSocket</span><span class="chip">SQLite</span>
+            <span class="chip">Ollama · local LLM</span><span class="chip">RSS / XML</span>
+            <span class="chip">Hyperliquid API</span><span class="chip">Telegram Bot</span><span class="chip">Security</span>
+          </div>
+          <div class="plinks"><span class="plink muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Private repository</span></div>
+        </div>
+        <div class="hub-gallery">
+          <figure class="shot-thumb"><img class="zoomable" loading="lazy" src="assets/shots/orbit_trading_dashboard.webp" alt="Orbit — trading dashboard: KPIs, portfolio &amp; equity curve"/><figcaption>Trading · Dashboard</figcaption></figure>
+          <figure class="shot-thumb"><img class="zoomable" loading="lazy" src="assets/shots/orbit_trading_analytics.webp" alt="Orbit — trading analytics: equity curve, distributions, long vs short"/><figcaption>Trading · Analytics</figcaption></figure>
+          <figure class="shot-thumb"><img class="zoomable" loading="lazy" src="assets/shots/orbit_budget_projection.webp" alt="Orbit — budget: wealth projection to retirement"/><figcaption>Budget · Wealth projection</figcaption></figure>
+          <figure class="shot-thumb"><img class="zoomable" loading="lazy" src="assets/shots/orbit_budget_dashboard.webp" alt="Orbit — budget overview: expense breakdown &amp; health score"/><figcaption>Budget · Overview</figcaption></figure>
+          <figure class="shot-thumb"><img class="zoomable" loading="lazy" src="assets/shots/orbit_budget_actifs.webp" alt="Orbit — budget: assets &amp; positions"/><figcaption>Budget · Assets</figcaption></figure>
+          <figure class="shot-thumb"><img class="zoomable" loading="lazy" src="assets/shots/orbit_polymarket.webp" alt="Orbit — Polymarket capital tracker"/><figcaption>Polymarket · Capital tracker</figcaption></figure>
+          <figure class="shot-thumb"><img class="zoomable" loading="lazy" src="assets/shots/orbit_tdl_tasks.webp" alt="Orbit — to-do list &amp; tasks"/><figcaption>Planner · Tasks</figcaption></figure>
+          <figure class="shot-thumb"><img class="zoomable" loading="lazy" src="assets/shots/orbit_tdl_schedule.webp" alt="Orbit — daily schedule / planning"/><figcaption>Planner · Schedule</figcaption></figure>
+        </div>
+        <p class="gallery-hint">Real screenshots of Orbit — click any to enlarge.</p>
+      </article>
+
+      <!-- POLYBOT-TRACKER -->
+      <article class="pcard rev reveal">
+        <div class="pbody">
+          <span class="ptag">📊 Quantitative research</span>
+          <h3>Polybot-Tracker</h3>
+          <div class="psub">End-to-end research on prediction-market strategies</div>
+          <p>A full data pipeline and backtesting suite to study strategy profitability on Polymarket. I reverse-engineered a professional bot (~$12M profit) from ~36,000 trades, then stress-tested every hypothesis on real historical fills — not theoretical quotes.</p>
+          <ul class="pfeat">
+            <li>Backtested <b>5.5M real trades</b> across 8,500+ resolved markets using prices actually paid.</li>
+            <li>Split-half out-of-sample validation, robustness tests, bias detection (survivorship, look-ahead, favorite-longshot).</li>
+            <li><b>5 strategies invalidated with numbers</b> — and 1 survivor precisely characterised.</li>
+          </ul>
+          <div class="pmetrics">
+            <div class="pmetric"><div class="mv">5.5M</div><div class="ml">Trades analysed</div></div>
+            <div class="pmetric"><div class="mv">8.5k+</div><div class="ml">Markets</div></div>
+            <div class="pmetric"><div class="mv">36k</div><div class="ml">Trades reversed</div></div>
+          </div>
+          <div class="chips">
+            <span class="chip">Python</span><span class="chip">Pandas</span><span class="chip">SQLite</span>
+            <span class="chip">Jupyter</span><span class="chip">Plotly</span><span class="chip">Statistics</span><span class="chip">Backtesting</span>
+          </div>
+          <div class="plinks"><span class="plink muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Private research repo</span></div>
+        </div>
+        <div class="pvisual">
+          <div class="glow"></div>
+          <div class="viz-grid" aria-hidden="true">
+            <div class="viz-row">
+              <div class="viz-box"><div class="big">5.5M</div><div class="cap">Real trades backtested</div></div>
+              <div class="viz-box"><div class="big cy">1 / 6</div><div class="cap">Strategies survived validation</div></div>
+            </div>
+            <div class="viz-box">
+              <div class="cap" style="margin-top:0;margin-bottom:2px">Split-half out-of-sample</div>
+              <div class="bars">
+                <span style="height:46%"></span><span style="height:62%"></span><span style="height:38%"></span>
+                <span style="height:71%"></span><span style="height:55%"></span><span style="height:80%"></span>
+                <span style="height:48%"></span><span style="height:66%"></span><span style="height:59%"></span>
+                <span style="height:74%"></span><span style="height:41%"></span><span style="height:69%"></span>
+              </div>
+            </div>
+            <div class="viz-box">
+              <div class="viz-mono">
+                <span class="m">$</span> analyze.py --markets 8541<br/>
+                <span class="k">→</span> fills loaded: <span class="g">5,512,847</span><br/>
+                <span class="k">→</span> split-half corr: <span class="g">0.71</span><br/>
+                <span class="k">→</span> favorite-longshot: <span class="a">flagged</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- POLYCHEAT -->
+      <article class="pcard reveal">
+        <div class="pbody">
+          <span class="ptag">🤖 Deployed in production</span>
+          <h3>Polycheat</h3>
+          <div class="psub">On-chain copy-trading bot on a 24/7 cloud server</div>
+          <p>A bot that mirrors high-performing traders detected on-chain in real time (~1.3s) over WebSocket. Clean architecture separates engine, simulation and real execution — safe by design, dry-run by default, deployed and running on a free-forever Linux VM.</p>
+          <ul class="pfeat">
+            <li>Real-time on-chain detection of many wallets at once via QuickNode RPC WebSocket.</li>
+            <li>Wallet scanner with SQLite <b>exclusion memory</b> — never re-analyses a rejected wallet.</li>
+            <li>Per-order / per-session / daily caps, file kill-switch, private key only from env vars.</li>
+            <li>Deployed on Oracle Cloud (won capacity after 27 automated retries), systemd <code>Restart=always</code>.</li>
+          </ul>
+          <div class="pmetrics">
+            <div class="pmetric"><div class="mv">~1.3s</div><div class="ml">Detection latency</div></div>
+            <div class="pmetric"><div class="mv">27</div><div class="ml">Auto retries to deploy</div></div>
+            <div class="pmetric"><div class="mv">systemd</div><div class="ml">Always-on service</div></div>
+          </div>
+          <div class="chips">
+            <span class="chip">Python</span><span class="chip">WebSocket</span><span class="chip">On-chain / RPC</span>
+            <span class="chip">SQLite</span><span class="chip">Oracle Cloud</span><span class="chip">systemd</span><span class="chip">SSH</span>
+          </div>
+          <div class="plinks"><span class="plink muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Private repository</span></div>
+        </div>
+        <div class="pvisual">
+          <div class="glow"></div>
+          <div class="viz-grid" aria-hidden="true">
+            <div class="viz-box">
+              <div class="cap" style="margin-top:0;margin-bottom:7px">Live on-chain feed</div>
+              <div class="viz-mono">
+                <span class="k">◉</span> wallet 0x7a…f2 <span class="g">BUY</span> · 1.3s<br/>
+                <span class="k">◉</span> sizing model-B → <span class="m">$142</span><br/>
+                <span class="k">◉</span> guardrails: <span class="g">OK</span> <span class="a">(dry-run)</span><br/>
+                <span class="k">◉</span> scanner: <span class="m">3,204</span> wallets seen
+              </div>
+            </div>
+            <div class="viz-row">
+              <div class="viz-box"><div class="big cy">24/7</div><div class="cap">Uptime · Oracle Cloud VM</div></div>
+              <div class="viz-box"><div class="big">▣ safe</div><div class="cap">Kill-switch + caps</div></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- STRATEGY 1 -->
+      <article class="pcard rev reveal">
+        <div class="pbody">
+          <span class="ptag">🎯 Backtesting engine</span>
+          <h3>Strategy Engine</h3>
+          <div class="psub">Modular price-action / ICT backtesting framework</div>
+          <p>A modular engine to quantify and validate a technical trading strategy: market-structure detection, swing points, Fair-Value-Gaps, volume profile, signal generation and a full metrics &amp; validation layer — all unit-tested with pytest.</p>
+          <ul class="pfeat">
+            <li>Clean module split: <code>structure</code>, <code>swings</code>, <code>fvg</code>, <code>volume_profile</code>, <code>signals</code>, <code>metrics</code>, <code>validation</code>.</li>
+            <li>Equity curves, drawdown, R-multiple distribution and monthly P&amp;L breakdowns.</li>
+            <li>Data download, candle plotting and per-trade review tooling.</li>
+          </ul>
+          <div class="chips">
+            <span class="chip">Python</span><span class="chip">Pandas</span><span class="chip">pytest</span>
+            <span class="chip">matplotlib</span><span class="chip">Modular architecture</span>
+          </div>
+          <div class="plinks"><span class="plink muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Private repository</span></div>
+        </div>
+        <div class="pvisual">
+          <div class="glow"></div>
+          <div>
+            <div class="shot"><img class="zoomable" src="assets/img/strategy1_equity.png" alt="Real backtest equity curve — 671 trades" loading="lazy"/></div>
+            <div class="shot-cap">Real backtest output — equity curve over 671 trades</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- POLYCOPY / ARBITRAGE -->
+      <article class="pcard reveal">
+        <div class="pbody">
+          <span class="ptag">⚖️ Signal vs. artefact</span>
+          <h3>Arbitrage &amp; Fair-Value Lab</h3>
+          <div class="psub">Latency-aware arbitrage &amp; Black-Scholes option pricing</div>
+          <p>Research tools on two strategies: pair arbitrage and crypto-option fair value. A paper-execution probe measures what would <i>really</i> get filled given latency, and a Black-Scholes model prices Polymarket "BTC Up or Down" against live Binance spot.</p>
+          <ul class="pfeat">
+            <li>2-leg micro-executor with leg-risk handling (auto-flatten if only one leg fills).</li>
+            <li>Black-Scholes edge collector comparing implied vs realised volatility over ~44h of live data.</li>
+            <li><b>Key finding:</b> the apparent edge is a stale-quote / volatility artefact — not exploitable alpha.</li>
+          </ul>
+          <div class="chips">
+            <span class="chip">Python</span><span class="chip">Black-Scholes</span><span class="chip">Volatility</span>
+            <span class="chip">Microstructure</span><span class="chip">WebSocket</span><span class="chip">Binance API</span>
+          </div>
+          <div class="plinks"><span class="plink muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Private research repo</span></div>
+        </div>
+        <div class="pvisual">
+          <div class="glow"></div>
+          <div class="viz-grid" aria-hidden="true">
+            <div class="viz-box">
+              <div class="cap" style="margin-top:0;margin-bottom:7px">Black-Scholes vs market</div>
+              <div class="viz-mono">
+                <span class="m">σ</span> implied &nbsp;= <span class="a">0.63</span><br/>
+                <span class="m">σ</span> realised = <span class="g">0.41</span><br/>
+                model price = <span class="k">0.512</span><br/>
+                market price = <span class="k">0.548</span><br/>
+                <span class="k">→</span> edge = <span class="a">artefact</span>
+              </div>
+            </div>
+            <div class="viz-row">
+              <div class="viz-box"><div class="big cy">44h</div><div class="cap">Live data collected</div></div>
+              <div class="viz-box"><div class="big">2-leg</div><div class="cap">Risk-managed executor</div></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- GAMESTOP -->
+      <article class="pcard rev reveal">
+        <div class="pbody">
+          <span class="ptag">🎮 Desktop application</span>
+          <h3>GameStop</h3>
+          <div class="psub">Native Windows play-time tracker (Qt)</div>
+          <p>A native desktop app that monitors gaming time in the background — built with PySide6 (Qt): a system-tray icon, background monitoring thread, single-instance guard, logging and persistent storage, packaged into a single <code>.exe</code> with PyInstaller.</p>
+          <ul class="pfeat">
+            <li>System-tray app with background thread monitoring and single-instance lock.</li>
+            <li>PyInstaller one-file executable — installable, distributable, self-contained.</li>
+          </ul>
+          <div class="chips">
+            <span class="chip">Python</span><span class="chip">PySide6 / Qt</span><span class="chip">Threading</span>
+            <span class="chip">PyInstaller</span><span class="chip">Desktop GUI</span>
+          </div>
+          <div class="plinks"><span class="plink muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Private repository</span></div>
+        </div>
+        <div class="pvisual">
+          <div class="glow"></div>
+          <div class="mock" style="max-width:340px" aria-hidden="true">
+            <div class="mock-bar"><span class="d d1"></span><span class="d d2"></span><span class="d d3"></span><span class="t">GameStop · tray</span></div>
+            <div class="mock-body">
+              <div style="display:flex;align-items:center;gap:11px;margin-bottom:12px">
+                <div style="width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,#8b5cf6,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:20px">🎮</div>
+                <div>
+                  <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;font-size:15px">4h 12m</div>
+                  <div style="font-size:10.5px;color:rgba(255,255,255,0.45)">today · tracked in background</div>
+                </div>
+              </div>
+              <div class="bars" style="height:52px">
+                <span style="height:35%"></span><span style="height:52%"></span><span style="height:44%"></span>
+                <span style="height:70%"></span><span style="height:60%"></span><span style="height:88%"></span><span style="height:48%"></span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:9.5px;color:rgba(255,255,255,0.4);margin-top:6px">
+                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">Toolbox</div>
+      <h2 class="sec-title">Skills &amp; technologies</h2>
+      <p class="sec-desc">Everything below comes from projects I actually built, deployed and maintained.</p>
+    </div>
+    <div class="skill-grid">
+      <div class="skill-card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></div>
+        <h4>Languages &amp; frameworks</h4>
+        <div class="tags">
+          <span class="chip">Python (advanced)</span><span class="chip">asyncio</span><span class="chip">JavaScript</span>
+          <span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">FastAPI</span><span class="chip">PySide6 / Qt</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div>
+        <h4>Data analysis &amp; visualization</h4>
+        <div class="tags">
+          <span class="chip">Pandas</span><span class="chip">Data viz</span><span class="chip">Dashboards</span>
+          <span class="chip">Power BI</span><span class="chip">Excel</span><span class="chip">Jupyter</span><span class="chip">Plotly</span>
+          <span class="chip">Backtesting</span><span class="chip">Out-of-sample validation</span><span class="chip">Bias detection</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 2v10l7 3"/></svg></div>
+        <h4>APIs &amp; integration</h4>
+        <div class="tags">
+          <span class="chip">REST</span><span class="chip">WebSocket</span><span class="chip">Hyperliquid</span>
+          <span class="chip">Polymarket</span><span class="chip">Binance</span><span class="chip">Telegram Bot</span><span class="chip">QuickNode RPC</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/></svg></div>
+        <h4>DevOps &amp; infrastructure</h4>
+        <div class="tags">
+          <span class="chip">Git / GitHub</span><span class="chip">Linux</span><span class="chip">Oracle Cloud</span>
+          <span class="chip">systemd</span><span class="chip">SSH</span><span class="chip">journalctl</span><span class="chip">PyInstaller</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h4>Security by design</h4>
+        <div class="tags">
+          <span class="chip">Secrets management</span><span class="chip">Env-var keys</span><span class="chip">Token auth</span>
+          <span class="chip">HTTP security headers</span><span class="chip">Dry-run defaults</span><span class="chip">Kill-switch</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <h4>Method &amp; databases</h4>
+        <div class="tags">
+          <span class="chip">SQLite</span><span class="chip">Scientific rigor</span><span class="chip">Methodical debugging</span>
+          <span class="chip">Risk management</span><span class="chip">Documentation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OTHER PROJECTS -->
+<section id="other">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">Earlier projects</div>
+      <h2 class="sec-title">More things I've built</h2>
+      <p class="sec-desc">Data-visualisation and algorithm projects — several open on GitHub.</p>
+    </div>
+    <div class="grid-mini">
+      <div class="mini reveal">
+        <div class="emoji">🌾</div>
+        <h4>IoT — Rice Fields, Japan</h4>
+        <p>Data visualisation from multiple sensors implanted in rice fields in Kumamoto, Japan, using Power BI and Python.</p>
+        <div class="tags"><span class="chip">Power BI</span><span class="chip">Python</span><span class="chip">IoT</span></div>
+        <a class="repo" href="https://github.com/thespicyy/IOT-Project" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>View repo</a>
+      </div>
+      <div class="mini reveal">
+        <div class="emoji">📈</div>
+        <h4>Power BI Investment Dashboard</h4>
+        <p>A personal dashboard to monitor and analyse my investments across the stock market and cryptocurrencies.</p>
+        <div class="tags"><span class="chip">Power BI</span><span class="chip">Finance</span></div>
+        <a class="repo" href="https://github.com/thespicyy/Investment-dashboard" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>View repo</a>
+      </div>
+      <div class="mini reveal">
+        <div class="emoji">📗</div>
+        <h4>Excel Investment Dashboard</h4>
+        <p>The same investment tracking rebuilt in Excel for greater flexibility and ease of daily use.</p>
+        <div class="tags"><span class="chip">Excel</span><span class="chip">Finance</span></div>
+        <a class="repo" href="https://github.com/thespicyy/Excel-Investment-Dashboard" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>View repo</a>
+      </div>
+      <div class="mini reveal">
+        <div class="emoji">🔤</div>
+        <h4>Bombparty Algorithm</h4>
+        <p>An algorithm that finds correct words from given syllables, following linguistic rules for accuracy and coherence.</p>
+        <div class="tags"><span class="chip">Python</span><span class="chip">Algorithms</span></div>
+        <a class="repo" href="https://github.com/thespicyy/Bombparty" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>View repo</a>
+      </div>
+      <div class="mini reveal">
+        <div class="emoji">🌍</div>
+        <h4>Global Product Trends</h4>
+        <p>A dashboard built on the ELK Stack showing objectives, data distribution by country and key sales indicators.</p>
+        <div class="tags"><span class="chip">ELK Stack</span><span class="chip">Elasticsearch</span><span class="chip">Kibana</span></div>
+        <a class="repo" href="https://github.com/thespicyy/elk_dashboard" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>View repo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">About</div>
+      <h2 class="sec-title">How I work</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about reveal">
+        <p class="about-edu">🎓 <b>Data science</b> graduate — double degree from <b>Mines Saint-Étienne</b> &amp; <b>Institut Polytechnique de Paris</b>. Now looking for a data-related role.</p>
+        <p class="about-lead">I turn data into tools people can actually use — dashboards, analyses and automations — and I build them <b>end-to-end, from idea to production</b>, testing my own assumptions with real numbers even when that means proving myself wrong.</p>
+        <p>Most of my recent work sits at the intersection of data analysis and software engineering: collecting data at scale over REST and WebSocket, turning it into dashboards and visualisations, backtesting strategies over millions of records, validating out-of-sample, and shipping the result as a running service on a Linux cloud server.</p>
+        <p>What I care about most is <b>telling real signal from artefact</b> — a survivorship bias, a stale quote, an implied-vs-realised volatility gap — and being honest about it. Across one research project I invalidated five strategies with evidence and kept only the one that survived rigorous validation.</p>
+        <p>I'm methodical when things break: isolate causes by elimination rather than guessing, keep guardrails and dry-run modes around anything that touches real money, and document as I go.</p>
+        <p>I also work fast by pairing with AI — <b>Claude Code</b> is my everyday pair-programmer. It handles the boilerplate, but the architecture, the trade-offs and the debugging are mine; I make a point of understanding every line I ship.</p>
+      </div>
+      <div class="method reveal">
+        <h4>What sets my work apart</h4>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg><span><b>Scientific rigor</b> — hypotheses tested empirically, ideas invalidated with numbers.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg><span><b>Full autonomy</b> — from idea to production deployment, solo.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg><span><b>Methodical debugging</b> — cause isolation by elimination.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg><span><b>Risk-first mindset</b> — systematic guardrails, simulate before going live.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg><span><b>Critical thinking</b> — separating true signal from artefact.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="reveal">
+      <h2>Let's <span class="g">build</span> something.</h2>
+      <p>Open to a broad range of roles — software &amp; quant development, data analysis, engineering and construction project management (conducteur de travaux). The fastest way to reach me is email.</p>
+      <div class="contact-btns">
+        <a class="btn btn-primary" href="mailto:remy.grabet@polytechnique.edu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>remy.grabet@polytechnique.edu</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/remy-grabet-832375289/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 20.4h-3.5v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9v5.7H9.4V9h3.3v1.6h.1c.5-.9 1.6-1.9 3.3-1.9 3.5 0 4.2 2.3 4.2 5.3v6.4zM5.3 7.4a2 2 0 1 1 0-4.1 2 2 0 0 1 0 4.1zM7.1 20.4H3.6V9h3.5v11.4z"/></svg>LinkedIn</a>
+        <a class="btn btn-ghost" href="https://github.com/thespicyy" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>GitHub</a>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="wrap foot">
+      <span class="cr">© <span id="yr"></span> Rémy Grabet — built from scratch, no template.</span>
+      <span class="loc">Orsay, France</span>
+      <div class="foot-links">
+        <a class="nav-ico" href="https://github.com/thespicyy" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg></a>
+        <a class="nav-ico" href="https://www.linkedin.com/in/remy-grabet-832375289/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 20.4h-3.5v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9v5.7H9.4V9h3.3v1.6h.1c.5-.9 1.6-1.9 3.3-1.9 3.5 0 4.2 2.3 4.2 5.3v6.4zM5.3 7.4a2 2 0 1 1 0-4.1 2 2 0 0 1 0 4.1zM7.1 20.4H3.6V9h3.5v11.4zM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0z"/></svg></a>
+      </div>
+    </div>
+  </footer>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lightbox" aria-hidden="true" role="dialog" aria-label="Image viewer">
+  <button class="lb-close" id="lb-close" aria-label="Close (Esc)">✕</button>
+  <button class="lb-nav lb-prev" id="lb-prev" aria-label="Previous image">‹</button>
+  <button class="lb-nav lb-next" id="lb-next" aria-label="Next image">›</button>
+  <div class="lb-stage" id="lb-stage">
+    <img id="lb-img" src="" alt=""/>
+    <div class="lb-cap" id="lb-cap"></div>
+  </div>
+</div>
+
+<script>
+// year
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// theme
+(function(){
+  var saved = localStorage.getItem('portfolio_theme');
+  if(saved === 'light') document.documentElement.setAttribute('data-theme','light');
+  else if(saved === 'dark') document.documentElement.removeAttribute('data-theme');
+  else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
+    document.documentElement.setAttribute('data-theme','light');
+  syncThemeIcon();
+})();
+function toggleTheme(){
+  var light = document.documentElement.getAttribute('data-theme') === 'light';
+  if(light){document.documentElement.removeAttribute('data-theme');localStorage.setItem('portfolio_theme','dark');}
+  else{document.documentElement.setAttribute('data-theme','light');localStorage.setItem('portfolio_theme','light');}
+  syncThemeIcon();
+}
+function syncThemeIcon(){
+  var light = document.documentElement.getAttribute('data-theme') === 'light';
+  var el = document.getElementById('theme-icon');
+  if(!el) return;
+  el.innerHTML = light
+    ? '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'
+    : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+}
+
+// mobile menu
+function toggleMenu(){document.getElementById('navlinks').classList.toggle('open');}
+function closeMenu(){document.getElementById('navlinks').classList.remove('open');}
+
+// nav scrolled state
+var nav = document.getElementById('nav');
+window.addEventListener('scroll',function(){nav.classList.toggle('scrolled', window.scrollY > 24);},{passive:true});
+
+// reveal on scroll
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){en.target.classList.add('in'); io.unobserve(en.target);} });
+  },{threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+  els.forEach(function(e){io.observe(e);});
+})();
+
+// ── Lightbox ──
+(function(){
+  var imgs = Array.prototype.slice.call(document.querySelectorAll('img.zoomable'));
+  if(!imgs.length) return;
+  var lb=document.getElementById('lightbox'), lbImg=document.getElementById('lb-img'),
+      lbCap=document.getElementById('lb-cap'), stage=document.getElementById('lb-stage');
+  var idx=0;
+  function capOf(im){ var f=im.closest('figure'); var c=f&&f.querySelector('figcaption'); return c?c.textContent:(im.alt||''); }
+  function show(i){ idx=(i+imgs.length)%imgs.length; var im=imgs[idx]; lbImg.src=im.currentSrc||im.src; lbImg.alt=im.alt||''; lbCap.textContent=capOf(im); }
+  function open(i){ show(i); lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+  function close(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); document.body.style.overflow=''; lbImg.src=''; }
+  imgs.forEach(function(im,i){
+    im.setAttribute('tabindex','0'); im.setAttribute('role','button');
+    im.addEventListener('click', function(){ open(i); });
+    im.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(i); } });
+  });
+  document.getElementById('lb-close').addEventListener('click', close);
+  document.getElementById('lb-prev').addEventListener('click', function(){ show(idx-1); });
+  document.getElementById('lb-next').addEventListener('click', function(){ show(idx+1); });
+  lb.addEventListener('click', function(e){ if(!stage.contains(e.target) && e.target.tagName!=='BUTTON') close(); });
+  document.addEventListener('keydown', function(e){
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    else if(e.key==='ArrowLeft') show(idx-1);
+    else if(e.key==='ArrowRight') show(idx+1);
+  });
+})();
+
+// ── Constellation background (animated, mouse-reactive) ──
+(function(){
+  var canvas = document.getElementById('bg-canvas');
+  var ctx = canvas.getContext('2d');
+  var W,H,dpr;
+  var mouse = {x:-9999,y:-9999,active:false};
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var COLORS = [
+    {r:124,g:58,b:237},{r:139,g:71,b:240},{r:167,g:139,b:250},
+    {r:196,g:181,b:253},{r:101,g:39,b:208},{r:226,g:232,b:240}
+  ];
+
+  function Node(){
+    this.hx = Math.random()*W; this.hy = Math.random()*H;
+    this.x = this.hx; this.y = this.hy; this.vx=0; this.vy=0;
+    var c = COLORS[Math.floor(Math.random()*COLORS.length)];
+    this.cr=c.r; this.cg=c.g; this.cb=c.b;
+    var roll = Math.random();
+    if(roll<0.12){this.size=3.4+Math.random()*2; this.glow=true;}
+    else if(roll<0.35){this.size=1.7+Math.random()*1.2; this.glow=false;}
+    else{this.size=0.7+Math.random()*0.8; this.glow=false;}
+  }
+  Node.prototype.update=function(){
+    if(mouse.active){
+      var dx=this.x-mouse.x, dy=this.y-mouse.y, d=Math.sqrt(dx*dx+dy*dy);
+      if(d<130 && d>0){var f=(130-d)/130, a=Math.atan2(dy,dx);
+        this.vx+=Math.cos(a)*f*3.2; this.vy+=Math.sin(a)*f*3.2;}
+    }
+    this.vx+=(this.hx-this.x)*0.06; this.vy+=(this.hy-this.y)*0.06;
+    this.vx*=0.8; this.vy*=0.8; this.x+=this.vx; this.y+=this.vy;
+  };
+  Node.prototype.draw=function(){
+    if(this.glow){
+      var g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.size*5);
+      g.addColorStop(0,'rgba('+this.cr+','+this.cg+','+this.cb+',0.5)');
+      g.addColorStop(0.4,'rgba('+this.cr+','+this.cg+','+this.cb+',0.16)');
+      g.addColorStop(1,'rgba('+this.cr+','+this.cg+','+this.cb+',0)');
+      ctx.beginPath(); ctx.arc(this.x,this.y,this.size*5,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
+    }
+    ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+    ctx.fillStyle='rgb('+this.cr+','+this.cg+','+this.cb+')'; ctx.fill();
+  };
+
+  var nodes=[];
+  function build(){
+    var count = Math.min(120, Math.round(W*H/14000));
+    nodes = []; for(var i=0;i<count;i++) nodes.push(new Node());
+  }
+  function connections(){
+    for(var i=0;i<nodes.length;i++){
+      for(var j=i+1;j<nodes.length;j++){
+        var a=nodes[i], b=nodes[j], dx=a.x-b.x, dy=a.y-b.y, dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist>140) continue;
+        var alpha=(1-dist/140)*0.5;
+        if(mouse.active){
+          var mx=(a.x+b.x)*0.5-mouse.x, my=(a.y+b.y)*0.5-mouse.y, md=Math.sqrt(mx*mx+my*my);
+          if(md<110) alpha*=md/110;
+        }
+        if(alpha<0.01) continue;
+        var n = a.size>=b.size?a:b;
+        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle='rgba('+n.cr+','+n.cg+','+n.cb+','+(alpha*0.65)+')';
+        ctx.lineWidth=0.5; ctx.stroke();
+      }
+    }
+  }
+  function fit(){
+    dpr=window.devicePixelRatio||1; W=window.innerWidth; H=window.innerHeight;
+    canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr);
+    canvas.style.width=W+'px'; canvas.style.height=H+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<nodes.length;i++){nodes[i].update();}
+    connections();
+    for(var k=0;k<nodes.length;k++){nodes[k].draw();}
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  window.addEventListener('mousemove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;mouse.active=true;});
+  window.addEventListener('mouseout',function(){mouse.active=false;});
+  var rt;
+  window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){fit();build();if(reduce){staticRender();}},160);});
+  function staticRender(){ctx.clearRect(0,0,W,H);connections();for(var k=0;k<nodes.length;k++)nodes[k].draw();}
+  fit(); build();
+  if(reduce) staticRender(); else frame();
+})();
+</script>
+</body>
 </html>
