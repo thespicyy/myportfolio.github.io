@@ -270,6 +270,22 @@ section{position:relative;padding:64px 0;}
 .gallery-hint{padding:15px 38px 34px;font-size:12.5px;color:var(--text-3);font-style:italic;}
 img.zoomable{cursor:zoom-in;}
 
+/* ── Experience ── */
+.xp-card{position:relative;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);
+  box-shadow:var(--shadow);padding:34px 36px;overflow:hidden;transition:border-color .3s;}
+.xp-card:hover{border-color:var(--border-strong);}
+.xp-card::before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.22) 50%,transparent);pointer-events:none;}
+[data-theme="light"] .xp-card::before{background:linear-gradient(90deg,transparent,rgba(124,58,237,0.20) 50%,transparent);}
+.xp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px 20px;flex-wrap:wrap;margin-bottom:16px;}
+.xp-head h3{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.01em;}
+.xp-org{color:var(--violet-3);font-size:14px;font-weight:600;margin-top:5px;}
+[data-theme="light"] .xp-org{color:var(--violet-deep);}
+.xp-meta{font-size:12.5px;color:var(--text-2);font-weight:600;background:var(--surface-2);
+  border:1px solid var(--border);border-radius:100px;padding:8px 15px;white-space:nowrap;}
+.xp-card > p{color:var(--text-2);font-size:14.5px;margin-bottom:18px;}
+@media(max-width:680px){.xp-card{padding:26px 22px;}.xp-meta{white-space:normal;}}
+
 /* ── Lightbox ── */
 .lb{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:28px;
   background:rgba(4,4,14,0.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
@@ -449,6 +465,7 @@ footer{border-top:1px solid var(--border);margin-top:60px;padding:30px 0;}
   </a>
   <div class="nav-spacer"></div>
   <div class="nav-links" id="navlinks">
+    <a href="#experience" onclick="closeMenu()">Experience</a>
     <a href="#work" onclick="closeMenu()">Work</a>
     <a href="#skills" onclick="closeMenu()">Skills</a>
     <a href="#other" onclick="closeMenu()">More</a>
@@ -489,6 +506,46 @@ footer{border-top:1px solid var(--border);margin-top:60px;padding:30px 0;}
     <p class="hero-note reveal">Built on my own — with <b>Claude Code</b> as an AI pair-programmer. 🤖</p>
   </div>
 </header>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">Experience</div>
+      <h2 class="sec-title">Professional experience</h2>
+      <p class="sec-desc">Where I've applied data science to real business problems.</p>
+    </div>
+    <article class="xp-card reveal">
+      <div class="xp-head">
+        <div>
+          <h3>Data Science Consultant · Internship</h3>
+          <div class="xp-org">BDO · Data &amp; Analytics consulting</div>
+        </div>
+        <div class="xp-meta">Mar – Sep 2025 · 6 months · France</div>
+      </div>
+      <p>End-of-studies internship in BDO's data &amp; analytics practice. I built an end-to-end data platform mapping the French nursing-home (EHPAD) market for investors — from scattered public sources to a clean facility-level database, machine-learning models and interactive decision-support dashboards.</p>
+      <ul class="pfeat">
+        <li>Designed the full ETL pipeline and a <b>multithreaded web scraper</b> — cutting data collection from ~4 h to ~20 min (<b>×12</b>), ~88% success rate, exponential-backoff retries and logging.</li>
+        <li>Entity resolution across 5+ public sources (FINESS, INSEE, DREES, government APIs): <b>fuzzy matching</b> (FINESS ↔ SIRET, Levenshtein) reaching <b>&gt;94% automatic match</b>, plus GPS-to-territory joins with GeoPandas.</li>
+        <li>Consolidated a facility-level database of <b>7,399 nursing homes × 86 variables</b>, with an algorithm redistributing group financials down to each facility.</li>
+        <li>Machine learning: <b>K-means</b> territorial segmentation (5 investable market profiles), <b>Random Forest / Gradient Boosting</b> revenue &amp; EBITDA models, <b>Isolation Forest</b> anomaly detection for data quality.</li>
+        <li>Delivered <b>interactive maps &amp; dashboards</b> and a financial-prediction tool used by the consulting team for investment targeting.</li>
+      </ul>
+      <div class="pmetrics">
+        <div class="pmetric"><div class="mv">7,399</div><div class="ml">Facilities mapped</div></div>
+        <div class="pmetric"><div class="mv">86</div><div class="ml">Variables</div></div>
+        <div class="pmetric"><div class="mv">×12</div><div class="ml">Faster pipeline</div></div>
+        <div class="pmetric"><div class="mv">&gt;94%</div><div class="ml">Entity match</div></div>
+      </div>
+      <div class="chips">
+        <span class="chip">Python</span><span class="chip">Web scraping</span><span class="chip">Pandas</span>
+        <span class="chip">scikit-learn</span><span class="chip">K-means</span><span class="chip">Random Forest</span>
+        <span class="chip">Gradient Boosting</span><span class="chip">Isolation Forest</span><span class="chip">GeoPandas</span>
+        <span class="chip">Fuzzy matching</span><span class="chip">ETL</span><span class="chip">Data viz</span>
+      </div>
+    </article>
+  </div>
+</section>
 
 <!-- FEATURED WORK -->
 <section id="work">

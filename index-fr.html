@@ -270,6 +270,22 @@ section{position:relative;padding:64px 0;}
 .gallery-hint{padding:15px 38px 34px;font-size:12.5px;color:var(--text-3);font-style:italic;}
 img.zoomable{cursor:zoom-in;}
 
+/* ── Experience ── */
+.xp-card{position:relative;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);
+  box-shadow:var(--shadow);padding:34px 36px;overflow:hidden;transition:border-color .3s;}
+.xp-card:hover{border-color:var(--border-strong);}
+.xp-card::before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.22) 50%,transparent);pointer-events:none;}
+[data-theme="light"] .xp-card::before{background:linear-gradient(90deg,transparent,rgba(124,58,237,0.20) 50%,transparent);}
+.xp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px 20px;flex-wrap:wrap;margin-bottom:16px;}
+.xp-head h3{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.01em;}
+.xp-org{color:var(--violet-3);font-size:14px;font-weight:600;margin-top:5px;}
+[data-theme="light"] .xp-org{color:var(--violet-deep);}
+.xp-meta{font-size:12.5px;color:var(--text-2);font-weight:600;background:var(--surface-2);
+  border:1px solid var(--border);border-radius:100px;padding:8px 15px;white-space:nowrap;}
+.xp-card > p{color:var(--text-2);font-size:14.5px;margin-bottom:18px;}
+@media(max-width:680px){.xp-card{padding:26px 22px;}.xp-meta{white-space:normal;}}
+
 /* ── Lightbox ── */
 .lb{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:28px;
   background:rgba(4,4,14,0.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
@@ -449,6 +465,7 @@ footer{border-top:1px solid var(--border);margin-top:60px;padding:30px 0;}
   </a>
   <div class="nav-spacer"></div>
   <div class="nav-links" id="navlinks">
+    <a href="#experience" onclick="closeMenu()">Expérience</a>
     <a href="#work" onclick="closeMenu()">Projets</a>
     <a href="#skills" onclick="closeMenu()">Compétences</a>
     <a href="#other" onclick="closeMenu()">Plus</a>
@@ -489,6 +506,46 @@ footer{border-top:1px solid var(--border);margin-top:60px;padding:30px 0;}
     <p class="hero-note reveal">Réalisé en autonomie — avec <b>Claude Code</b> comme binôme de programmation IA. 🤖</p>
   </div>
 </header>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">Expérience</div>
+      <h2 class="sec-title">Expérience professionnelle</h2>
+      <p class="sec-desc">Là où j'ai appliqué la data science à de vrais enjeux métier.</p>
+    </div>
+    <article class="xp-card reveal">
+      <div class="xp-head">
+        <div>
+          <h3>Consultant Data Science · Stage</h3>
+          <div class="xp-org">BDO · Conseil Data &amp; Analytics</div>
+        </div>
+        <div class="xp-meta">Mars – Sept. 2025 · 6 mois · France</div>
+      </div>
+      <p>Stage de fin d'études dans la practice data &amp; analytics de BDO. J'ai construit une plateforme de données de bout en bout cartographiant le marché français des EHPAD pour des investisseurs — de sources publiques éparses à une base propre au niveau établissement, des modèles de machine learning et des dashboards interactifs d'aide à la décision.</p>
+      <ul class="pfeat">
+        <li>Conception du pipeline ETL complet et d'un <b>scraper web multithreadé</b> — collecte réduite de ~4 h à ~20 min (<b>×12</b>), ~88 % de réussite, retries à backoff exponentiel et logging.</li>
+        <li>Résolution d'entités sur 5+ sources publiques (FINESS, INSEE, DREES, API gouvernementales) : <b>fuzzy matching</b> (FINESS ↔ SIRET, Levenshtein) atteignant <b>&gt;94 % d'appariement automatique</b>, plus des jointures GPS → territoire avec GeoPandas.</li>
+        <li>Consolidation d'une base au niveau établissement de <b>7 399 EHPAD × 86 variables</b>, avec un algorithme redistribuant les données financières de groupe jusqu'à chaque établissement.</li>
+        <li>Machine learning : segmentation territoriale <b>K-means</b> (5 profils de marché exploitables), modèles de CA &amp; EBE <b>Random Forest / Gradient Boosting</b>, détection d'anomalies <b>Isolation Forest</b> pour la qualité des données.</li>
+        <li>Livraison de <b>cartes &amp; dashboards interactifs</b> et d'un outil de prédiction financière utilisé par l'équipe de conseil pour cibler les investissements.</li>
+      </ul>
+      <div class="pmetrics">
+        <div class="pmetric"><div class="mv">7,399</div><div class="ml">EHPAD cartographiés</div></div>
+        <div class="pmetric"><div class="mv">86</div><div class="ml">variables</div></div>
+        <div class="pmetric"><div class="mv">×12</div><div class="ml">pipeline accéléré</div></div>
+        <div class="pmetric"><div class="mv">&gt;94%</div><div class="ml">d'appariement auto</div></div>
+      </div>
+      <div class="chips">
+        <span class="chip">Python</span><span class="chip">Web scraping</span><span class="chip">Pandas</span>
+        <span class="chip">scikit-learn</span><span class="chip">K-means</span><span class="chip">Random Forest</span>
+        <span class="chip">Gradient Boosting</span><span class="chip">Isolation Forest</span><span class="chip">GeoPandas</span>
+        <span class="chip">Fuzzy matching</span><span class="chip">ETL</span><span class="chip">Data viz</span>
+      </div>
+    </article>
+  </div>
+</section>
 
 <!-- FEATURED WORK -->
 <section id="work">
