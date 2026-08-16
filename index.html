@@ -58,7 +58,8 @@ nav{display:flex;align-items:center;gap:8px;padding:9px 9px 9px 20px;border-radi
   border:1px solid var(--border);box-shadow:0 14px 40px rgba(0,0,0,0.4);max-width:100%;}
 [data-theme="light"] nav{background:rgba(255,255,255,0.8);}
 .brand{display:inline-flex;align-items:center;gap:9px;font-family:'Space Grotesk',sans-serif;font-weight:700;
-  font-size:16px;letter-spacing:-0.01em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:6px;}
+  font-size:16px;letter-spacing:-0.01em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding:5px 11px;border-radius:100px;transition:box-shadow .3s ease;}
+.brand.at-top{box-shadow:inset 0 0 0 1px rgba(139,92,246,.6), 0 0 11px rgba(139,92,246,.45);}
 @keyframes spin{to{transform:rotate(360deg);}}
 .brand .mk .dot{transform-box:view-box;transform-origin:50% 50%;animation:spin 7s linear infinite;}
 .brand .mk{filter:drop-shadow(0 0 8px rgba(139,92,246,0.6));}
@@ -670,7 +671,7 @@ window.addEventListener('scroll',function(){if(tb)tb.classList.toggle('show',win
 var links=[].slice.call(nl.querySelectorAll('a'));
 var secs=links.map(function(a){return document.getElementById((a.getAttribute('href')||'').slice(1));});
 var ind=document.createElement('span');ind.className='nav-ind';ind.setAttribute('aria-hidden','true');nl.insertBefore(ind,nl.firstChild);
-var cur=-1,dt=null;
+var cur=-1,dt=null,brand=document.querySelector('.brand');
 function rowLayout(){return nl.offsetParent!==null&&getComputedStyle(nl).flexDirection==='row';}
 function place(idx,changed){
   if(idx<0||!rowLayout()){ind.classList.remove('on');return;}
@@ -682,7 +683,7 @@ function place(idx,changed){
 }
 function spy(){var line=120,idx=-1;for(var i=0;i<secs.length;i++){var s=secs[i];if(s&&s.getBoundingClientRect().top<=line)idx=i;}
   for(var j=0;j<links.length;j++)links[j].classList.toggle('active',j===idx);
-  place(idx,idx!==cur);cur=idx;}
+  if(brand)brand.classList.toggle('at-top',idx<0);place(idx,idx!==cur);cur=idx;}
 window.addEventListener('scroll',spy,{passive:true});window.addEventListener('resize',spy);spy();})();
 // reveal
 (function(){var els=document.querySelectorAll('.reveal');if(!('IntersectionObserver'in window)){els.forEach(e=>e.classList.add('in'));return;}
