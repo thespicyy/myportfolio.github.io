@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RNG Lab — statistical randomness vs cryptographic randomness</title>
+<style>
+:root{color-scheme:dark;--bg:#000;--surface:#101010;--border:#1f1f1f;
+ --text:#fff;--grey:#a8a8a8;--dim:#6b6b6b;--green:#00d094;--red:#ff4d4f;--amber:#f5a623;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font:15px/1.65 'Segoe UI',system-ui,sans-serif;}
+.wrap{max-width:860px;margin:0 auto;padding:48px 20px 80px;}
+h1{font-size:31px;letter-spacing:-.6px;}
+.sub{color:var(--dim);font-size:11px;letter-spacing:2.4px;text-transform:uppercase;
+ font-weight:600;margin-bottom:6px;}
+h2{font-size:20px;margin:52px 0 6px;letter-spacing:-.3px;}
+h2 .act{color:var(--dim);font-size:11px;letter-spacing:2px;display:block;
+ text-transform:uppercase;font-weight:600;margin-bottom:3px;}
+h3{font-size:15px;margin:26px 0 8px;color:var(--grey);}
+p{margin:10px 0;color:#d8d8d8;}
+a{color:#fff;}
+strong{color:#fff;}
+em.hl{font-style:normal;color:var(--amber);font-weight:600;}
+.lede{font-size:17px;color:var(--grey);margin-top:14px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+ padding:20px;margin:20px 0;}
+.thesis{border-left:3px solid var(--amber);}
+.thesis p:first-child{margin-top:0;}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:22px 0;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;}
+.kpi b{display:block;font-size:26px;font-family:ui-monospace,Consolas,monospace;
+ letter-spacing:-1px;line-height:1.2;}
+.kpi span{color:var(--dim);font-size:12.5px;display:block;margin-top:5px;}
+.kpi.bad b{color:var(--red);} .kpi.good b{color:var(--green);} .kpi.warn b{color:var(--amber);}
+.scroll{overflow-x:auto;margin:18px 0;}
+table{border-collapse:collapse;width:100%;font-size:13px;}
+.matrix th,.matrix td{border:1px solid var(--border);padding:7px 6px;text-align:center;}
+.matrix thead th{color:var(--dim);font-weight:600;font-size:10.5px;line-height:1.3;
+ vertical-align:bottom;min-width:54px;}
+.matrix th.src{text-align:left;min-width:210px;font-weight:500;}
+.matrix th.src b{display:block;font-size:13px;color:#fff;font-weight:600;}
+.matrix th.src em{font-style:normal;color:var(--dim);font-size:11px;}
+.matrix td.ok{color:var(--green);} .matrix td.no{color:var(--red);}
+.matrix td.score-ok{color:var(--green);font-weight:700;font-family:ui-monospace,monospace;}
+.matrix td.score-no{color:var(--red);font-weight:700;font-family:ui-monospace,monospace;}
+table.plain th,table.plain td{border-bottom:1px solid var(--border);padding:9px 10px;
+ text-align:left;}
+table.plain th{color:var(--dim);font-size:12px;font-weight:600;}
+table.plain td.num{font-family:ui-monospace,Consolas,monospace;text-align:right;}
+svg{width:100%;height:auto;display:block;}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;color:var(--grey);font-size:12.5px;}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:6px;
+ vertical-align:-1px;}
+.caption{color:var(--dim);font-size:12.5px;margin-top:12px;}
+code{font-family:ui-monospace,Consolas,monospace;background:#181818;padding:1px 5px;
+ border-radius:4px;font-size:13px;}
+pre{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;
+ overflow-x:auto;font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:#d8d8d8;}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--border);
+ color:var(--dim);font-size:12.5px;}
+.langsw{float:right;font-size:12px;color:var(--dim);text-decoration:none;border:1px solid var(--border);
+ border-radius:7px;padding:4px 10px;}
+.langsw:hover{color:#fff;border-color:#3a3a3a;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<a class="langsw" href="index.html">FR</a>
+<div class="sub">Experiment report</div>
+<h1>RNG Lab</h1>
+<p class="lede">Four families of generators, eight statistical tests, one attack.
+This report asks whether "passing the statistical tests" means "being secure".
+It does not — and the proof sits in two rows of the table below.</p>
+
+<div class="card thesis">
+<p><strong>The claim.</strong> A statistical test establishes the absence of
+<em>visible</em> structure. It says nothing about <strong>predictability</strong>.
+These are two different properties, and only the second one protects a secret.</p>
+<p>Two results from this bench settle it: a generator that passes all eight tests and
+whose future output is predicted <em class="hl">100 %</em> of the time, and an entropy
+source containing <em class="hl">exactly zero</em> entropy that also passes all eight.</p>
+</div>
+
+<h2><span class="act">The verdict</span>Results matrix</h2>
+<p>1 000 000 bits sampled per source, rejection threshold at 1 %.
+Hover a cell to read its p-value.</p>
+<div class="scroll"><table class="matrix"><thead><tr><th></th><th title="Monobit (0/1 balance)">Monobit</th><th title="Runs (alternations)">Runs</th><th title="Longest run of 1s">Longest run</th><th title="Chi-square on bytes">Chi-square</th><th title="Shannon entropy">Shannon</th><th title="Autocorrelation (lags 1-32)">Autocorr. 1-32</th><th title="Spectral (DFT)">Spectral</th><th title="Incompressibility (zlib)">Incompress.</th><th>score</th></tr></thead><tbody><tr><th class="src"><b>LCG (low-order byte)</b><em>PRNG</em></th><td class="ok" title="p = 0.973">✓</td><td class="ok" title="p = 0.981">✓</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="ok" title="p = 1">✓</td><td class="ok" title="p = —">✓</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = —">✗</td><td class="score-no">4/8</td></tr><tr><th class="src"><b>Mersenne Twister (MT19937)</b><em>PRNG</em></th><td class="ok" title="p = 0.865">✓</td><td class="ok" title="p = 0.379">✓</td><td class="ok" title="p = 0.999">✓</td><td class="ok" title="p = 0.213">✓</td><td class="ok" title="p = —">✓</td><td class="ok" title="p = 0.133">✓</td><td class="ok" title="p = 0.646">✓</td><td class="ok" title="p = —">✓</td><td class="score-ok">8/8</td></tr><tr><th class="src"><b>secrets (system CSPRNG)</b><em>CSPRNG</em></th><td class="ok" title="p = 0.798">✓</td><td class="ok" title="p = 0.323">✓</td><td class="ok" title="p = 0.742">✓</td><td class="ok" title="p = 0.314">✓</td><td class="ok" title="p = —">✓</td><td class="ok" title="p = 1">✓</td><td class="ok" title="p = 0.0464">✓</td><td class="ok" title="p = —">✓</td><td class="score-ok">8/8</td></tr><tr><th class="src"><b>CPU jitter — naive extraction</b><em>Software TRNG</em></th><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = —">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = —">✗</td><td class="score-no">0/8</td></tr><tr><th class="src"><b>CPU jitter — raw</b><em>Software TRNG</em></th><td class="no" title="p = 4.68e-98">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = —">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = —">✗</td><td class="score-no">0/8</td></tr><tr><th class="src"><b>CPU jitter — debiased (von Neumann)</b><em>Software TRNG</em></th><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="no" title="p = —">✗</td><td class="no" title="p = &lt; 1e-16">✗</td><td class="ok" title="p = 0.0735">✓</td><td class="ok" title="p = —">✓</td><td class="score-no">2/8</td></tr><tr><th class="src"><b>CPU jitter — SHA-256 conditioned</b><em>Software TRNG</em></th><td class="ok" title="p = 0.607">✓</td><td class="ok" title="p = 0.704">✓</td><td class="ok" title="p = 0.22">✓</td><td class="ok" title="p = 0.89">✓</td><td class="ok" title="p = —">✓</td><td class="ok" title="p = 0.0294">✓</td><td class="ok" title="p = 0.797">✓</td><td class="ok" title="p = —">✓</td><td class="score-ok">8/8</td></tr><tr><th class="src"><b>NULL source + SHA-256</b><em>Counter-example</em></th><td class="ok" title="p = 0.478">✓</td><td class="ok" title="p = 0.622">✓</td><td class="ok" title="p = 0.0826">✓</td><td class="ok" title="p = 0.468">✓</td><td class="ok" title="p = —">✓</td><td class="ok" title="p = 0.0847">✓</td><td class="ok" title="p = 0.569">✓</td><td class="ok" title="p = —">✓</td><td class="score-ok">8/8</td></tr></tbody></table></div>
+<p class="caption">How to read it: "8/8" does not mean "secure". Three rows score 8/8
+for three completely different reasons — one of them being a source that holds no
+entropy at all.</p>
+
+<h2><span class="act">Act I</span>What the tests catch — and what they miss</h2>
+<p>The linear congruential generator is the designated bad student. We publish its
+low-order byte, which is the classic beginner's mistake: the low bits of an LCG have
+tiny periods.</p>
+<p>Yet it is far from failing everywhere. Its Shannon entropy is
+<strong>8.00000 bits per byte</strong> — the exact theoretical maximum — and its
+chi-square over the 256 byte values returns <strong>p = 1</strong>, a flawless uniformity.
+Its distribution is beyond reproach.</p>
+<p>And still, <code>zlib</code> compresses it down to <strong>0.0065</strong> of its
+size, a factor of <em class="hl">153</em>. Truly random data is incompressible;
+this stream is almost entirely structured.</p>
+
+<div class="card"><svg viewBox="0 0 760 210" role="img" aria-label="histogram of byte values"><line x1="46" y1="182.0" x2="746" y2="182.0" stroke="#242424" stroke-width="1"/><text x="38" y="186.0" text-anchor="end" font-size="10" fill="#6b6b6b">0</text><line x1="46" y1="97.0" x2="746" y2="97.0" stroke="#242424" stroke-width="1"/><text x="38" y="101.0" text-anchor="end" font-size="10" fill="#6b6b6b">306</text><line x1="46" y1="12.0" x2="746" y2="12.0" stroke="#242424" stroke-width="1"/><text x="38" y="16.0" text-anchor="end" font-size="10" fill="#6b6b6b">612</text><polyline points="46.0,46.6 48.7,46.6 51.5,46.6 54.2,46.6 57.0,46.6 59.7,46.6 62.5,46.3 65.2,46.6 68.0,46.6 70.7,46.6 73.5,46.6 76.2,46.6 78.9,46.6 81.7,46.6 84.4,46.6 87.2,46.6 89.9,46.6 92.7,46.6 95.4,46.6 98.2,46.6 100.9,46.6 103.6,46.6 106.4,46.6 109.1,46.6 111.9,46.3 114.6,46.3 117.4,46.6 120.1,46.6 122.9,46.6 125.6,46.3 128.4,46.6 131.1,46.6 133.8,46.6 136.6,46.6 139.3,46.6 142.1,46.6 144.8,46.3 147.6,46.6 150.3,46.6 153.1,46.6 155.8,46.6 158.5,46.6 161.3,46.6 164.0,46.6 166.8,46.3 169.5,46.6 172.3,46.3 175.0,46.6 177.8,46.3 180.5,46.3 183.3,46.6 186.0,46.6 188.7,46.6 191.5,46.6 194.2,46.6 197.0,46.6 199.7,46.6 202.5,46.6 205.2,46.3 208.0,46.6 210.7,46.6 213.5,46.6 216.2,46.3 218.9,46.6 221.7,46.6 224.4,46.6 227.2,46.3 229.9,46.3 232.7,46.6 235.4,46.3 238.2,46.6 240.9,46.6 243.6,46.3 246.4,46.6 249.1,46.3 251.9,46.6 254.6,46.6 257.4,46.6 260.1,46.6 262.9,46.6 265.6,46.6 268.4,46.3 271.1,46.6 273.8,46.3 276.6,46.3 279.3,46.6 282.1,46.3 284.8,46.6 287.6,46.6 290.3,46.6 293.1,46.6 295.8,46.6 298.5,46.3 301.3,46.6 304.0,46.6 306.8,46.6 309.5,46.3 312.3,46.6 315.0,46.6 317.8,46.3 320.5,46.6 323.3,46.3 326.0,46.3 328.7,46.6 331.5,46.6 334.2,46.6 337.0,46.6 339.7,46.6 342.5,46.6 345.2,46.6 348.0,46.6 350.7,46.6 353.5,46.6 356.2,46.3 358.9,46.6 361.7,46.3 364.4,46.6 367.2,46.6 369.9,46.6 372.7,46.6 375.4,46.3 378.2,46.6 380.9,46.6 383.6,46.6 386.4,46.6 389.1,46.6 391.9,46.3 394.6,46.6 397.4,46.6 400.1,46.6 402.9,46.6 405.6,46.6 408.4,46.6 411.1,46.6 413.8,46.6 416.6,46.6 419.3,46.6 422.1,46.3 424.8,46.3 427.6,46.6 430.3,46.3 433.1,46.3 435.8,46.3 438.5,46.6 441.3,46.3 444.0,46.6 446.8,46.3 449.5,46.6 452.3,46.6 455.0,46.6 457.8,46.6 460.5,46.6 463.3,46.6 466.0,46.6 468.7,46.3 471.5,46.6 474.2,46.6 477.0,46.6 479.7,46.6 482.5,46.3 485.2,46.6 488.0,46.6 490.7,46.6 493.5,46.6 496.2,46.6 498.9,46.6 501.7,46.6 504.4,46.3 507.2,46.3 509.9,46.3 512.7,46.6 515.4,46.6 518.2,46.6 520.9,46.3 523.6,46.6 526.4,46.3 529.1,46.6 531.9,46.6 534.6,46.6 537.4,46.6 540.1,46.6 542.9,46.3 545.6,46.3 548.4,46.3 551.1,46.6 553.8,46.6 556.6,46.6 559.3,46.3 562.1,46.3 564.8,46.6 567.6,46.6 570.3,46.3 573.1,46.3 575.8,46.3 578.5,46.6 581.3,46.6 584.0,46.3 586.8,46.6 589.5,46.6 592.3,46.3 595.0,46.6 597.8,46.6 600.5,46.6 603.3,46.3 606.0,46.6 608.7,46.6 611.5,46.6 614.2,46.3 617.0,46.6 619.7,46.6 622.5,46.6 625.2,46.6 628.0,46.6 630.7,46.3 633.5,46.6 636.2,46.3 638.9,46.3 641.7,46.6 644.4,46.6 647.2,46.3 649.9,46.6 652.7,46.6 655.4,46.3 658.2,46.3 660.9,46.6 663.6,46.3 666.4,46.3 669.1,46.6 671.9,46.6 674.6,46.6 677.4,46.6 680.1,46.6 682.9,46.6 685.6,46.6 688.4,46.3 691.1,46.3 693.8,46.3 696.6,46.6 699.3,46.6 702.1,46.6 704.8,46.6 707.6,46.6 710.3,46.3 713.1,46.6 715.8,46.3 718.5,46.3 721.3,46.6 724.0,46.6 726.8,46.6 729.5,46.3 732.3,46.6 735.0,46.3 737.8,46.6 740.5,46.3 743.3,46.6 746.0,46.6" fill="none" stroke="#ff4d4f" stroke-width="1.3" opacity="0.9"/><polyline points="46.0,41.6 48.7,35.8 51.5,44.6 54.2,63.0 57.0,39.1 59.7,40.2 62.5,39.6 65.2,52.4 68.0,51.0 70.7,41.6 73.5,38.0 76.2,52.7 78.9,37.7 81.7,49.4 84.4,48.3 87.2,48.5 89.9,48.8 92.7,60.2 95.4,45.5 98.2,38.5 100.9,56.9 103.6,51.3 106.4,43.0 109.1,53.0 111.9,35.8 114.6,51.6 117.4,47.4 120.1,41.0 122.9,46.0 125.6,37.4 128.4,46.0 131.1,39.6 133.8,48.5 136.6,39.4 139.3,46.6 142.1,41.9 144.8,45.8 147.6,51.0 150.3,47.4 153.1,37.2 155.8,49.9 158.5,50.5 161.3,42.7 164.0,47.7 166.8,35.2 169.5,47.4 172.3,46.0 175.0,48.8 177.8,35.2 180.5,51.9 183.3,51.0 186.0,49.6 188.7,48.8 191.5,45.5 194.2,43.0 197.0,45.2 199.7,37.7 202.5,47.4 205.2,44.4 208.0,39.1 210.7,36.9 213.5,51.3 216.2,47.4 218.9,46.0 221.7,51.3 224.4,43.8 227.2,48.0 229.9,48.5 232.7,36.6 235.4,50.5 238.2,59.6 240.9,45.5 243.6,52.4 246.4,54.4 249.1,46.0 251.9,52.4 254.6,40.2 257.4,59.6 260.1,42.1 262.9,59.6 265.6,58.0 268.4,51.3 271.1,46.9 273.8,46.9 276.6,46.9 279.3,40.8 282.1,34.9 284.8,43.3 287.6,47.7 290.3,46.6 293.1,38.3 295.8,54.6 298.5,54.4 301.3,42.7 304.0,41.3 306.8,48.3 309.5,51.6 312.3,39.1 315.0,54.6 317.8,43.5 320.5,54.6 323.3,53.2 326.0,43.5 328.7,48.3 331.5,44.6 334.2,45.5 337.0,44.6 339.7,40.8 342.5,47.4 345.2,43.5 348.0,47.1 350.7,39.1 353.5,39.1 356.2,60.2 358.9,50.5 361.7,53.8 364.4,54.4 367.2,44.1 369.9,42.1 372.7,44.9 375.4,49.6 378.2,46.0 380.9,48.8 383.6,51.6 386.4,48.0 389.1,57.1 391.9,48.8 394.6,38.8 397.4,42.4 400.1,42.1 402.9,50.5 405.6,42.4 408.4,45.2 411.1,53.5 413.8,41.6 416.6,56.9 419.3,41.9 422.1,48.5 424.8,42.7 427.6,42.7 430.3,46.0 433.1,49.6 435.8,47.7 438.5,54.1 441.3,54.1 444.0,39.9 446.8,49.4 449.5,51.3 452.3,56.0 455.0,40.2 457.8,49.6 460.5,47.1 463.3,36.6 466.0,48.0 468.7,40.2 471.5,54.9 474.2,37.7 477.0,44.6 479.7,50.2 482.5,55.2 485.2,41.6 488.0,40.5 490.7,46.9 493.5,41.6 496.2,43.8 498.9,41.3 501.7,50.5 504.4,37.4 507.2,53.0 509.9,52.7 512.7,45.2 515.4,41.9 518.2,42.7 520.9,40.2 523.6,49.4 526.4,44.6 529.1,42.7 531.9,53.0 534.6,46.0 537.4,48.5 540.1,40.8 542.9,47.1 545.6,47.4 548.4,47.1 551.1,52.1 553.8,46.6 556.6,54.4 559.3,44.9 562.1,45.5 564.8,56.9 567.6,55.7 570.3,38.8 573.1,44.1 575.8,42.4 578.5,46.6 581.3,49.9 584.0,56.6 586.8,38.3 589.5,54.6 592.3,38.3 595.0,49.1 597.8,49.9 600.5,61.6 603.3,45.2 606.0,49.6 608.7,40.8 611.5,38.3 614.2,33.5 617.0,39.4 619.7,45.8 622.5,48.8 625.2,62.1 628.0,48.8 630.7,54.6 633.5,36.0 636.2,52.1 638.9,48.5 641.7,45.5 644.4,40.5 647.2,53.5 649.9,51.6 652.7,38.0 655.4,30.2 658.2,44.4 660.9,40.2 663.6,55.2 666.4,54.4 669.1,46.3 671.9,41.9 674.6,36.0 677.4,51.6 680.1,44.6 682.9,55.7 685.6,50.5 688.4,34.7 691.1,47.7 693.8,49.6 696.6,49.6 699.3,46.0 702.1,46.3 704.8,47.4 707.6,43.5 710.3,43.5 713.1,32.7 715.8,43.8 718.5,61.8 721.3,43.5 724.0,39.4 726.8,39.4 729.5,46.0 732.3,43.8 735.0,46.6 737.8,40.8 740.5,56.3 743.3,42.7 746.0,58.0" fill="none" stroke="#00d094" stroke-width="1.3" opacity="0.9"/><text x="46" y="202" font-size="10" fill="#6b6b6b">0</text><text x="746" y="202" text-anchor="end" font-size="10" fill="#6b6b6b">255 — byte value</text></svg><div class="legend"><span><i style="background:#ff4d4f"></i>LCG (low-order byte)</span><span><i style="background:#00d094"></i>secrets</span></div>
+<p class="caption">Histogram of byte values. The LCG (red) is a perfectly flat line —
+<em>flatter</em> than the CSPRNG, whose fluctuations are precisely the signature of
+randomness. A distribution that is too perfect is a symptom, not a quality.</p></div>
+
+<p>The lesson: Shannon entropy and chi-square measure the <em>marginal</em> distribution,
+i.e. how often each value occurs in isolation. They are blind to the <strong>order</strong>
+of those values. Catching the sequence takes structural tests — compression, spectral,
+autocorrelation.</p>
+
+<div class="card"><svg viewBox="0 0 760 230" role="img" aria-label="autocorrelation by lag"><line x1="52" y1="200.0" x2="746" y2="200.0" stroke="#242424"/><text x="44" y="204.0" text-anchor="end" font-size="10" fill="#6b6b6b">0</text><line x1="52" y1="106.0" x2="746" y2="106.0" stroke="#242424"/><text x="44" y="110.0" text-anchor="end" font-size="10" fill="#6b6b6b">69</text><line x1="52" y1="12.0" x2="746" y2="12.0" stroke="#242424"/><text x="44" y="16.0" text-anchor="end" font-size="10" fill="#6b6b6b">277</text><line x1="52" y1="181.9" x2="746" y2="181.9" stroke="#f5a623" stroke-width="1.2" stroke-dasharray="5 4"/><text x="744" y="175.9" text-anchor="end" font-size="10.5" fill="#f5a623">1 % rejection threshold</text><polyline points="52.0,198.3 74.4,199.5 96.8,199.6 119.2,199.3 141.5,198.6 163.9,199.5 186.3,199.2 208.7,152.6 231.1,198.1 253.5,198.4 275.9,198.9 298.3,199.5 320.6,198.7 343.0,197.7 365.4,198.7 387.8,155.4 410.2,198.4 432.6,199.5 455.0,198.1 477.4,199.3 499.7,198.6 522.1,198.5 544.5,197.9 566.9,16.5 589.3,198.0 611.7,199.1 634.1,198.8 656.5,198.5 678.8,198.4 701.2,198.9 723.6,199.4 746.0,69.8" fill="none" stroke="#ff4d4f" stroke-width="2" stroke-linejoin="round"/><polyline points="52.0,128.9 74.4,117.8 96.8,166.1 119.2,154.1 141.5,169.8 163.9,168.5 186.3,174.7 208.7,174.7 231.1,177.9 253.5,176.2 275.9,173.5 298.3,180.3 320.6,178.0 343.0,177.2 365.4,173.4 387.8,176.6 410.2,173.7 432.6,177.1 455.0,174.8 477.4,185.5 499.7,179.1 522.1,180.2 544.5,175.6 566.9,173.7 589.3,180.4 611.7,176.2 634.1,178.7 656.5,179.5 678.8,172.6 701.2,185.7 723.6,181.2 746.0,182.6" fill="none" stroke="#f5a623" stroke-width="2" stroke-linejoin="round"/><polyline points="52.0,188.8 74.4,193.0 96.8,193.7 119.2,191.7 141.5,187.8 163.9,188.9 186.3,193.4 208.7,197.7 231.1,195.8 253.5,186.2 275.9,192.1 298.3,184.5 320.6,184.3 343.0,188.7 365.4,189.2 387.8,195.3 410.2,187.4 432.6,186.7 455.0,195.0 477.4,185.0 499.7,191.3 522.1,186.9 544.5,191.3 566.9,195.8 589.3,191.0 611.7,193.5 634.1,192.6 656.5,188.4 678.8,190.9 701.2,187.7 723.6,192.1 746.0,185.6" fill="none" stroke="#00d094" stroke-width="2" stroke-linejoin="round"/><text x="52" y="222" font-size="10" fill="#6b6b6b">lag 1</text><text x="746" y="222" text-anchor="end" font-size="10" fill="#6b6b6b">32 — autocorrelation, in standard deviations</text></svg><div class="legend"><span><i style="background:#ff4d4f"></i>LCG</span><span><i style="background:#f5a623"></i>Debiased jitter</span><span><i style="background:#00d094"></i>secrets</span></div>
+<p class="caption">Autocorrelation at lags 1 to 32, in standard deviations. Past the
+dashed line, the dependency is statistically established.</p></div>
+
+<h2><span class="act">Act II</span>The physical source, put to the test</h2>
+<p>This is where the homemade hardware-generator idea meets reality. Our physical source is
+<strong>clock jitter</strong>: we run a fixed computational load and measure how long it
+takes, which varies with cache, scheduler, frequency scaling and interrupts. Genuine
+physical noise, with nothing to solder.</p>
+
+<h3>First trap: the silently dead source</h3>
+<p>The obvious extraction takes the low-order bit of the gap between two clock readings.
+On Windows, <code>perf_counter_ns</code> has a 100 ns granularity: every gap is a multiple
+of 100, and its low bit is <strong>invariably 0</strong>.</p>
+<p>Measured: P(bit = 1) = <strong>0.0000</strong>, min-entropy
+<strong>0.000 bits per bit</strong>. The source emits a stream of zeros at 8 Mbit/s. It
+"works", it raises no error, and it contains nothing.</p>
+
+<h3>Second trap: debiasing is not enough</h3>
+<p>With a correct extraction the source comes alive: P(bit = 1) = <strong>0.3970</strong>.
+Biased, then, but real. The classic remedy is von Neumann debiasing, which guarantees a
+perfectly balanced output — <strong>provided the bits are independent</strong>.</p>
+<p>After von Neumann, we measure P(bit = 1) = <strong>0.5024</strong>. Over a million bits,
+that departure from 0.5 is massively significant. This is not measurement noise: it is
+<strong>proof that the raw bits are not independent</strong>. Von Neumann's assumption is
+violated, so its guarantee does not hold. The debiased stream still fails
+<strong>6 of the 8 tests</strong>.</p>
+
+<div class="card"><svg viewBox="0 0 760 188" role="img" aria-label="min-entropy per bit"><text x="238" y="30.400000000000002" text-anchor="end" font-size="13" fill="#a8a8a8">Jitter — naive extraction</text><rect x="250" y="10" width="2.0" height="30" rx="3" fill="#ff4d4f"/><text x="262.0" y="30.400000000000002" font-size="13" fill="#ffffff" font-family="ui-monospace,Consolas,monospace">0.000 bit/bit</text><text x="238" y="72.4" text-anchor="end" font-size="13" fill="#a8a8a8">Jitter — raw</text><rect x="250" y="52" width="291.9" height="30" rx="3" fill="#f5a623"/><text x="551.9" y="72.4" font-size="13" fill="#ffffff" font-family="ui-monospace,Consolas,monospace">0.730 bit/bit</text><text x="238" y="114.4" text-anchor="end" font-size="13" fill="#a8a8a8">Jitter — after von Neumann</text><rect x="250" y="94" width="397.2" height="30" rx="3" fill="#00d094"/><text x="657.2" y="114.4" font-size="13" fill="#ffffff" font-family="ui-monospace,Consolas,monospace">0.993 bit/bit</text><text x="238" y="156.4" text-anchor="end" font-size="13" fill="#a8a8a8">Ideal (1 bit per bit)</text><rect x="250" y="136" width="400.0" height="30" rx="3" fill="#00d094"/><text x="660.0" y="156.4" font-size="13" fill="#ffffff" font-family="ui-monospace,Consolas,monospace">1.000 bit/bit</text></svg>
+<p class="caption">Min-entropy per bit — <code>-log2(max(p0, p1))</code>. This is the
+measure that matters for an entropy source (NIST SP 800-90B) because it keys on the most
+likely outcome, hence on an attacker's best guess. Shannon entropy, which averages, is far
+more flattering.</p></div>
+
+<p>Von Neumann yield: <strong>21.9 %</strong> of bits survive, for a final throughput
+of <strong>76.2 kbit/s</strong>. The system CSPRNG delivers
+<strong>15.4 Gbit/s</strong> — a ratio of <em class="hl">604 522×</em>
+in favour of the software route.</p>
+
+<div class="card"><svg viewBox="0 0 760 356" role="img" aria-label="production throughput"><text x="238" y="30.400000000000002" text-anchor="end" font-size="13" fill="#a8a8a8">LCG (low-order byte)</text><rect x="250" y="10" width="259.2" height="30" rx="3" fill="#6b6b6b"/><text x="519.2" y="30.400000000000002" font-size="13" fill="#ffffff" font-family="ui-monospace,Consolas,monospace">63.12 Mbit/s</text><text x="238" y="72.4" text-anchor="end" font-size="13" fill="#a8a8a8">Mersenne Twister (MT19937)</text><rect x="250" y="52" width="368.3" height="30" rx="3" fill="#6b6b6b"/><text x="628.3" y="72.4" font-size="13" fill="#ffffff" font-family="ui-monospace,Consolas,monospace">4 468.27 Mbit/s</text><text x="238" y="114.4" text-anchor="end" font-size="13" fill="#a8a8a8">secrets (system CSPRNG)</text><rect x="250" y="94" width="400.0" height="30" rx="3" fill="#6b6b6b"/><text x="660.0" y="114.4" font-size="13" fill="#ffffff" font-family="ui-monospace,Consolas,monospace">15 384.61 Mbit/s</text><text x="238" y="156.4" text-anchor="end" font-size="13" fill="#a8a8a8">CPU jitter — naive extraction</text><rect x="250" y="136" width="208.7" height="30" rx="3" fill="#6b6b6b"/><text x="468.7" y="156.4" font-size="13" fill="#ffffff" font-family="ui-monospace,Consolas,monospace">8.77 Mbit/s</text><text x="238" y="198.4" text-anchor="end" font-size="13" fill="#a8a8a8">CPU jitter — raw</text><rect x="250" y="178" width="131.9" height="30" rx="3" fill="#6b6b6b"/><text x="391.9" y="198.4" font-size="13" fill="#ffffff" font-family="ui-monospace,Consolas,monospace">0.44 Mbit/s</text><text x="238" y="240.4" text-anchor="end" font-size="13" fill="#a8a8a8">CPU jitter — debiased (von Neumann)</text><rect x="250" y="220" width="90.2" height="30" rx="3" fill="#6b6b6b"/><text x="350.2" y="240.4" font-size="13" fill="#ffffff" font-family="ui-monospace,Consolas,monospace">0.09 Mbit/s</text><text x="238" y="282.4" text-anchor="end" font-size="13" fill="#a8a8a8">CPU jitter — SHA-256 conditioned</text><rect x="250" y="262" width="59.0" height="30" rx="3" fill="#6b6b6b"/><text x="319.0" y="282.4" font-size="13" fill="#ffffff" font-family="ui-monospace,Consolas,monospace">0.03 Mbit/s</text><text x="238" y="324.4" text-anchor="end" font-size="13" fill="#a8a8a8">NULL source + SHA-256</text><rect x="250" y="304" width="301.5" height="30" rx="3" fill="#6b6b6b"/><text x="561.5" y="324.4" font-size="13" fill="#ffffff" font-family="ui-monospace,Consolas,monospace">329.45 Mbit/s</text></svg>
+<p class="caption">Production throughput, logarithmic scale.</p></div>
+
+<h2><span class="act">Act III</span>SHA-256 washes whiter</h2>
+<p>Final step of the classic design: condition the output through a hash function. Applied
+to our debiased jitter, SHA-256 lifts the source from 2/8 to
+<strong>8/8</strong>. Victory?</p>
+<p>Then let us apply the very same conditioning to the <strong>null</strong> source — the
+stream of zeros from Act II, entropy measured at 0.000 bits. Result:
+<strong>8/8 as well</strong>, with equally comfortable p-values.</p>
+
+<div class="card thesis">
+<p><strong>A generator holding no entropy whatsoever is statistically indistinguishable
+from a good one.</strong> The tests do not measure the source: they measure the
+conditioner. SHA-256 turns any input into flawless-looking output, a counter included.</p>
+<p>This is exactly why a homemade hardware generator is risky. If the diode ages,
+saturates or comes unplugged, the output stays impeccable under test — and becomes fully
+predictable to anyone who guesses the counter. Certified TRNGs (AIS-31, NIST SP 800-90B)
+therefore mandate continuous health tests on the <em>raw</em> source, ahead of any
+conditioning.</p>
+</div>
+
+<h2><span class="act">Act IV</span>The attack: Mersenne Twister, 8/8 and predictable</h2>
+<p>MT19937 is the generator behind Python's <code>random</code>, and behind PHP, Ruby and
+Excel. It passes all eight tests without a weakness. Its period is 2<sup>19937</sup>−1.</p>
+<p>It holds 624 words of 32-bit internal state. Each output is produced by applying a
+"tempering" function — shifts and XORs — to one state word. That function is
+<strong>bijective</strong>: it scrambles, it does not hide. So we invert it.</p>
+
+<pre>y ^= y &gt;&gt; 18                    <span style="color:#6b6b6b">→ invertible in one pass</span>
+y ^= (y &lt;&lt; 15) &amp; 0xEFC60000     <span style="color:#6b6b6b">→ invertible by iteration</span>
+y ^= (y &lt;&lt; 7)  &amp; 0x9D2C5680     <span style="color:#6b6b6b">→ invertible by iteration</span>
+y ^= y &gt;&gt; 11                    <span style="color:#6b6b6b">→ invertible by iteration</span></pre>
+
+<p>Observing 624 consecutive outputs therefore means reading the entire internal state. We
+rebuild a clone, and predict what comes next.</p>
+
+<div class="kpis">
+<div class="kpi bad"><b>5 000/5 000</b><span>MT19937 outputs predicted after
+observing 624 values</span></div>
+<div class="kpi bad"><b>100 %</b><span>attack success rate</span></div>
+<div class="kpi good"><b>0/5 000</b><span>on the CSPRNG, with exactly the
+same attack</span></div>
+</div>
+
+<p>None of the eight tests sees this weakness, and none of them could: MT19937's output
+<em>is</em> statistically excellent. The flaw is not in the distribution, it is in the
+structure of the algorithm.</p>
+
+<h2>What to take away</h2>
+<table class="plain">
+<tr><th>Finding</th><th>Consequence</th></tr>
+<tr><td>The LCG has perfect Shannon entropy and compresses by a factor of 153</td>
+<td>Measuring the entropy of an output says nothing about its quality</td></tr>
+<tr><td>Naive jitter yields 0 bits of entropy without raising an error</td>
+<td>A physical source must be measured, never assumed</td></tr>
+<tr><td>Von Neumann leaves an imbalance of 0.5024</td>
+<td>Fixing bias does not fix correlation</td></tr>
+<tr><td>A null source conditioned by SHA-256 passes all 8 tests</td>
+<td>The tests judge the conditioner, not the source</td></tr>
+<tr><td>MT19937 passes all 8 tests and is predicted 100 % of the time</td>
+<td>Passing the tests is not evidence of security</td></tr>
+<tr><td>The CSPRNG is 604 522× faster than the software TRNG</td>
+<td>Rolling your own randomness costs more and delivers less</td></tr>
+</table>
+
+<p>Hence the practical conclusion, which is also the design principle behind
+<strong>KeyMint</strong>: for a secret, use the operating system's CSPRNG. It is already
+seeded by hardware entropy, already conditioned, already audited — and it does not die in
+silence.</p>
+
+<h2>Method</h2>
+<p>The eight tests are implemented inside this project, without a statistics library. The
+p-values rest on a regularised incomplete gamma function written by hand and
+<strong>cross-validated against SciPy</strong> in the test suite. Every test is also
+exercised on deliberately defective sequences whose flaw is known in advance — a test that
+never rejects anything is worthless.</p>
+
+<pre>py run_lab.py       <span style="color:#6b6b6b"># the bench → report/results.json</span>
+py make_report.py   <span style="color:#6b6b6b"># → report/index.html + index.en.html</span>
+py tests/test_rnglab.py</pre>
+
+<footer>
+RNG Lab — report generated on 2026-08-16 15:16. 1 000 000 bits sampled per source.
+Tests after NIST SP 800-22; min-entropy in the sense of NIST SP 800-90B.
+</footer>
+
+</div>
+</body>
+</html>
