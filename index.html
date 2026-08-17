@@ -571,22 +571,30 @@ footer{border-top:1px solid var(--border);margin-top:80px;padding:32px 0;}
         </div>
       </div>
     </article>
-    <!-- Polybot -->
+    <!-- KeyMint -->
     <article class="feat rev reveal">
       <div class="fbody">
-        <span class="ftag">📊 Quantitative research</span>
-        <h3>Polybot-Tracker</h3>
-        <div class="fsub">End-to-end research on prediction-market strategies</div>
-        <p>A full data pipeline and backtesting suite. I stress-tested every hypothesis on real historical data — reverse-engineered a pro bot from ~36,000 trades, and validated results out-of-sample rather than trusting a nice-looking curve.</p>
+        <span class="ftag">🔑 Applied cryptography</span>
+        <h3>KeyMint</h3>
+        <div class="fsub">Strong secrets, generated offline, never stored</div>
+        <p>A password &amp; passphrase generator that runs entirely offline — on the phone (installable PWA) and on Windows (.exe). It shows the real entropy in bits rather than an arbitrary gauge, using unbiased rejection sampling proven with a chi-square test, and a French wordlist rebuilt from scratch across four linguistic signals.</p>
         <div class="fmetrics">
-          <div class="fmetric"><div class="mv">5.5M</div><div class="ml">Trades analysed</div></div>
-          <div class="fmetric"><div class="mv">8.5k+</div><div class="ml">Markets</div></div>
-          <div class="fmetric"><div class="mv">1 / 6</div><div class="ml">Survived validation</div></div>
+          <div class="fmetric"><div class="mv">99 bits</div><div class="ml">16-char entropy</div></div>
+          <div class="fmetric"><div class="mv">χ² 500k</div><div class="ml">Proven bias-free</div></div>
+          <div class="fmetric"><div class="mv">0 stored</div><div class="ml">Nothing persisted</div></div>
         </div>
-        <div class="tags"><span class="chip">Python</span><span class="chip">Pandas</span><span class="chip">SQLite</span><span class="chip">Statistics</span><span class="chip">Backtesting</span></div>
-        <span class="feat-more" data-proj="polybot">View full details →</span>
+        <div class="tags"><span class="chip">JavaScript</span><span class="chip">Web Crypto API</span><span class="chip">PWA</span><span class="chip">Python</span><span class="chip">Applied cryptography</span></div>
+        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:16px">
+          <span class="feat-more" data-proj="keymint" style="margin-top:0">View full details →</span>
+          <a class="feat-more" href="https://thespicyy.github.io/keymint/" target="_blank" rel="noopener" style="margin-top:0">✦ Live demo ↗</a>
+        </div>
       </div>
-      <div class="fvis"><img class="zoomable" loading="lazy" src="assets/img/strategy1_equity.png" alt="Real backtest equity curve"/></div>
+      <div class="fvis">
+        <div class="gallery-mini">
+          <img class="zoomable" loading="lazy" src="assets/shots/keymint_password.webp" alt="KeyMint — password mode with entropy in bits"/>
+          <img class="zoomable" loading="lazy" src="assets/shots/keymint_passphrase.webp" alt="KeyMint — passphrase mode, rebuilt French wordlist"/>
+        </div>
+      </div>
     </article>
     <!-- VM Antivirus -->
     <article class="feat reveal">
@@ -626,7 +634,7 @@ footer{border-top:1px solid var(--border);margin-top:80px;padding:32px 0;}
     <p class="sec-desc">Other things I've built — from cloud bots to data-viz dashboards.</p>
   </div>
   <div class="pgrid">
-    <div class="pcard reveal" data-proj="keymint"><div class="top"><div class="emoji">🔑</div><span class="cat">Offline · PWA + Windows</span></div><h4>KeyMint — password generator</h4><p>Strong passwords and passphrases, generated offline on phone &amp; PC — bias-free sampling, real entropy in bits, nothing ever stored.</p><a class="pcard-demo" href="https://thespicyy.github.io/keymint/" target="_blank" rel="noopener">✦ Live demo ↗</a><div class="foot"><span class="metric"><b>99 bits</b> entropy</span><span class="pcard-more">View details →</span></div></div>
+    <div class="pcard reveal" data-proj="polybot"><div class="top"><div class="emoji">📊</div><span class="cat">Quantitative research</span></div><h4>Polybot-Tracker</h4><p>End-to-end research on prediction-market strategies: a full data pipeline &amp; backtesting suite, reverse-engineering a pro bot from ~36k trades, validated out-of-sample.</p><div class="foot"><span class="metric"><b>5.5M</b> trades</span><span class="pcard-more">View details →</span></div></div>
     <div class="pcard reveal" data-proj="rnglab"><div class="top"><div class="emoji">🎲</div><span class="cat">Cryptanalysis · Statistics</span></div><h4>RNG Lab</h4><p>A bench of 8 random generators, 8 statistical tests written from scratch, and an attack that predicts 100 % of Mersenne Twister's output.</p><a class="pcard-demo" href="rng-lab/index.en.html" target="_blank" rel="noopener">✦ Live demo ↗</a><div class="foot"><span class="metric"><b>5 000/5 000</b> predicted</span><span class="pcard-more">View details →</span></div></div>
     <div class="pcard reveal" data-proj="tdl"><div class="top"><div class="emoji">📱</div><span class="cat">PWA + Windows · Sync</span></div><h4>TDL — My tasks</h4><p>A to-do list on phone &amp; PC: one OKX design across a PWA and a native Windows app, offline-first Supabase sync, synced pinning.</p><a class="pcard-demo" href="https://thespicyy.github.io/tdl-app/" target="_blank" rel="noopener">✦ Live demo ↗</a><div class="foot"><span class="metric"><b>Supabase</b> sync</span><span class="pcard-more">View details →</span></div></div>
     <div class="pcard reveal" data-proj="polycheat"><div class="top"><div class="emoji">🤖</div><span class="cat">Deployed</span></div><h4>Polycheat</h4><p>On-chain copy-trading bot on a 24/7 cloud server — real-time detection over WebSocket, safe-by-design, systemd on Oracle Cloud.</p><div class="foot"><span class="metric"><b>~1.3s</b> latency</span><span class="pcard-more">View details →</span></div></div>

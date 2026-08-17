@@ -571,22 +571,30 @@ footer{border-top:1px solid var(--border);margin-top:80px;padding:32px 0;}
         </div>
       </div>
     </article>
-    <!-- Polybot -->
+    <!-- KeyMint -->
     <article class="feat rev reveal">
       <div class="fbody">
-        <span class="ftag">📊 Recherche quantitative</span>
-        <h3>Polybot-Tracker</h3>
-        <div class="fsub">Recherche de bout en bout sur les stratégies de marchés de prédiction</div>
-        <p>Un pipeline de données complet et une suite de backtesting. J'ai éprouvé chaque hypothèse sur de vraies données historiques — rétro-conçu un bot pro à partir de ~36 000 trades, et validé les résultats hors échantillon plutôt que de me fier à une belle courbe.</p>
+        <span class="ftag">🔑 Cryptographie appliquée</span>
+        <h3>KeyMint</h3>
+        <div class="fsub">Des secrets forts, générés hors ligne, jamais stockés</div>
+        <p>Un générateur de mots de passe &amp; de phrases secrètes qui fonctionne entièrement hors ligne — sur le téléphone (PWA installable) et sur Windows (.exe). Il affiche l'entropie réelle en bits plutôt qu'une jauge arbitraire, grâce à un échantillonnage sans biais prouvé par un test du khi-deux, et une liste de mots française reconstruite de zéro à partir de quatre signaux linguistiques.</p>
         <div class="fmetrics">
-          <div class="fmetric"><div class="mv">5.5M</div><div class="ml">trades analysés</div></div>
-          <div class="fmetric"><div class="mv">8.5k+</div><div class="ml">marchés</div></div>
-          <div class="fmetric"><div class="mv">1 / 6</div><div class="ml">ont passé la validation</div></div>
+          <div class="fmetric"><div class="mv">99 bits</div><div class="ml">entropie sur 16 car.</div></div>
+          <div class="fmetric"><div class="mv">χ² 500k</div><div class="ml">sans biais prouvé</div></div>
+          <div class="fmetric"><div class="mv">0 stocké</div><div class="ml">rien de persisté</div></div>
         </div>
-        <div class="tags"><span class="chip">Python</span><span class="chip">Pandas</span><span class="chip">SQLite</span><span class="chip">Statistics</span><span class="chip">Backtesting</span></div>
-        <span class="feat-more" data-proj="polybot">Voir les détails →</span>
+        <div class="tags"><span class="chip">JavaScript</span><span class="chip">Web Crypto API</span><span class="chip">PWA</span><span class="chip">Python</span><span class="chip">Cryptographie appliquée</span></div>
+        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:16px">
+          <span class="feat-more" data-proj="keymint" style="margin-top:0">Voir les détails →</span>
+          <a class="feat-more" href="https://thespicyy.github.io/keymint/" target="_blank" rel="noopener" style="margin-top:0">✦ Démo en ligne ↗</a>
+        </div>
       </div>
-      <div class="fvis"><img class="zoomable" loading="lazy" src="assets/img/strategy1_equity.png" alt="Real backtest equity curve"/></div>
+      <div class="fvis">
+        <div class="gallery-mini">
+          <img class="zoomable" loading="lazy" src="assets/shots/keymint_password.webp" alt="KeyMint — mode mot de passe, entropie en bits"/>
+          <img class="zoomable" loading="lazy" src="assets/shots/keymint_passphrase.webp" alt="KeyMint — mode phrase secrète, liste de mots refaite"/>
+        </div>
+      </div>
     </article>
     <!-- VM Antivirus -->
     <article class="feat reveal">
@@ -626,7 +634,7 @@ footer{border-top:1px solid var(--border);margin-top:80px;padding:32px 0;}
     <p class="sec-desc">D'autres choses que j'ai construites — des bots cloud aux dashboards de data-viz.</p>
   </div>
   <div class="pgrid">
-    <div class="pcard reveal" data-proj="keymint"><div class="top"><div class="emoji">🔑</div><span class="cat">Hors ligne · PWA + Windows</span></div><h4>KeyMint — générateur de mots de passe</h4><p>Mots de passe et phrases de passe forts, générés hors ligne sur téléphone &amp; PC — tirage sans biais, entropie réelle en bits, rien n'est enregistré.</p><a class="pcard-demo" href="https://thespicyy.github.io/keymint/" target="_blank" rel="noopener">✦ Démo live ↗</a><div class="foot"><span class="metric"><b>99 bits</b> d'entropie</span><span class="pcard-more">Voir les détails →</span></div></div>
+    <div class="pcard reveal" data-proj="polybot"><div class="top"><div class="emoji">📊</div><span class="cat">Recherche quantitative</span></div><h4>Polybot-Tracker</h4><p>Recherche de bout en bout sur les stratégies de marchés de prédiction : pipeline de données &amp; suite de backtesting, un bot pro rétro-conçu à partir de ~36k trades, validé hors échantillon.</p><div class="foot"><span class="metric"><b>5.5M</b> trades</span><span class="pcard-more">Voir les détails →</span></div></div>
     <div class="pcard reveal" data-proj="rnglab"><div class="top"><div class="emoji">🎲</div><span class="cat">Cryptanalyse · Statistiques</span></div><h4>RNG Lab</h4><p>Un banc de 8 générateurs aléatoires, 8 tests statistiques écrits de zéro, et une attaque qui prédit 100 % des sorties de Mersenne Twister.</p><a class="pcard-demo" href="rng-lab/index.html" target="_blank" rel="noopener">✦ Démo live ↗</a><div class="foot"><span class="metric"><b>5 000/5 000</b> prédites</span><span class="pcard-more">Voir les détails →</span></div></div>
     <div class="pcard reveal" data-proj="tdl"><div class="top"><div class="emoji">📱</div><span class="cat">PWA + Windows · Synchro</span></div><h4>TDL — Mes tâches</h4><p>Une to-do list sur téléphone &amp; PC : un design OKX commun à une PWA et une app Windows native, synchro offline-first Supabase, épinglage synchronisé.</p><a class="pcard-demo" href="https://thespicyy.github.io/tdl-app/" target="_blank" rel="noopener">✦ Démo live ↗</a><div class="foot"><span class="metric"><b>Supabase</b> synchro</span><span class="pcard-more">Voir les détails →</span></div></div>
     <div class="pcard reveal" data-proj="polycheat"><div class="top"><div class="emoji">🤖</div><span class="cat">Déployé</span></div><h4>Polycheat</h4><p>Bot de copy-trading on-chain sur un serveur cloud 24/7 — détection temps réel via WebSocket, sûr par conception, systemd sur Oracle Cloud.</p><div class="foot"><span class="metric"><b>~1,3s</b> latence</span><span class="pcard-more">Voir les détails →</span></div></div>
