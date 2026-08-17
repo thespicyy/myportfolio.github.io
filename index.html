@@ -46,8 +46,9 @@ img{max-width:100%;display:block;}
 ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--violet),var(--magenta));background-clip:padding-box;border:3px solid transparent;border-radius:100px;}
 ::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--violet-2),var(--pink));background-clip:padding-box;border:3px solid transparent;}
 ::-webkit-scrollbar-corner{background:transparent;}
-/* fiche projet : petite marge pour dégager les coins arrondis */
+/* fiche projet : petite marge pour dégager les coins arrondis + pas de flèches */
 #pm-body::-webkit-scrollbar-track{margin:10px 0;}
+#pm-body::-webkit-scrollbar-button{display:none;width:0;height:0;}
 
 /* bg */
 #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
