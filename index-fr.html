@@ -322,6 +322,11 @@ footer{border-top:1px solid var(--border);margin-top:80px;padding:32px 0;}
   background:var(--bg);border:1px solid var(--border-strong);box-shadow:0 40px 100px rgba(0,0,0,0.65);padding:0;}
 #pm-body{max-height:88vh;overflow-y:auto;overscroll-behavior:contain;padding:38px;}
 [data-theme="light"] .pm-panel{background:#fff;}
+/* petits caches d'angle : masquent le liseré du poucet de la scrollbar qui affleure les coins arrondis */
+.pm-panel::before,.pm-panel::after{content:'';position:absolute;right:0;width:18px;height:16px;background:var(--bg);z-index:1;pointer-events:none;}
+.pm-panel::before{top:0;border-top-right-radius:24px;}
+.pm-panel::after{bottom:0;border-bottom-right-radius:24px;}
+[data-theme="light"] .pm-panel::before,[data-theme="light"] .pm-panel::after{background:#fff;}
 .pm-close{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:11px;border:1px solid var(--border-strong);
   background:var(--surface);color:var(--text-2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;z-index:2;}
 .pm-close:hover{color:var(--text);}
