@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --bg:#07071a;--surface:rgba(255,255,255,0.12);--surface-2:rgba(255,255,255,0.15);
+  --bg:#07071a;--surface:rgba(18,17,42,0.85);--surface-2:rgba(30,28,60,0.85);
   --border:rgba(255,255,255,0.09);--border-strong:rgba(255,255,255,0.16);
   --text:#fff;--text-2:rgba(255,255,255,0.72);--text-3:rgba(255,255,255,0.45);--text-4:rgba(255,255,255,0.26);
   --violet:#8b5cf6;--violet-2:#a78bfa;--violet-3:#c4b5fd;--violet-deep:#7c3aed;
@@ -46,8 +46,11 @@ img{max-width:100%;display:block;}
 ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--violet),var(--magenta));background-clip:padding-box;border:3px solid transparent;border-radius:100px;}
 ::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--violet-2),var(--pink));background-clip:padding-box;border:3px solid transparent;}
 ::-webkit-scrollbar-corner{background:transparent;}
-/* fiche projet : pas de flèches (les coins sont déjà découpés par overflow:hidden) */
-#pm-body::-webkit-scrollbar-button{display:none;width:0;height:0;}
+/* fiche projet : masque les flèches de la scrollbar (Windows = single-button) */
+#pm-body::-webkit-scrollbar-button,
+#pm-body::-webkit-scrollbar-button:single-button,
+#pm-body::-webkit-scrollbar-button:vertical:decrement,
+#pm-body::-webkit-scrollbar-button:vertical:increment{display:none!important;width:0!important;height:0!important;background:transparent;}
 
 /* bg */
 #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
