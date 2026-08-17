@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VM Antivirus — Live Simulation · Rémy Grabet</title>
+<meta name="description" content="Interactive simulation of VM Antivirus — a three-layer malware triage tool: static analysis, threat-intelligence reputation, and disposable-VM sandbox detonation."/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23120b2a'/><g fill='%23fff'><rect x='40' y='20' width='9' height='9'/><rect x='51' y='20' width='9' height='9'/><rect x='29' y='31' width='9' height='9'/><rect x='40' y='31' width='9' height='9'/><rect x='51' y='31' width='9' height='9'/><rect x='62' y='31' width='9' height='9'/><rect x='29' y='42' width='9' height='9'/><rect x='62' y='42' width='9' height='9'/><rect x='40' y='53' width='9' height='9'/><rect x='51' y='53' width='9' height='9'/></g></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07071a;--surface:rgba(18,17,42,0.82);--surface-2:rgba(30,28,60,0.85);
+  --border:rgba(255,255,255,0.09);--border-strong:rgba(255,255,255,0.16);
+  --text:#fff;--text-2:rgba(255,255,255,0.72);--text-3:rgba(255,255,255,0.45);--text-4:rgba(255,255,255,0.26);
+  --violet:#8b5cf6;--violet-2:#a78bfa;--violet-3:#c4b5fd;--pink:#ec4899;--cyan:#06b6d4;
+  --green:#10b981;--amber:#f59e0b;--red:#f43f5e;
+  --grad-pink:linear-gradient(110deg,#a78bfa,#ec4899);
+  --grad-violet:linear-gradient(120deg,#a78bfa,#7c3aed);
+  --mono:'Space Grotesk',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;
+  min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(72px);}
+.orb-1{width:760px;height:760px;top:-300px;left:50%;transform:translateX(-50%);
+  background:radial-gradient(circle,rgba(139,92,246,0.16),rgba(236,72,153,0.05) 46%,transparent 70%);}
+.orb-2{width:560px;height:520px;bottom:-200px;right:-140px;background:radial-gradient(ellipse,rgba(6,182,212,0.10),transparent 70%);}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px;position:relative;z-index:2;}
+
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:22px 0 6px;flex-wrap:wrap;}
+.back{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--text-2);
+  padding:9px 15px;border-radius:100px;background:var(--surface);border:1px solid var(--border);transition:.18s;}
+.back:hover{color:var(--text);border-color:var(--border-strong);transform:translateX(-2px);}
+.back svg{width:15px;height:15px;}
+.sim-badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--violet-2);
+  padding:8px 14px;border-radius:100px;background:rgba(139,92,246,0.10);border:1px solid rgba(139,92,246,0.28);}
+.sim-badge .d{width:7px;height:7px;border-radius:50%;background:var(--violet-2);box-shadow:0 0 8px var(--violet-2);}
+
+/* header */
+header{padding:26px 0 8px;}
+.kick{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--violet-2);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.kick::before{content:'';width:26px;height:2px;border-radius:2px;background:var(--violet);}
+h1{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:-0.02em;line-height:1.02;font-size:clamp(30px,5vw,50px);margin-bottom:14px;}
+h1 .p{background:var(--grad-pink);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.lede{color:var(--text-2);font-size:clamp(15px,2vw,17px);max-width:680px;}
+.layers{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;}
+.layers .pill{font-size:12px;font-weight:600;color:var(--text-2);padding:6px 13px;border-radius:100px;background:var(--surface-2);border:1px solid var(--border);display:inline-flex;gap:7px;align-items:center;}
+.layers .pill b{color:var(--violet-3);font-weight:700;}
+
+/* sample picker */
+.pick-h{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin:34px 0 14px;}
+.samples{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.sample{text-align:left;cursor:pointer;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;transition:.22s;position:relative;overflow:hidden;color:inherit;font:inherit;}
+.sample:hover{border-color:var(--border-strong);transform:translateY(-3px);}
+.sample.active{border-color:var(--violet);box-shadow:0 0 0 1px var(--violet),0 16px 40px rgba(124,58,237,.28);}
+.sample .emoji{font-size:24px;margin-bottom:10px;}
+.sample .nm{font-family:var(--mono);font-weight:700;font-size:14.5px;margin-bottom:3px;word-break:break-word;}
+.sample .ds{font-size:12.5px;color:var(--text-3);}
+.sample .sz{position:absolute;top:16px;right:16px;font-size:11px;color:var(--text-4);font-family:var(--mono);}
+
+/* console */
+.console{margin:26px 0 10px;background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.4);}
+.console-bar{display:flex;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.16);}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot.r{background:#ff5f57;}.dot.y{background:#febc2e;}.dot.g{background:#28c840;}
+.console-title{margin-left:8px;font-family:var(--mono);font-size:13px;color:var(--text-3);}
+.console-title b{color:var(--text-2);}
+.stages{padding:8px 0;}
+.stage{padding:16px 22px;border-bottom:1px solid var(--border);opacity:.4;transition:opacity .4s;}
+.stage:last-child{border-bottom:none;}
+.stage.on,.stage.done{opacity:1;}
+.stage-head{display:flex;align-items:center;gap:12px;margin-bottom:2px;}
+.stage-ic{width:34px;height:34px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.24);color:var(--violet-2);font-size:16px;transition:.3s;}
+.stage.done .stage-ic{background:rgba(16,185,129,0.14);border-color:rgba(16,185,129,0.3);color:var(--green);}
+.stage h3{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;flex:1;}
+.stage .st{font-size:12px;font-family:var(--mono);color:var(--text-3);}
+.stage.on .st{color:var(--violet-2);}
+.stage.done .st{color:var(--green);}
+.spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.2);border-top-color:var(--violet-2);border-radius:50%;animation:sp .7s linear infinite;display:inline-block;vertical-align:-2px;}
+@keyframes sp{to{transform:rotate(360deg);}}
+.bar{height:3px;border-radius:3px;background:rgba(255,255,255,.08);margin:12px 0 4px;overflow:hidden;}
+.bar i{display:block;height:100%;width:0;background:var(--grad-violet);transition:width .5s ease;}
+.log{list-style:none;margin:8px 0 0 46px;display:flex;flex-direction:column;gap:5px;}
+.log li{font-size:13px;color:var(--text-2);opacity:0;transform:translateY(5px);transition:.3s;display:flex;gap:9px;align-items:flex-start;}
+.log li.in{opacity:1;transform:none;}
+.log li .k{font-family:var(--mono);color:var(--text-4);min-width:96px;flex-shrink:0;}
+.log .ok{color:var(--green);}.log .bad{color:var(--red);}.log .warn{color:var(--amber);}
+.mono{font-family:var(--mono);}
+
+/* verdict */
+.verdict{margin:20px 0 40px;border-radius:20px;overflow:hidden;border:1px solid var(--border);opacity:0;transform:translateY(14px);transition:.5s;}
+.verdict.in{opacity:1;transform:none;}
+.verdict-banner{padding:22px 26px;display:flex;align-items:center;gap:16px;}
+.verdict-banner .badge{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:.01em;}
+.verdict-banner .sub{font-size:14px;opacity:.9;}
+.v-SAFE .verdict-banner{background:linear-gradient(100deg,rgba(16,185,129,.22),rgba(16,185,129,.06));}
+.v-SAFE .badge{color:#34d399;}
+.v-SUSPICIOUS .verdict-banner{background:linear-gradient(100deg,rgba(245,158,11,.22),rgba(245,158,11,.05));}
+.v-SUSPICIOUS .badge{color:#fbbf24;}
+.v-DANGEROUS .verdict-banner{background:linear-gradient(100deg,rgba(244,63,94,.26),rgba(244,63,94,.07));}
+.v-DANGEROUS .badge{color:#fb7185;}
+.verdict-body{padding:20px 26px;background:var(--surface);}
+.verdict-body ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.verdict-body li{position:relative;padding-left:22px;font-size:14px;color:var(--text-2);}
+.verdict-body li::before{content:'';position:absolute;left:2px;top:8px;width:7px;height:7px;border-radius:2px;background:var(--grad-pink);}
+.verdict-reco{margin-top:16px;padding-top:16px;border-top:1px solid var(--border);font-size:14px;color:var(--text-2);}
+.verdict-reco b{color:var(--text);}
+.replay{margin-top:8px;}
+.hint{text-align:center;color:var(--text-3);font-size:14px;padding:30px 0;}
+
+footer{border-top:1px solid var(--border);padding:26px 0;margin-top:20px;}
+.foot{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;color:var(--text-3);font-size:13px;}
+.foot a{color:var(--violet-2);font-weight:600;}
+.disclaimer{font-size:12.5px;color:var(--text-4);max-width:640px;}
+
+@media(max-width:720px){.samples{grid-template-columns:1fr;}.log li .k{min-width:78px;}}
+</style>
+</head>
+<body>
+<div class="orb orb-1"></div><div class="orb orb-2"></div>
+
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back to portfolio</a>
+    <span class="sim-badge"><span class="d"></span>Interactive simulation</span>
+  </div>
+
+  <header>
+    <div class="kick">VM Antivirus</div>
+    <h1>Is this download <span class="p">safe to run?</span></h1>
+    <p class="lede">A malware-triage tool that decides whether an untrusted executable is safe — <b>without ever running it on your real machine</b>. Pick a sample below and watch the three-layer analysis play out, exactly as the real desktop app does it.</p>
+    <div class="layers">
+      <span class="pill"><b>1</b> Static analysis</span>
+      <span class="pill"><b>2</b> Threat-intel reputation</span>
+      <span class="pill"><b>3</b> Sandbox detonation</span>
+    </div>
+  </header>
+
+  <div class="pick-h">Choose a sample to analyse</div>
+  <div class="samples" id="samples"></div>
+
+  <div id="stage-area"></div>
+
+  <footer><div class="foot">
+    <span class="disclaimer">Simulated walkthrough for demonstration — no real files are analysed and no network request is made. The logic, thresholds and verdicts mirror the real Python application (VirusTotal + MalwareBazaar APIs, PE analysis, Windows Sandbox detonation).</span>
+    <span>Built by <a href="../index.html">Rémy Grabet</a></span>
+  </div></footer>
+</div>
+
+<script>
+const SAMPLES = {
+  clean: {
+    emoji:"🎮", name:"Neon Drift.exe", size:"24.8 MB", desc:"Cracked indie game (GameMaker)",
+    static:[["sha-256","9f2c3a…e1a7"],["type","PE32 · GameMaker runtime"],["signature",["unsigned — normal for a crack","warn"]],["packer","none · entropy nominal"],["imports","keyboard input, rendering, sockets (game engine)"]],
+    rep:[["VirusTotal",["0 / 73 engines — clean","ok"]],["MalwareBazaar",["not listed (no known-malware match)","ok"]]],
+    sandbox:[["launched","yes — game window opened"],["child processes","none spawned"],["persistence",["none (no Run key, no startup, no task)","ok"]],["network",["1 connection → 172.26.x.x (LAN only)","ok"]],["files written","game saves + shader cache"]],
+    verdict:{level:"SAFE",sub:"No sign of malicious behaviour",
+      reasons:["VirusTotal: 0 detections across 73 engines.","Not present in the MalwareBazaar known-malware corpus.","Sandbox: no persistence, no data-theft behaviour, only LAN traffic.","The only “scary” imports are the game engine (keyboard input, rendering)."],
+      reco:"Clean across all three layers. The unsigned binary is expected for a crack — nothing behaves like malware."}
+  },
+  stealer: {
+    emoji:"💀", name:"Setup_Installer.exe", size:"6.2 MB", desc:"Fake installer — RedLine stealer",
+    static:[["sha-256","a1b29c…5c6b"],["type","PE32 · packed (.rsrc entropy 7.9)"],["signature",["unsigned","warn"]],["packer",["packed / obfuscated section","bad"]],["imports",["CryptUnprotectData (browser-password decrypt), process injection","bad"]]],
+    rep:[["VirusTotal",["34 / 72 — Trojan-PSW.RedLine","bad"]],["MalwareBazaar",["known malware · family: RedLineStealer","bad"]]],
+    sandbox:[["launched","yes"],["child processes",["spawns powershell.exe (LOLBin)","bad"]],["persistence",["adds Run key → WinDefendUpdate","bad"]],["network",["connects to 185.220.101.42:443 (public C2)","bad"]],["data theft",["reads Login Data, Cookies, wallet.dat → Discord webhook","bad"]]],
+    verdict:{level:"DANGEROUS",sub:"Do not run — data-stealing malware",
+      reasons:["MalwareBazaar: known sample of the RedLineStealer family.","VirusTotal: 34/72 engines flag Trojan-PSW (a credential stealer).","Sandbox: installs persistence and spawns PowerShell.","Reads browser passwords / cookies / wallets and exfiltrates them to a Discord webhook."],
+      reco:"Delete it. This is a genuine information stealer — every layer agrees, and the sandbox caught it stealing credentials in real time."}
+  },
+  crack: {
+    emoji:"🔧", name:"game-crack.exe", size:"3.1 MB", desc:"Crack / patcher (the tricky case)",
+    static:[["sha-256","74c0e1…d19b"],["type","PE32"],["signature",["unsigned","warn"]],["packer","none"],["imports",["IsDebuggerPresent (anti-debug — common in DRM patchers)","warn"]]],
+    rep:[["VirusTotal",["12 / 72 — but labelled HackTool / Riskware / Crack","warn"]],["MalwareBazaar",["not listed","ok"]]],
+    sandbox:[["launched","yes — patched the game, then exited"],["child processes","none"],["persistence",["none","ok"]],["network",["no outbound connection","ok"]],["data theft",["none observed","ok"]]],
+    verdict:{level:"SUSPICIOUS",sub:"Probable crack — false positive, at your own risk",
+      reasons:["12 detections, but every label reads “crack / keygen / riskware” — not “stealer”.","Not in MalwareBazaar; sandbox shows no persistence, no network, no data theft.","A crack is a modified executable, so antivirus always flags it — that is expected."],
+      reco:"This is the hard case the tool is built for: telling a crack false-positive apart from a real stealer. The detection labels + a clean detonation point to a crack, not malware — but a crack is still a patched binary, so only run it from a source you trust."}
+  }
+};
+
+const stageDefs = [
+  {key:"static", ic:"🔬", title:"Static analysis", tag:"without executing", field:"static"},
+  {key:"rep",    ic:"🌐", title:"Threat-intel reputation", tag:"VirusTotal + MalwareBazaar", field:"rep"},
+  {key:"sandbox",ic:"📦", title:"Sandbox detonation", tag:"disposable isolated VM", field:"sandbox"}
+];
+
+const wait = ms => new Promise(r=>setTimeout(r,ms));
+let running = false, token = 0;
+
+function buildSamples(){
+  const box = document.getElementById('samples');
+  box.innerHTML = Object.entries(SAMPLES).map(([id,s])=>
+    `<button class="sample" data-id="${id}"><span class="sz">${s.size}</span><div class="emoji">${s.emoji}</div><div class="nm">${s.name}</div><div class="ds">${s.desc}</div></button>`).join('');
+  box.querySelectorAll('.sample').forEach(b=>b.addEventListener('click',()=>run(b.dataset.id)));
+}
+
+function stageShell(){
+  return `<div class="console"><div class="console-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="console-title">vm-antivirus · <b id="cur-file"></b></span></div>
+  <div class="stages">${stageDefs.map(d=>`
+    <div class="stage" id="st-${d.key}">
+      <div class="stage-head"><div class="stage-ic">${d.ic}</div><h3>${d.title}</h3><span class="st" id="stt-${d.key}">${d.tag}</span></div>
+      <div class="bar"><i id="bar-${d.key}"></i></div>
+      <ul class="log" id="log-${d.key}"></ul>
+    </div>`).join('')}</div></div>
+  <div id="verdict-slot"></div>`;
+}
+
+function line(item){
+  let k,v,cls='';
+  if(Array.isArray(item[1])){k=item[0];v=item[1][0];cls=item[1][1];}
+  else{k=item[0];v=item[1];}
+  const c = cls==='ok'?'ok':cls==='bad'?'bad':cls==='warn'?'warn':'';
+  return `<li><span class="k">${k}</span><span class="${c}">${v}</span></li>`;
+}
+
+async function run(id){
+  const s = SAMPLES[id]; if(!s) return;
+  const my = ++token; running = true;
+  document.querySelectorAll('.sample').forEach(b=>b.classList.toggle('active',b.dataset.id===id));
+  const area = document.getElementById('stage-area');
+  area.innerHTML = stageShell();
+  document.getElementById('cur-file').textContent = s.name;
+  area.scrollIntoView({behavior:'smooth',block:'start'});
+
+  for(const d of stageDefs){
+    if(my!==token) return;
+    const st = document.getElementById('st-'+d.key);
+    const stt = document.getElementById('stt-'+d.key);
+    st.classList.add('on');
+    stt.innerHTML = '<span class="spin"></span>';
+    document.getElementById('bar-'+d.key).style.width = '100%';
+    await wait(560);
+    const rows = s[d.field];
+    const ul = document.getElementById('log-'+d.key);
+    for(const item of rows){
+      if(my!==token) return;
+      ul.insertAdjacentHTML('beforeend', line(item));
+      const li = ul.lastElementChild;
+      requestAnimationFrame(()=>li.classList.add('in'));
+      await wait(230);
+    }
+    stt.textContent = 'done';
+    st.classList.remove('on'); st.classList.add('done');
+    await wait(260);
+  }
+  if(my!==token) return;
+  showVerdict(s.verdict);
+  running = false;
+}
+
+function showVerdict(v){
+  const slot = document.getElementById('verdict-slot');
+  slot.innerHTML = `<div class="verdict v-${v.level}">
+    <div class="verdict-banner"><div><div class="badge">${v.level==='SAFE'?'✓ SAFE':v.level==='SUSPICIOUS'?'⚠ SUSPICIOUS':'✕ DANGEROUS'}</div><div class="sub">${v.sub}</div></div></div>
+    <div class="verdict-body"><ul>${v.reasons.map(r=>`<li>${r}</li>`).join('')}</ul>
+    <div class="verdict-reco"><b>Verdict.</b> ${v.reco}</div>
+    <div class="replay"><button class="back" onclick="document.getElementById('samples').scrollIntoView({behavior:'smooth'})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9 9 0 0 0-6.7 3"/><path d="M3 4v4h4"/></svg>Try another sample</button></div>
+    </div></div>`;
+  const el = slot.querySelector('.verdict');
+  requestAnimationFrame(()=>el.classList.add('in'));
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+buildSamples();
+document.getElementById('stage-area').innerHTML = '<div class="hint">↑ Pick a sample to launch the analysis.</div>';
+</script>
+</body>
+</html>
