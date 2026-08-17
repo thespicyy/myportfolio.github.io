@@ -46,6 +46,8 @@ img{max-width:100%;display:block;}
 ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--violet),var(--magenta));background-clip:padding-box;border:3px solid transparent;border-radius:100px;}
 ::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--violet-2),var(--pink));background-clip:padding-box;border:3px solid transparent;}
 ::-webkit-scrollbar-corner{background:transparent;}
+/* fiche projet : la barre s'arrête avant les coins arrondis (rayon 24px) */
+.pm-panel::-webkit-scrollbar-track{margin:24px 0;}
 
 /* bg */
 #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
