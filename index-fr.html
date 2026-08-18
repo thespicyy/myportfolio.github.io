@@ -334,6 +334,16 @@ footer{border-top:1px solid var(--border);margin-top:80px;padding:32px 0;}
 .pm-close{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:11px;border:1px solid var(--border-strong);
   background:var(--surface);color:var(--text-2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;z-index:2;}
 .pm-close:hover{color:var(--text);}
+/* mentions légales */
+.legal-link{font-size:13px;color:var(--text-3);cursor:pointer;transition:.16s;}
+.legal-link:hover{color:var(--violet-2);}
+[data-theme="light"] .legal-link:hover{color:var(--violet-deep);}
+.legal-body{max-height:88vh;overflow-y:auto;overscroll-behavior:contain;padding:38px;}
+.legal-body h3{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;margin-bottom:6px;}
+.legal-body h4{font-size:12.5px;font-weight:700;letter-spacing:.02em;color:var(--text);margin:20px 0 5px;text-transform:uppercase;}
+.legal-body p{color:var(--text-2);font-size:14px;margin-bottom:3px;}
+.legal-body a{color:var(--violet-2);}
+[data-theme="light"] .legal-body a{color:var(--violet-deep);}
 .pm-cat{display:inline-flex;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
   color:var(--violet-2);padding:5px 11px;border-radius:8px;background:rgba(139,92,246,0.10);border:1px solid rgba(139,92,246,0.22);margin-bottom:16px;}
 .pm-panel h3{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;margin-bottom:6px;}
@@ -665,9 +675,28 @@ footer{border-top:1px solid var(--border);margin-top:80px;padding:32px 0;}
 </div>
 <footer><div class="foot">
   <span class="cr">© <span id="yr"></span> Rémy Grabet</span>
+  <a href="#" id="legal-link" class="legal-link">Mentions légales</a>
   <span class="loc">Anglet, France</span>
 </div></footer>
 </div></section>
+
+<!-- Mentions légales -->
+<div class="pm" id="legalmodal"><div class="pm-panel"><button class="pm-close" id="legal-close" aria-label="Fermer">✕</button>
+<div class="legal-body">
+  <span class="pm-cat">Mentions légales</span>
+  <h3>Mentions légales</h3>
+  <div class="pm-sub">Mise à jour : août 2026</div>
+  <h4>Éditeur</h4>
+  <p>Rémy Grabet — Anglet, France</p>
+  <p>Contact : <a href="mailto:r.grabet@gmail.com">r.grabet@gmail.com</a></p>
+  <h4>Hébergement</h4>
+  <p>GitHub Pages — GitHub, Inc.</p>
+  <p>88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis</p>
+  <h4>Propriété intellectuelle</h4>
+  <p>Le contenu de ce site (textes, captures d'écran, code source) est © Rémy Grabet, sauf mention contraire. Les noms et logos de tiers (technologies, projets) appartiennent à leurs propriétaires respectifs.</p>
+  <h4>Données personnelles &amp; cookies</h4>
+  <p>Ce site est une vitrine statique : aucun compte, aucune mesure d'audience, aucun cookie de suivi. Le seul stockage navigateur utilisé est votre préférence de thème (clair / sombre), conservée localement sur votre appareil et jamais transmise.</p>
+</div></div></div>
 
 <!-- Project modal -->
 <div class="pm" id="projmodal"><div class="pm-panel"><button class="pm-close" id="pm-close" aria-label="Close">✕</button><div id="pm-body"></div></div></div>
@@ -738,6 +767,13 @@ footer{border-top:1px solid var(--border);margin-top:80px;padding:32px 0;}
 <div class="lb" id="lightbox"><button class="lb-close" id="lb-close">✕</button><img id="lb-img" src="" alt=""/></div>
 <script>
 document.getElementById('yr').textContent=new Date().getFullYear();
+// mentions légales : modale
+(function(){var link=document.getElementById('legal-link'),modal=document.getElementById('legalmodal'),close=document.getElementById('legal-close');if(!link||!modal)return;
+function op(e){if(e)e.preventDefault();modal.classList.add('open');document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';}
+function sh(){modal.classList.remove('open');document.documentElement.style.overflow='';document.body.style.overflow='';}
+link.addEventListener('click',op);if(close)close.addEventListener('click',sh);
+modal.addEventListener('click',function(e){if(e.target===modal)sh();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))sh();});})();
 function tt(){var l=document.documentElement.getAttribute('data-theme')==='light';if(l){document.documentElement.removeAttribute('data-theme');localStorage.setItem('pf2_theme','dark');}else{document.documentElement.setAttribute('data-theme','light');localStorage.setItem('pf2_theme','light');}}
 (function(){var s=localStorage.getItem('pf2_theme');if(s==='light')document.documentElement.setAttribute('data-theme','light');else if(!s&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)document.documentElement.setAttribute('data-theme','light');})();
 function mm(){document.getElementById('navlinks').classList.toggle('open');}
