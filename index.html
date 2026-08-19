@@ -966,6 +966,32 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
         top=Math.max(84,Math.min(top,Math.max(84,window.innerHeight-h-20)));      // jamais coupé en bas
         inner.style.top=top+'px';
       });
+      mesureEffacement();
+    }
+
+    /* Distance sur laquelle le bloc s'efface. Calculée après coup, une fois toutes les
+       hauteurs posées : elle dépend de la position de la section suivante.
+       Objectif : le bloc a fini de disparaître quand la suivante arrive vers le milieu
+       de l'écran — donc bien après son apparition, mais avant le bas de page. */
+    function mesureEffacement(){
+      var Y=window.scrollY, vh=window.innerHeight;
+      var scrollMax=document.documentElement.scrollHeight-vh;
+      ids.forEach(function(id){
+        var sec=document.getElementById(id); if(!sec) return;
+        var hold=sec.querySelector('.shold'); if(!hold) return;
+        if(!sec.classList.contains('has-hold')){ delete sec.dataset.fade; return; }
+        var inner=hold.firstElementChild;
+        var h=inner.firstElementChild.getBoundingClientRect().height;
+        var top=parseFloat(inner.style.top)||0;
+        var relache=hold.getBoundingClientRect().top+Y+hold.offsetHeight-top-h;   // scroll de libération
+        var suiv=sec.nextElementSibling;
+        while(suiv&&!suiv.matches('section,footer')) suiv=suiv.nextElementSibling;
+        var vise=suiv?(suiv.getBoundingClientRect().top+Y-vh*0.5-relache):460;
+        var len=Math.max(320,Math.min(560,vise));
+        var restant=scrollMax-relache;                     // ce qu'il reste à faire défiler après la libération
+        if(restant>0) len=Math.min(len,restant*0.8);       // garantit l'effacement complet avant le bas de page
+        sec.dataset.fade=Math.round(Math.max(240,len));
+      });
     }
     setup();
     // après le maintien, le bloc s'échappe vers le haut en s'effaçant
@@ -981,15 +1007,14 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
         var h=inner.firstElementChild.getBoundingClientRect().height;
         var top=parseFloat(inner.style.top)||0;
         var past=(top+h)-hold.getBoundingClientRect().bottom;      // pixels au-delà de la libération
-        var f=Math.max(0,Math.min(1,past/300));
-        // l'effacement se termine avant la fin de la course (à 70 %) : sinon, en bas de page,
-        // le bloc restait visible à 5 % d'opacité sur ~200 px de haut
-        var fade=Math.min(1,f/0.7);
-        inner.style.transform=f?('translateY('+(-f*120).toFixed(1)+'px)'):'';
-        inner.style.opacity=f?(1-fade).toFixed(3):'';
-        // une fois effacé, on le retire vraiment : plus de reste visible, et il ne capte plus les clics
-        inner.style.visibility=(fade>=1)?'hidden':'';
-        inner.style.pointerEvents=(fade>=1)?'none':'';
+        var len=parseFloat(sec.dataset.fade)||460;
+        var p=Math.max(0,Math.min(1,past/len));
+        var e=p*p*(3-2*p);          // adouci aux deux bouts : ni départ brutal, ni coupure sèche
+        inner.style.transform=p?('translateY('+(-e*110).toFixed(1)+'px)'):'';
+        inner.style.opacity=p?(1-e).toFixed(3):'';
+        // à la fin, on le retire vraiment : aucun reste visible, et il ne capte plus les clics
+        inner.style.visibility=(p>=1)?'hidden':'';
+        inner.style.pointerEvents=(p>=1)?'none':'';
       });
     }
     window.addEventListener('scroll',flyaway,{passive:true});
