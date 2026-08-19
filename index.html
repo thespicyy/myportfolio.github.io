@@ -319,6 +319,15 @@ h1 .mut{color:var(--text-3);}
 #pmBody{max-height:88vh;overflow-y:auto;overscroll-behavior:contain;padding:40px 34px 40px 40px;}
 .pm-close{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface-2);color:var(--text-2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;z-index:3;}
 .pm-close:hover{color:var(--text);}
+/* mentions légales */
+.legal-link{font-family:var(--mono);font-size:11.5px;color:var(--text-3);background:none;border:0;padding:0;cursor:pointer;transition:color .25s var(--ease);}
+.legal-link:hover{color:var(--text-2);}
+.cr .sep{margin:0 8px;color:var(--line-2);}
+.legal h4{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-3);margin:26px 0 8px;}
+.legal h4:first-of-type{margin-top:6px;}
+.legal p{color:var(--text-2);font-size:14px;line-height:1.65;margin-bottom:4px;}
+.legal a{color:var(--text);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line-2);}
+.legal a:hover{text-decoration-color:var(--text-3);}
 .pm-cat{display:inline-flex;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-2);padding:5px 11px;border-radius:7px;background:var(--surface-2);border:1px solid var(--line);margin-bottom:16px;}
 .pm-panel h3{font-family:var(--display);font-weight:600;font-size:28px;letter-spacing:-0.02em;margin-bottom:8px;}
 .pm-sub{color:var(--text-3);font-size:14px;margin-bottom:20px;}
@@ -636,7 +645,7 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
           <a href="https://www.linkedin.com/in/remy-grabet-832375289/" target="_blank" rel="noopener">LinkedIn</a>
           <a href="https://github.com/thespicyy" target="_blank" rel="noopener">GitHub</a>
         </div>
-        <span class="cr">© 2026 Rémy Grabet — France</span>
+        <span class="cr">© 2026 Rémy Grabet — France<span class="sep">·</span><button class="legal-link" id="legalLink" data-fr="Mentions légales">Legal notice</button></span>
       </div>
     </div>
   </div>
@@ -916,8 +925,31 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
   var locks=0;
   function lock(){locks++;document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';}
   function unlock(){locks=Math.max(0,locks-1);if(!locks){document.documentElement.style.overflow='';document.body.style.overflow='';}}
+  /* ---- mentions légales ---- */
+  var LEGAL={
+    en:{cat:'Legal notice',h:'Legal notice',sub:'Last updated August 2026',
+      s:[['Publisher','Rémy Grabet — France<br/>Contact: <a href="mailto:r.grabet@gmail.com">r.grabet@gmail.com</a>'],
+         ['Hosting','GitHub Pages — GitHub, Inc.<br/>88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA'],
+         ['Intellectual property','The content of this site (text, screenshots, source code) is © Rémy Grabet, unless otherwise stated. Third-party names and logos (technologies, projects) belong to their respective owners.'],
+         ['Personal data &amp; cookies','This is a static showcase site: no account, no audience measurement, no tracking cookies. The only browser storage used is your theme (light / dark) and language (FR / EN) preferences, kept locally on your device and never transmitted.']]},
+    fr:{cat:'Mentions légales',h:'Mentions légales',sub:'Dernière mise à jour : août 2026',
+      s:[['Éditeur','Rémy Grabet — France<br/>Contact : <a href="mailto:r.grabet@gmail.com">r.grabet@gmail.com</a>'],
+         ['Hébergement','GitHub Pages — GitHub, Inc.<br/>88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis'],
+         ['Propriété intellectuelle','Le contenu de ce site (textes, captures, code source) est © Rémy Grabet, sauf mention contraire. Les noms et logos de tiers (technologies, projets) appartiennent à leurs propriétaires respectifs.'],
+         ['Données personnelles &amp; cookies',"Ce site est une vitrine statique : aucun compte, aucune mesure d'audience, aucun cookie de suivi. Le seul stockage navigateur utilisé concerne vos préférences de thème (clair / sombre) et de langue (FR / EN), conservées localement sur votre appareil et jamais transmises."]]}
+  };
+  function openLegal(){
+    var L=LEGAL[LANG]||LEGAL.fr;
+    var h='<span class="pm-cat">'+L.cat+'</span><h3>'+L.h+'</h3><div class="pm-sub">'+L.sub+'</div><div class="legal">';
+    for(var i=0;i<L.s.length;i++) h+='<h4>'+L.s[i][0]+'</h4><p>'+L.s[i][1]+'</p>';
+    pmBody.innerHTML=h+'</div>'; pmBody.scrollTop=0; pm.classList.add('open'); lock();
+  }
+  var legalBtn=document.getElementById('legalLink');
+  if(legalBtn) legalBtn.addEventListener('click',function(){ lastKey='legal'; openLegal(); });
+
   var lastKey=null;
   function openModal(key){
+    if(key==='legal'){ lastKey='legal'; openLegal(); return; }   // la bascule FR/EN repasse par ici
     var d=ALL[key]; if(!d) return;
     lastKey=key;
     var h='<span class="pm-cat">'+esc(d.cat)+'</span><h3>'+esc(d.title)+'</h3><div class="pm-sub">'+esc(d.sub)+(d.per?' · '+esc(d.per):'')+'</div>';
