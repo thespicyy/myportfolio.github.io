@@ -2,839 +2,1222 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<script>
+/* thème appliqué avant toute peinture : évite le flash de couleur (bulle de nav, cartes…) */
+(function(){try{
+  /* sombre par défaut ; le mode clair ne s'applique que si l'utilisateur l'a choisi */
+  if(localStorage.getItem('noir_theme')==='light')
+    document.documentElement.setAttribute('data-theme','light');
+}catch(e){}}());
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Rémy Grabet — Data & Software</title>
-<meta name="description" content="Rémy Grabet — data-focused developer. Dashboards, data analysis &amp; visualization, machine learning, automation and cloud deployment in Python."/>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'><circle cx='50' cy='50' r='38' stroke='%23a78bfa' stroke-width='4'/><circle cx='50' cy='50' r='13' fill='%238b5cf6'/><circle cx='69' cy='17.09' r='9' fill='%23f3f1fa'/></svg>"/>
+<title>NOIR — Rémy Grabet</title>
+<meta name="description" content="Rémy Grabet — data analyst & data scientist. Data platforms, machine learning, dashboards and decision-support tools in Python."/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><style>path%7Bfill:%23111%7D@media(prefers-color-scheme:dark)%7Bpath%7Bfill:%23ededed%7D%7D</style><path d='M50 12 C55 42 58 45 88 50 C58 55 55 58 50 88 C45 58 42 55 12 50 C42 45 45 42 50 12 Z'/></svg>"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><style>path%7Bfill:%23111%7D@media(prefers-color-scheme:dark)%7Bpath%7Bfill:%23ededed%7D%7D</style><path d='M50 12 C55 42 58 45 88 50 C58 55 55 58 50 88 C45 58 42 55 12 50 C42 45 45 42 50 12 Z'/></svg>"/>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=general-sans@400,500,600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --bg:#0b0910;--surface:rgba(18,17,42,0.5);--surface-2:rgba(30,28,60,0.6);
-  --border:rgba(255,255,255,0.09);--border-strong:rgba(255,255,255,0.16);
-  --text:#fff;--text-2:rgba(255,255,255,0.72);--text-3:rgba(255,255,255,0.45);--text-4:rgba(255,255,255,0.26);
-  --violet:#8b5cf6;--violet-2:#a78bfa;--violet-3:#c4b5fd;--violet-deep:#7c3aed;
-  --pink:#ec4899;--pink-2:#f472b6;--magenta:#d946ef;--cyan:#06b6d4;--green:#10b981;
-  --grad:linear-gradient(120deg,#ffffff,#a78bfa);
-  --grad-pink:linear-gradient(110deg,#a78bfa,#ec4899);
-  --grad-violet:linear-gradient(120deg,#a78bfa,#7c3aed);
-  --radius:20px;--maxw:1200px;
-  --shadow:0 24px 60px rgba(0,0,0,0.45);
+  --bg:#0a0a0a;--surface:#101010;--surface-2:#161616;--surface-3:#1c1c1c;
+  --line:rgba(255,255,255,0.08);--line-2:rgba(255,255,255,0.14);
+  --text:#ededed;--text-2:#a8a8a8;--text-3:#6b6b6b;--white:#ffffff;
+  --display:'Clash Display','General Sans',system-ui,sans-serif;
+  --body:'General Sans',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(0.32,0.72,0,1);
+  --maxw:1180px;
+  --edge:max(24px, calc((100vw - 1180px)/2 + 24px));
+  --btn-fg:#000;--scene:#0a0a0a;--rule:rgba(255,255,255,0.055);
+  --nav-bg:rgba(16,16,16,0.6);--veil:rgba(4,4,4,0.82);--veil-2:rgba(2,2,2,0.94);
+  --well:#0b0b0b;--thumb:#242424;--thumb-h:#3a3a3a;--logo-inv:0;
+  --circ:rgba(0,0,0,0.08);--track:rgba(255,255,255,0.14);--tick:rgba(255,255,255,0.05);
+  --barfill:rgba(255,255,255,0.13);--sparkle:rgba(255,255,255,0.18);
+  --nav-shadow:0 10px 34px rgba(0,0,0,0.55), 0 0 26px rgba(255,255,255,0.05);
+  --ind-bg:rgba(255,255,255,0.07);--ind-line:rgba(255,255,255,0.22);--ind-glow:rgba(255,255,255,0.16);--cta-ring:rgba(255,255,255,0.45);--cta-glow:rgba(255,255,255,0.34);--sweep:rgba(0,0,0,0.22);
 }
 [data-theme="light"]{
-  --bg:#f6f5fc;--surface:#ffffff;--surface-2:#f3f1fb;
-  --border:rgba(30,16,80,0.12);--border-strong:rgba(124,58,237,0.4);
-  --text:#140a34;--text-2:rgba(20,10,52,0.76);--text-3:rgba(20,10,52,0.58);--text-4:rgba(20,10,52,0.36);
-  --grad:linear-gradient(120deg,#1e1060,#7c3aed);
-  --grad-pink:linear-gradient(110deg,#7c3aed,#db2777);
-  --grad-violet:linear-gradient(120deg,#7c3aed,#4c1d95);
-  --shadow:0 16px 40px rgba(80,50,160,0.13);
+  --bg:#f2f2f2;--surface:#ffffff;--surface-2:#ececec;--surface-3:#e3e3e3;
+  --line:rgba(0,0,0,0.10);--line-2:rgba(0,0,0,0.20);
+  --text:#121212;--text-2:#4d4d4d;--text-3:#7d7d7d;--white:#121212;
+  --btn-fg:#fff;--scene:#f2f2f2;--rule:rgba(0,0,0,0.055);
+  --nav-bg:rgba(255,255,255,0.72);--veil:rgba(245,245,245,0.84);--veil-2:rgba(248,248,248,0.96);
+  --well:#f7f7f7;--thumb:#cdcdcd;--thumb-h:#b4b4b4;--logo-inv:1;
+  --circ:rgba(255,255,255,0.18);--track:rgba(0,0,0,0.14);--tick:rgba(0,0,0,0.07);
+  --barfill:rgba(0,0,0,0.16);--sparkle:rgba(0,0,0,0.22);
+  --nav-shadow:0 12px 40px rgba(0,0,0,0.10);
+  --ind-bg:rgba(18,18,18,0.06);--ind-line:rgba(18,18,18,0.20);--ind-glow:rgba(18,18,18,0.14);--cta-ring:rgba(18,18,18,0.38);--cta-glow:rgba(18,18,18,0.26);--sweep:rgba(255,255,255,0.34);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;overflow-x:hidden;}
-body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;
-  font-variant-numeric:tabular-nums;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background .5s,color .5s;}
+html{scroll-behavior:smooth;overflow-x:clip;}
+body{overflow-anchor:none;background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip;letter-spacing:-0.005em;}
+::selection{background:var(--surface-3);color:var(--text);}
 a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--text-2);outline-offset:3px;border-radius:4px;}
 img{max-width:100%;display:block;}
-::selection{background:rgba(236,72,153,0.32);color:#fff;}
 
-/* barre de défilement — accent violet/magenta du thème */
-*{scrollbar-width:thin;scrollbar-color:#8b5cf6 transparent;}
-::-webkit-scrollbar{width:12px;height:12px;}
+*{scrollbar-width:thin;scrollbar-color:var(--thumb) transparent;}
+::-webkit-scrollbar{width:11px;height:11px;}
 ::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--violet),var(--magenta));background-clip:padding-box;border:3px solid transparent;border-radius:100px;}
-::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--violet-2),var(--pink));background-clip:padding-box;border:3px solid transparent;}
+::-webkit-scrollbar-thumb{background:var(--thumb);border-radius:100px;border:3px solid transparent;background-clip:padding-box;}
+::-webkit-scrollbar-thumb:hover{background:var(--thumb-h);background-clip:padding-box;border:3px solid transparent;}
 ::-webkit-scrollbar-corner{background:transparent;}
-/* fiche projet : masque les flèches de la scrollbar (Windows = single-button) */
-#pm-body::-webkit-scrollbar-button,
-#pm-body::-webkit-scrollbar-button:single-button,
-#pm-body::-webkit-scrollbar-button:vertical:decrement,
-#pm-body::-webkit-scrollbar-button:vertical:increment{display:none!important;width:0!important;height:0!important;background:transparent;}
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-button:single-button,
+::-webkit-scrollbar-button:vertical:decrement,::-webkit-scrollbar-button:vertical:increment,
+::-webkit-scrollbar-button:horizontal:decrement,::-webkit-scrollbar-button:horizontal:increment{
+  display:none!important;width:0!important;height:0!important;background:transparent;}
 
-/* bg — décor statique (halo + sheen + grille) */
-.bg-scene{position:fixed;inset:0;z-index:-1;overflow:hidden;background:var(--bg);pointer-events:none;}
-.bg-glow{position:absolute;inset:0;background:radial-gradient(120% 95% at 78% 88%,rgba(139,92,246,0.20) 0%,rgba(139,92,246,0.07) 38%,rgba(11,9,16,0) 70%);}
-.bg-sheen{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0.035) 0%,rgba(255,255,255,0) 45%);}
-.bg-grid{position:absolute;inset:0;opacity:0.55;
-  background-image:linear-gradient(rgba(255,255,255,0.028) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.028) 1px,transparent 1px);
+.grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:0.035;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.bg-scene{position:fixed;inset:0;z-index:-1;overflow:hidden;background:var(--scene);pointer-events:none;}
+.bg-grid{position:absolute;inset:0;opacity:.9;
+  background-image:linear-gradient(var(--rule) 1px,transparent 1px),linear-gradient(90deg,var(--rule) 1px,transparent 1px);
   background-size:88px 88px;
-  -webkit-mask-image:radial-gradient(100% 80% at 50% 20%,#000 0%,transparent 78%);mask-image:radial-gradient(100% 80% at 50% 20%,#000 0%,transparent 78%);}
-[data-theme="light"] .bg-glow{background:radial-gradient(120% 95% at 78% 88%,rgba(124,58,237,0.12) 0%,rgba(124,58,237,0.05) 38%,rgba(246,245,252,0) 70%);}
-[data-theme="light"] .bg-sheen{background:linear-gradient(180deg,rgba(124,58,237,0.05) 0%,rgba(255,255,255,0) 45%);}
-[data-theme="light"] .bg-grid{opacity:.45;background-image:linear-gradient(rgba(20,10,52,0.055) 1px,transparent 1px),linear-gradient(90deg,rgba(20,10,52,0.055) 1px,transparent 1px);}
+  -webkit-mask-image:radial-gradient(125% 100% at 50% 20%,#000 0%,#000 58%,transparent 100%);mask-image:radial-gradient(125% 100% at 50% 20%,#000 0%,#000 58%,transparent 100%);}
 
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px;position:relative;z-index:2;}
-/* effet verre : les cartes laissent transparaître le fond, flouté */
-.feat,.bento .cell,.xp,.pcard,.value-list .row{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
-
-/* ── Capsule nav ── */
-.nav-shell{position:fixed;top:18px;left:0;right:0;z-index:50;display:flex;justify-content:center;padding:0 16px;transition:top .3s;}
-nav{display:flex;align-items:center;gap:8px;padding:9px 9px 9px 20px;border-radius:100px;
-  background:rgba(12,11,32,0.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border:1px solid var(--border);box-shadow:0 14px 40px rgba(0,0,0,0.4);max-width:100%;}
-[data-theme="light"] nav{background:rgba(255,255,255,0.8);}
-.brand{display:inline-flex;align-items:center;gap:9px;font-family:'Space Grotesk',sans-serif;font-weight:700;
-  font-size:16px;letter-spacing:-0.01em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding:5px 11px;border-radius:100px;transition:box-shadow .3s ease;}
-.brand.at-top{box-shadow:inset 0 0 0 1px rgba(139,92,246,.6), 0 0 11px rgba(139,92,246,.45);}
-@keyframes spin{to{transform:rotate(360deg);}}
-.brand .mk .dot{transform-box:view-box;transform-origin:50% 50%;animation:spin 7s linear infinite;}
-.brand .mk{filter:drop-shadow(0 0 8px rgba(139,92,246,0.6));}
-.nav-sep{width:1px;height:22px;background:var(--border);margin:0 4px;}
-.nav-links{display:flex;gap:2px;position:relative;}
-.nav-links a{padding:8px 14px;border-radius:100px;font-size:13.5px;font-weight:500;color:var(--text-3);transition:.16s;position:relative;z-index:1;}
-.nav-links a:hover{background:var(--surface-2);color:var(--text);}
-.nav-links a.active{color:var(--violet);text-shadow:0 0 8px rgba(167,139,250,.55);}
+/* nav */
+.nav-shell{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:center;padding:18px 16px;
+  opacity:0;transition:opacity .32s var(--ease);}
+.nav-shell.ready{opacity:1;}
+nav{position:relative;transform:translateZ(0);display:flex;align-items:center;gap:20px;padding:9px 9px 9px 20px;border-radius:100px;background:var(--nav-bg);border:1px solid var(--line);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--nav-shadow);}
+.brand{position:relative;z-index:1;display:inline-flex;align-items:center;gap:9px;font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-0.01em;color:var(--text);}
+.brand .star{width:19px;height:19px;color:var(--text);}
+.nav-sep{width:1px;height:20px;background:var(--line-2);flex:0 0 auto;margin-left:12px;margin-right:-11px;}
+.nav-links{display:flex;gap:2px;}
+.nav-links a{position:relative;z-index:1;}
 .nav-ind{position:absolute;top:0;left:0;height:100%;width:0;border-radius:100px;pointer-events:none;z-index:0;opacity:0;
-  box-shadow:inset 0 0 0 1px rgba(139,92,246,.65), 0 0 11px rgba(139,92,246,.5);
-  transition:left .42s cubic-bezier(.34,1.56,.64,1),width .42s cubic-bezier(.34,1.56,.64,1),top .42s cubic-bezier(.34,1.56,.64,1),height .42s cubic-bezier(.34,1.56,.64,1),transform .42s cubic-bezier(.34,1.56,.64,1),opacity .25s ease;}
+  background:var(--ind-bg);
+  box-shadow:inset 0 0 0 1px var(--ind-line), 0 0 14px var(--ind-glow), 0 0 30px var(--ind-glow);
+  transition:left .42s var(--ease),width .42s var(--ease),transform .42s var(--ease),opacity .25s ease;}
+.nav-ind.no-anim{transition:none!important;}
 .nav-ind.on{opacity:1;}
-.nav-ind.drop{transform:scaleX(1.18) scaleY(.86);}
-@media(prefers-reduced-motion:reduce){.nav-ind{transition:opacity .2s;}}
-.nav-cta{padding:9px 18px;border-radius:100px;font-size:13.5px;font-weight:600;color:#fff;
-  background:var(--grad-violet);box-shadow:0 6px 18px rgba(124,58,237,0.4);transition:.18s;white-space:nowrap;}
-.nav-cta:hover{transform:translateY(-1px);box-shadow:0 10px 26px rgba(124,58,237,0.55);}
-.nav-ico{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:100px;
-  border:1px solid var(--border);background:var(--surface);color:var(--text-3);cursor:pointer;transition:.16s;}
-.nav-ico:hover{color:var(--text);border-color:var(--border-strong);}
-.nav-ico svg{width:16px;height:16px;}
-.lang-ico{width:auto;padding:0 12px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;letter-spacing:.04em;text-decoration:none;}
-.menu-btn{display:none;}
+.nav-ind.pop{transform:scaleX(1.10) scaleY(.86);}
+/* sur le bouton de contact : la bulle passe dessous et disparaît, c'est le bouton qui s'allume */
+.nav-ind.on-cta{background:transparent;box-shadow:none;}
+.nav-links a.active{color:var(--text);text-shadow:0 0 10px var(--ind-glow);}
+.brand.lit{text-shadow:0 0 10px var(--ind-glow);}
+.nav-links a{padding:7px 13px;border-radius:100px;font-size:13.5px;font-weight:500;color:var(--text-2);transition:color .25s var(--ease),background .25s var(--ease);}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,0.05);}
+.nav-cta{position:relative;z-index:1;display:inline-flex;align-items:center;gap:9px;padding:8px 8px 8px 18px;border-radius:100px;background:var(--white);color:var(--btn-fg);font-size:13.5px;font-weight:600;transition:transform .3s var(--ease);}
+.nav-cta:active{transform:scale(0.97);}
+/* section contact atteinte : le bouton s'illumine */
+.nav-cta{transition:transform .3s var(--ease),box-shadow .12s ease;}
+.nav-cta.lit{overflow:hidden;box-shadow:0 0 18px var(--cta-glow), 0 0 46px var(--cta-glow);}
+.nav-cta.lit::after{content:'';position:absolute;top:0;left:-70%;width:45%;height:100%;pointer-events:none;
+  background:linear-gradient(100deg,transparent,var(--sweep),transparent);transform:skewX(-18deg);
+  animation:shine 2.8s cubic-bezier(.4,0,.2,1) infinite;}
+@media(prefers-reduced-motion:reduce){.nav-cta.lit::after{animation:none;}}
+.nav-cta .circ{width:26px;height:26px;border-radius:100px;background:var(--circ);display:flex;align-items:center;justify-content:center;transition:transform .3s var(--ease);}
+.nav-cta:hover .circ{transform:translate(2px,-2px);}
+.nav-cta svg{width:13px;height:13px;}
+.lang-btn{display:inline-flex;align-items:center;justify-content:center;height:34px;padding:0 12px;border-radius:100px;
+  border:1px solid var(--line-2);background:transparent;color:var(--text-2);cursor:pointer;
+  font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:.06em;transition:color .25s var(--ease),background .25s var(--ease);}
+.lang-btn:hover{color:var(--text);background:var(--surface-3);}
+.menu-btn{display:none;width:40px;height:40px;border-radius:100px;border:1px solid var(--line);background:transparent;color:var(--text);align-items:center;justify-content:center;cursor:pointer;}
+.menu-btn svg{width:18px;height:18px;}
 
-/* ── Hero ── */
-.hero{position:relative;padding:150px 0 70px;}
-.hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:40px;align-items:center;}
-.badge{display:inline-flex;align-items:center;gap:9px;padding:7px 15px;border-radius:100px;background:var(--surface);
-  border:1px solid var(--border);font-size:12.5px;font-weight:500;color:var(--text-2);margin-bottom:26px;}
-.badge .pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blip 2s infinite;}
-@keyframes blip{0%,100%{opacity:1}50%{opacity:.35}}
-.hero h1{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:-0.03em;line-height:0.98;
-  font-size:clamp(44px,6.6vw,82px);margin-bottom:22px;}
-.hero h1 .p{background:var(--grad-pink);-webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 0 30px rgba(236,72,153,0.25));}
-.hero .lede{font-size:clamp(16px,2vw,19px);color:var(--text-2);max-width:520px;margin-bottom:30px;}
-.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;}
-.btn{display:inline-flex;align-items:center;gap:9px;padding:14px 24px;border-radius:14px;font-size:15px;font-weight:600;
-  cursor:pointer;transition:.18s;border:1px solid transparent;}
-.btn svg{width:16px;height:16px;}
-.btn-primary{background:var(--grad-violet);color:#fff;box-shadow:0 12px 30px rgba(124,58,237,0.4);}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(124,58,237,0.55);}
-.btn-ghost{background:var(--surface);border-color:var(--border);color:var(--text);}
-.btn-ghost:hover{background:var(--surface-2);border-color:var(--border-strong);transform:translateY(-2px);}
-.trust{display:flex;flex-wrap:wrap;gap:8px 20px;margin-bottom:26px;}
-.trust span{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--text-3);}
-.trust svg{width:15px;height:15px;color:var(--green);}
-.proof{display:flex;align-items:center;gap:13px;}
-.proof .edu{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text-3);
-  padding:8px 14px;border-radius:100px;background:var(--surface);border:1px solid var(--border);}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+section{position:relative;padding:86px 0;}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-3);margin-bottom:16px;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:100px;border:1px solid var(--line);background:var(--surface);font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-2);}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--text);}
+.eyebrow .dot.blink{animation:blink 2.2s ease-in-out infinite;box-shadow:0 0 0 0 rgba(237,237,237,.5);}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(237,237,237,.45);}50%{opacity:.45;box-shadow:0 0 0 4px rgba(237,237,237,0);}}
+.sec-head{max-width:660px;margin-bottom:48px;}
+/* arrêt du scroll : la section entière reste affichée, centrée, pendant ~3 crans */
+section.has-hold{padding:0 0 76px;}
+.has-hold .shold-in{position:sticky;}
+.shold{overflow-anchor:none;}
+.has-hold .shold-in>.wrap{width:100%;}
+.has-hold .sec-head{margin-bottom:26px;}
+.sec-head h2{font-family:var(--display);font-weight:600;font-size:clamp(30px,5vw,52px);line-height:1.08;letter-spacing:-0.02em;text-wrap:balance;}
+.sec-head p{margin-top:18px;color:var(--text-2);font-size:16px;max-width:52ch;}
 
-/* floating hero card */
-.hero-card{position:relative;justify-self:center;}
-.hero-card .glow{position:absolute;inset:-40px -30px;border-radius:40px;
-  background:radial-gradient(circle at 60% 40%,rgba(139,92,246,0.35),rgba(236,72,153,0.14) 45%,transparent 70%);filter:blur(30px);z-index:0;}
-.device{position:relative;z-index:1;border-radius:18px;overflow:hidden;border:1px solid var(--border-strong);
-  box-shadow:0 40px 90px rgba(0,0,0,0.6);transform:rotate(2.5deg);transition:transform .4s;}
-.device:hover{transform:rotate(0deg) translateY(-4px);}
-.device img{width:100%;display:block;}
-.float-chip{position:absolute;z-index:2;display:flex;align-items:center;gap:9px;padding:11px 15px;border-radius:14px;
-  background:rgba(12,11,32,0.85);backdrop-filter:blur(10px);border:1px solid var(--border-strong);box-shadow:0 16px 40px rgba(0,0,0,0.5);}
-[data-theme="light"] .float-chip{background:rgba(255,255,255,0.92);}
-.float-chip .n{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;}
-.float-chip .l{font-size:10.5px;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;}
-.fc-1{top:-24px;left:-32px;}
-.fc-1 .n{color:var(--green);}
-.fc-2{bottom:-22px;right:-26px;}
-.fc-2 .n{background:var(--grad-pink);-webkit-background-clip:text;background-clip:text;color:transparent;}
-.fc-dot{width:26px;height:26px;border-radius:9px;background:linear-gradient(135deg,#8b5cf6,#ec4899);display:flex;align-items:center;justify-content:center;font-size:14px;}
+/* hero */
+.hero{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:140px 24px 110px;}
+.hero .eyebrow{margin-bottom:34px;}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(42px,8vw,96px);line-height:1.14;letter-spacing:-0.015em;word-spacing:0.04em;max-width:17ch;text-wrap:balance;}
+h1 .mut{color:var(--text-3);}
+.hero>p{margin-top:30px;color:var(--text-2);font-size:clamp(15px,2vw,19px);max-width:56ch;line-height:1.6;}
+.hero-cta{margin-top:42px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+.btn{display:inline-flex;align-items:center;gap:12px;border-radius:100px;font-size:14.5px;font-weight:600;transition:transform .3s var(--ease),border-color .3s var(--ease),background .3s var(--ease);cursor:pointer;}
+.btn-primary{background:var(--white);color:var(--btn-fg);padding:13px 14px 13px 24px;}
+.btn-primary .circ{width:30px;height:30px;border-radius:100px;background:var(--circ);display:flex;align-items:center;justify-content:center;transition:transform .3s var(--ease);}
+.btn-primary:hover .circ{transform:translateY(2px);}
+.btn-primary.ext:hover .circ{transform:translate(2px,-2px);}
+.btn-primary:active{transform:scale(0.98);}
+.btn-ghost{padding:13px 24px;border:1px solid var(--line-2);color:var(--text);background:transparent;}
+.btn-ghost:hover{background:rgba(255,255,255,0.05);}
+.btn svg{width:14px;height:14px;}
 
-/* ── Marquee ── */
-.marquee{position:relative;z-index:2;margin:36px 0 10px;overflow:hidden;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
-  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);}
-.marquee-label{text-align:center;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-4);margin-bottom:16px;font-family:'Syne',sans-serif;font-weight:700;}
-.marquee-track{display:flex;gap:44px;width:max-content;animation:scroll-x 28s linear infinite;}
-@keyframes scroll-x{to{transform:translateX(-50%);}}
-.marquee-track span{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:500;color:var(--text-3);white-space:nowrap;
-  display:inline-flex;align-items:center;gap:10px;}
-.marquee-track span::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--violet);opacity:.6;}
-@media(prefers-reduced-motion:reduce){.marquee-track{animation:none;}}
+/* ── sections à défilement horizontal ── */
+.hsec{padding:0;overflow-anchor:none;}
+.hsticky{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;}
+.hhead{padding:0 var(--edge);margin-bottom:34px;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;}
+.hhead .htitle{max-width:640px;}
+.hhead h2{font-family:var(--display);font-weight:600;font-size:clamp(28px,4.4vw,46px);line-height:1.08;letter-spacing:-0.02em;}
+.hhead p{margin-top:14px;color:var(--text-2);font-size:15.5px;max-width:48ch;}
+.hcount{font-family:var(--mono);font-size:12px;color:var(--text-3);letter-spacing:0.08em;white-space:nowrap;display:flex;align-items:center;gap:10px;}
+.hcount .bar{width:70px;height:3px;border-radius:100px;background:var(--track);position:relative;overflow:hidden;}
+.hcount .bar i{position:absolute;inset:0;width:0;border-radius:100px;background:var(--text);}
+.hview{display:flex;justify-content:center;padding:0 24px;}
+.htrack{position:relative;}
+.htrack.d-xp{width:372px;height:440px;}
+.htrack.d-feat{width:392px;height:520px;}
+.htrack .hcard{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
+  transform-origin:center center;will-change:transform,opacity;backface-visibility:hidden;
+  box-shadow:0 18px 40px -22px rgba(0,0,0,0.9);}
+.htrack .hcard.is-front{pointer-events:auto;}
 
-/* ── Section base ── */
-section{position:relative;padding:80px 0;}
-.sec-head{margin-bottom:44px;max-width:640px;}
-.sec-head.center{margin-left:auto;margin-right:auto;text-align:center;}
-.kicker{font-family:'Syne',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--violet-2);margin-bottom:14px;display:inline-flex;align-items:center;gap:10px;}
-.kicker::before{content:'';width:26px;height:2px;border-radius:2px;background:var(--violet);}
-.sec-head.center .kicker{justify-content:center;}
-.sec-title{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:-0.02em;font-size:clamp(30px,4.6vw,48px);line-height:1.06;}
-.sec-title .p{background:var(--grad-pink);-webkit-background-clip:text;background-clip:text;color:transparent;}
-.sec-desc{color:var(--text-3);margin-top:16px;font-size:16px;}
+/* carte projet (dimensions strictement identiques) */
+.hcard{flex:0 0 auto;width:392px;height:520px;border:1px solid var(--line);border-radius:20px;background:var(--surface);
+  display:flex;flex-direction:column;overflow:hidden;cursor:pointer;transition:border-color .3s var(--ease),background .3s var(--ease);}
+.hcard:hover{border-color:var(--line-2);background:var(--surface-2);}
+.hc-vis{height:186px;flex:0 0 186px;background:var(--well);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;padding:18px;position:relative;}
+.hc-vis img{max-height:100%;max-width:100%;width:auto;height:auto;object-fit:contain;border-radius:6px;}
+.hc-num{position:absolute;top:12px;left:14px;font-family:var(--mono);font-size:10px;color:var(--text-3);letter-spacing:0.1em;}
+.hc-body{flex:1;padding:24px 26px 26px;display:flex;flex-direction:column;gap:10px;min-height:0;}
+.hc-top{display:flex;align-items:center;gap:9px;}
+.hc-star{width:14px;height:14px;color:var(--text-2);opacity:.75;margin-left:auto;flex:0 0 auto;}
+.hc-cat{font-family:var(--mono);font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-3);}
+.hc-flag{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--bg);background:var(--text);padding:3px 7px;border-radius:4px;}
+.hc-body h3{font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:-0.02em;line-height:1.15;}
+.hc-per{font-family:var(--mono);font-size:11px;color:var(--text-3);}
+.hc-desc{color:var(--text-2);font-size:13.5px;line-height:1.55;flex:1;overflow:hidden;
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;}
+.hc-metrics{display:flex;gap:18px;flex-wrap:wrap;}
+.hc-m b{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-0.02em;display:block;line-height:1.2;}
+.hc-m span{font-size:10.5px;color:var(--text-3);}
+.hc-foot{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--line);}
+.hc-more{font-size:12px;font-weight:600;color:var(--text);}
+.btn-sm{padding:8px 14px;font-size:12px;border-radius:100px;border:1px solid var(--line-2);color:var(--text);transition:background .25s var(--ease);}
+.btn-sm:hover{background:var(--surface-3);}
+/* bouton démo : mis en avant, avec un reflet qui balaie */
+.demo-btn{position:relative;overflow:hidden;background:var(--white);color:var(--btn-fg);border-color:transparent;font-weight:600;
+  box-shadow:0 4px 16px -6px rgba(0,0,0,.6);}
+.demo-btn:hover{background:var(--white);transform:translateY(-1px);}
+.demo-btn::after{content:'';position:absolute;top:0;left:-70%;width:45%;height:100%;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-18deg);
+  animation:shine 3.4s cubic-bezier(.4,0,.2,1) infinite;}
+[data-theme="light"] .demo-btn::after{background:linear-gradient(100deg,transparent,rgba(255,255,255,.30),transparent);}
+@keyframes shine{0%{left:-70%}45%{left:135%}100%{left:135%}}
 
-/* ── What I do (value + checklist) ── */
-.value{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
-.value-list{display:flex;flex-direction:column;gap:14px;}
-.value-list .row{display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);
-  border-radius:16px;padding:18px 20px;transition:.25s;}
-.value-list .row:hover{border-color:var(--border-strong);transform:translateX(4px);}
-.value-list .ic{width:40px;height:40px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
-  background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.24);color:var(--violet-2);}
-.value-list .ic svg{width:20px;height:20px;}
-.value-list h4{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:3px;}
-.value-list p{font-size:13.5px;color:var(--text-3);}
-[data-theme="light"] .value-list .ic{color:var(--violet-deep);}
+/* carte mission (texte seul, dimensions identiques) */
+.hcard.text-only{width:372px;height:440px;}
+.hcard.text-only .hc-body{padding:28px 26px;}
+.hcard.text-only .hc-desc{-webkit-line-clamp:6;}
 
-/* ── Bento grid ── */
-.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-.bento .cell{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;
-  position:relative;overflow:hidden;transition:.3s;}
-.bento .cell:hover{border-color:var(--border-strong);transform:translateY(-4px);}
-.bento .cell::after{content:'';position:absolute;inset:0;background:radial-gradient(120% 90% at 100% 0%,rgba(139,92,246,0.10),transparent 60%);pointer-events:none;}
-.bento .cell.wide{grid-column:span 2;}
-.bento .ic{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;
-  background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.24);color:var(--violet-2);margin-bottom:18px;}
-.bento .ic svg{width:24px;height:24px;}
-.bento h4{font-family:'Syne',sans-serif;font-weight:700;font-size:19px;margin-bottom:9px;}
-.bento p{font-size:14px;color:var(--text-3);margin-bottom:16px;}
-.tags{display:flex;flex-wrap:wrap;gap:7px;}
-.chip{font-size:11.5px;font-weight:500;color:var(--text-2);padding:5px 11px;border-radius:100px;background:var(--surface-2);border:1px solid var(--border);}
-[data-theme="light"] .chip{background:#f3f1fb;color:rgba(20,10,52,0.72);}
-[data-theme="light"] .bento .ic,[data-theme="light"] .value-list .ic{color:var(--violet-deep);}
+/* timeline BDO */
+.xp-intro{display:grid;grid-template-columns:1.1fr 0.9fr;gap:30px;align-items:end;margin-bottom:44px;}
+.xp-intro h3{font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:-0.01em;margin-bottom:10px;}
+.xp-intro p{color:var(--text-2);font-size:15px;max-width:52ch;}
+.xp-facts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.xp-facts div{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--surface);}
+.xp-facts span{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-3);margin-bottom:3px;}
+.xp-facts b{font-family:var(--display);font-weight:600;font-size:14.5px;letter-spacing:-0.01em;white-space:nowrap;}
+.xp-facts b{word-spacing:.10em;}
 
-/* ── Experience highlight ── */
-.xp{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:40px;position:relative;overflow:hidden;box-shadow:var(--shadow);}
-.xp::before{content:'';position:absolute;top:0;left:6%;right:6%;height:1px;background:linear-gradient(90deg,transparent,rgba(236,72,153,0.4),transparent);}
-.xp-top{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:flex-start;margin-bottom:18px;}
-.xp-top h3{font-family:'Syne',sans-serif;font-weight:800;font-size:25px;}
-.xp-org{color:var(--pink-2);font-weight:600;font-size:14.5px;margin-top:5px;}
-[data-theme="light"] .xp-org{color:#db2777;}
-.xp-meta{font-size:13px;font-weight:600;color:var(--text-2);background:var(--surface-2);border:1px solid var(--border);border-radius:100px;padding:8px 15px;white-space:nowrap;}
-.xp>p{color:var(--text-2);font-size:15px;margin-bottom:20px;max-width:820px;}
-.xp-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
-.xp-metric{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:16px;}
-.xp-metric .mv{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;
-  background:var(--grad-pink);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;}
-.xp-metric .ml{font-size:11.5px;color:var(--text-3);margin-top:6px;text-transform:uppercase;letter-spacing:.03em;}
-.xp-feat{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 26px;margin-bottom:20px;}
-.xp-feat li{position:relative;padding-left:24px;color:var(--text-2);font-size:13.8px;}
-.xp-feat li::before{content:'';position:absolute;left:4px;top:8px;width:7px;height:7px;border-radius:2px;background:var(--grad-pink);}
+/* vue calendaire des missions */
+.cal{margin-top:34px;border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:22px 24px;}
+.cal-head{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;margin-bottom:14px;}
+.cal-label{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--text-3);}
+.cal-months{display:grid;grid-template-columns:repeat(7,1fr);}
+.cal-months span{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;color:var(--text-3);text-align:left;padding-left:2px;}
+.cal-row{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;padding:5px 0;}
+.cal-name{font-size:12.5px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cal-track{position:relative;height:22px;border-radius:6px;
+  background:repeating-linear-gradient(90deg,var(--tick) 0 1px,transparent 1px calc(100%/7));}
+.cal-track::after{content:'';position:absolute;inset:0;border-radius:6px;border:1px solid var(--line);pointer-events:none;}
+.cal-track i{position:absolute;top:3px;bottom:3px;left:calc(var(--s)/7*100%);width:calc(var(--l)/7*100%);
+  border-radius:5px;background:var(--barfill);border:1px solid var(--line-2);}
+.cal-row.flag .cal-name{color:var(--text);font-weight:600;}
+.cal-row.flag .cal-track i{background:var(--text);border-color:var(--text);}
 
-/* ── Showcase (featured) ── */
-.showcase{display:flex;flex-direction:column;gap:24px;}
-.feat{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:var(--radius);overflow:hidden;
-  background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);transition:border-color .3s;}
-.feat:hover{border-color:var(--border-strong);}
-.feat.rev .fbody{order:2;}.feat.rev .fvis{order:1;border-left:none;border-right:1px solid var(--border);}
-.fbody{padding:38px;display:flex;flex-direction:column;}
-.ftag{align-self:flex-start;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--violet-2);padding:5px 11px;border-radius:8px;background:rgba(139,92,246,0.10);border:1px solid rgba(139,92,246,0.22);margin-bottom:16px;}
-.feat h3{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;margin-bottom:6px;}
-.fsub{color:var(--violet-3);font-size:13.5px;font-weight:600;margin-bottom:14px;}
-[data-theme="light"] .fsub{color:var(--violet-deep);}
-.feat p{color:var(--text-2);font-size:14.5px;margin-bottom:18px;}
-.fmetrics{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
-.fmetric{background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:9px 14px;min-width:92px;}
-.fmetric .mv{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;color:var(--cyan);line-height:1;}
-[data-theme="light"] .fmetric .mv{color:#0891b2;}
-.fmetric .ml{font-size:10.5px;color:var(--text-3);margin-top:4px;text-transform:uppercase;letter-spacing:.03em;}
-.fbody .tags{margin-top:auto;}
-.fvis{position:relative;border-left:1px solid var(--border);overflow:hidden;background:radial-gradient(120% 120% at 80% 0%,rgba(124,58,237,0.14),transparent 60%);display:flex;align-items:center;justify-content:center;padding:26px;}
-.fvis img{width:100%;border-radius:12px;border:1px solid var(--border-strong);box-shadow:0 20px 44px rgba(0,0,0,0.5);cursor:zoom-in;}
-.gallery-mini{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;}
-.gallery-mini img{border-radius:10px;border:1px solid var(--border);cursor:zoom-in;transition:.25s;}
-.gallery-mini img:hover{border-color:var(--violet);transform:translateY(-2px);}
+/* études */
+.edu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+.edu{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:28px;display:flex;flex-direction:column;gap:12px;transition:border-color .3s var(--ease);}
+.edu:hover{border-color:var(--line-2);}
+.edu-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+.edu-deg{font-family:var(--mono);font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-3);}
+.edu-when{font-family:var(--mono);font-size:11px;color:var(--text-3);}
+.edu h3{font-family:var(--display);font-weight:600;font-size:21px;letter-spacing:-0.02em;}
+.edu p{color:var(--text-2);font-size:14px;}
+.edu-foot{margin-top:20px;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:18px 22px;}
+.edu-prep{font-size:13.5px;color:var(--text-2);}
+.edu-prep b{color:var(--text);font-weight:600;}
+.edu-lang{font-family:var(--mono);font-size:11.5px;color:var(--text-3);}
+.edu-foot .btn-ghost{padding:10px 18px;font-size:13px;}
 
-/* ── Projects grid (tools catalog) ── */
-.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-.pcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;display:flex;flex-direction:column;transition:.3s;}
-.pcard:hover{border-color:var(--border-strong);transform:translateY(-4px);}
-.pcard .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.pcard .emoji{width:44px;height:44px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;}
-.pcard .cat{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--violet-2);padding:5px 10px;border-radius:100px;background:rgba(139,92,246,0.10);border:1px solid rgba(139,92,246,0.2);}
-.pcard h4{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:8px;}
-.pcard p{font-size:13.3px;color:var(--text-3);margin-bottom:16px;flex:1;}
-.pcard .foot{display:flex;align-items:center;justify-content:space-between;}
-.pcard .metric{font-size:12px;color:var(--text-3);display:inline-flex;align-items:center;gap:6px;}
-.pcard .metric b{font-family:'Space Grotesk',sans-serif;color:var(--cyan);font-weight:700;}
-[data-theme="light"] .pcard .metric b{color:#0891b2;}
-.pcard .lnk{font-size:12.5px;font-weight:600;color:var(--violet-2);display:inline-flex;align-items:center;gap:6px;}
-.pcard .lnk svg{width:14px;height:14px;}
-.pcard .lnk.muted{color:var(--text-4);}
-[data-theme="light"] .pcard .lnk{color:var(--violet-deep);}
+/* toolbox */
+.tool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.tool{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:20px;display:flex;flex-direction:column;gap:10px;min-height:172px;transition:border-color .3s var(--ease),background .3s var(--ease);}
+.tool:hover{border-color:var(--line-2);background:var(--surface-2);}
+.tool .tn{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);display:flex;align-items:center;justify-content:center;}
+.tool .tn svg{width:19px;height:19px;color:var(--text);}
+.tool h4{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-0.01em;}
+.tool p{color:var(--text-2);font-size:13px;line-height:1.45;flex:1;}
+.tool .stack-t{display:flex;flex-wrap:wrap;gap:7px;}
+.tool .t{font-family:var(--mono);font-size:11.5px;font-weight:500;color:var(--text);padding:4px 9px;border-radius:7px;background:var(--surface-3);border:1px solid var(--line-2);}
+.tags{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{font-family:var(--mono);font-size:11px;color:var(--text-2);padding:5px 10px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);}
 
-/* ── Big CTA ── */
-.cta-band{position:relative;border-radius:28px;overflow:hidden;padding:70px 40px;text-align:center;
-  background:linear-gradient(120deg,rgba(124,58,237,0.22),rgba(236,72,153,0.16));border:1px solid var(--border-strong);}
-.cta-band::before{content:'';position:absolute;inset:0;background:radial-gradient(60% 120% at 50% 0%,rgba(236,72,153,0.2),transparent 60%);pointer-events:none;}
-.cta-band h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(28px,4.6vw,46px);letter-spacing:-0.02em;margin-bottom:14px;position:relative;}
-.cta-band h2 .p{background:var(--grad-pink);-webkit-background-clip:text;background-clip:text;color:transparent;}
-.cta-band p{color:var(--text-2);max-width:520px;margin:0 auto 30px;font-size:16px;position:relative;}
-.cta-btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;position:relative;}
+/* marquee */
+.marquee{position:relative;background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px 0;overflow:hidden;margin-top:88px;--gap:44px;}
+/* le masque est sur une couche interne : le fond du bandeau reste opaque */
+.marquee-mask{overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14%,#000 86%,transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0,#000 14%,#000 86%,transparent 100%);}
+.marquee-in{display:flex;width:max-content;animation:mq linear infinite;will-change:transform;}
+.mq-set{display:flex;gap:var(--gap);padding-right:var(--gap);flex:0 0 auto;}
+.mq-set span{font-family:var(--mono);font-size:14px;color:var(--text-3);white-space:nowrap;display:inline-flex;align-items:center;gap:var(--gap);}
+.mq-set span::after{content:'✦';color:var(--sparkle);font-size:9px;}
+@keyframes mq{from{transform:translate3d(0,0,0)}to{transform:translate3d(calc(-1 * var(--shift,50%)),0,0)}}
 
-footer{border-top:1px solid var(--border);margin-top:80px;padding:32px 0;}
-.foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;}
-.foot .cr{font-size:13px;color:var(--text-3);}
-.foot .loc{font-size:13px;color:var(--text-4);}
-.foot-links{display:flex;gap:8px;}
+/* grille projets */
+.work-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.pcard{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:24px;display:flex;flex-direction:column;cursor:pointer;min-height:236px;transition:border-color .3s var(--ease),transform .3s var(--ease),background .3s var(--ease);}
+.pcard:hover{border-color:var(--line-2);transform:translateY(-3px);background:var(--surface-2);}
+.pcard .ptop{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.pcard .cat{font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-3);}
+.pcard .pstar{width:14px;height:14px;color:var(--text-2);opacity:.75;flex:0 0 auto;}
+.pcard h4{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-0.015em;margin-bottom:8px;}
+.pcard>p{color:var(--text-2);font-size:13px;margin-bottom:16px;flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;}
+.pcard .pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:14px;border-top:1px solid var(--line);}
+.pcard .metric{font-size:11.5px;color:var(--text-2);}
+.pcard .metric b{font-family:var(--display);color:var(--text);}
+.pcard .more{font-size:11.5px;font-weight:600;color:var(--text);white-space:nowrap;}
 
-/* reveal */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);}
-.reveal.in{opacity:1;transform:none;}
-@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
+/* modal */
+.pm{position:fixed;inset:0;z-index:110;display:none;align-items:center;justify-content:center;padding:22px;background:var(--veil);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);}
+.pm.open{display:flex;}
+.pm-panel{position:relative;max-width:740px;width:100%;max-height:88vh;overflow-y:auto;overscroll-behavior:contain;border-radius:22px;background:var(--surface);border:1px solid var(--line-2);box-shadow:0 24px 60px -30px rgba(0,0,0,0.95);padding:40px;}
+.pm-close{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface-2);color:var(--text-2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;z-index:3;}
+.pm-close:hover{color:var(--text);}
+.pm-cat{display:inline-flex;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-2);padding:5px 11px;border-radius:7px;background:var(--surface-2);border:1px solid var(--line);margin-bottom:16px;}
+.pm-panel h3{font-family:var(--display);font-weight:600;font-size:28px;letter-spacing:-0.02em;margin-bottom:8px;}
+.pm-sub{color:var(--text-3);font-size:14px;margin-bottom:20px;}
+.pm-desc{color:var(--text-2);font-size:14.5px;margin-bottom:22px;}
+.pm-shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:24px;}
+.pm-shots figure{margin:0;display:flex;flex-direction:column;}
+.pm-shots .ph{height:170px;border:1px solid var(--line);border-radius:10px;background:var(--well);display:flex;align-items:center;justify-content:center;padding:12px;overflow:hidden;transition:border-color .25s var(--ease);}
+.pm-shots .ph:hover{border-color:var(--line-2);}
+.pm-shots img{max-height:100%;max-width:100%;width:auto;height:auto;object-fit:contain;cursor:zoom-in;border-radius:4px;}
+.pm-shots figcaption{font-family:var(--mono);font-size:10px;color:var(--text-3);margin-top:8px;line-height:1.45;}
+.pm-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:22px;}
+.pm-metric{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface-2);}
+.pm-metric b{font-family:var(--display);font-weight:600;font-size:18px;display:block;letter-spacing:-0.01em;}
+.pm-metric span{color:var(--text-3);font-size:11.5px;}
+.pm-feats{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:22px;}
+.pm-feats li{color:var(--text-2);font-size:14px;padding-left:20px;position:relative;}
+.pm-feats li::before{content:'';position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--text-3);}
+.pm-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;}
 
-/* FABs */
-.fab{position:fixed;bottom:22px;z-index:60;width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;
-  border:1px solid var(--border-strong);background:rgba(15,14,38,0.72);backdrop-filter:blur(12px);color:var(--text-2);cursor:pointer;
-  box-shadow:0 10px 30px rgba(0,0,0,0.4);transition:transform .18s,color .18s,opacity .25s;}
-.fab:hover{color:var(--text);transform:translateY(-3px);border-color:var(--violet);}
-.fab svg{width:20px;height:20px;}
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:130;display:none;align-items:center;justify-content:center;padding:30px;background:var(--veil-2);cursor:zoom-out;}
+.lb.open{display:flex;}
+.lb img{max-width:94vw;max-height:90vh;border-radius:12px;border:1px solid var(--line-2);}
+
+/* contact */
+.cta-band{max-width:880px;margin:0 auto;border:1px solid var(--line);border-radius:26px;background:var(--surface);padding:64px 44px;text-align:center;}
+.cta-band h2{font-family:var(--display);font-weight:600;font-size:clamp(30px,4.6vw,46px);letter-spacing:-0.02em;line-height:1.12;margin-bottom:20px;text-wrap:balance;}
+.cta-lines{margin-bottom:34px;}
+.cta-lines span{display:block;color:var(--text-2);font-size:16px;line-height:1.75;}
+.cta-band .hero-cta{justify-content:center;margin-top:0;}
+
+/* footer */
+#contact{padding-top:44px;padding-bottom:140px;}  /* écart identique dessus/dessous, resserré */
+footer{position:relative;background:var(--surface);border-top:1px solid var(--line);padding:76px 0 50px;}
+.foot-grid{display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap;}
+.noir-sig{display:block;line-height:0;}
+.noir-logo{height:38px;width:auto;opacity:var(--logo-op,.30);filter:invert(var(--logo-inv));transition:opacity .3s var(--ease);}
+/* en clair, le logo est inversé (noir sur fond pâle) : il faut plus d'opacité pour le même gris */
+[data-theme="light"] .noir-logo{--logo-op:.52;}
+[data-theme="light"] .noir-sig:hover .noir-logo{opacity:.78;}
+.noir-sig:hover .noir-logo{opacity:.55;}
+.foot-meta{display:flex;flex-direction:column;gap:8px;align-items:flex-end;text-align:right;justify-content:center;}
+.foot-meta a{color:var(--text-2);font-size:13.5px;transition:color .25s var(--ease);}
+.foot-meta a:hover{color:var(--text);}
+.foot-meta .cr{color:var(--text-3);font-size:12px;font-family:var(--mono);margin-top:4px;}
+
+/* boutons flottants */
+.fab{position:fixed;bottom:22px;z-index:70;width:44px;height:44px;border-radius:100px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--line-2);background:var(--nav-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  color:var(--text-2);cursor:pointer;transition:transform .25s var(--ease),color .25s var(--ease),opacity .3s var(--ease),border-color .25s var(--ease);}
+.fab:hover{color:var(--text);border-color:var(--text-3);transform:translateY(-3px);}
+.fab svg{width:19px;height:19px;}
 #theme-fab{right:22px;}
 #to-top{left:22px;opacity:0;pointer-events:none;transform:translateY(10px);}
 #to-top.show{opacity:1;pointer-events:auto;transform:none;}
-[data-theme="light"] .fab{background:rgba(255,255,255,0.85);}
+.sun{display:none;}
+[data-theme="light"] .sun{display:block;}
+[data-theme="light"] .moon{display:none;}
 
-/* lightbox */
-.lb{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:28px;
-  background:rgba(4,4,14,0.9);backdrop-filter:blur(8px);}
-.lb.open{display:flex;}
-.lb img{max-width:94vw;max-height:88vh;border-radius:12px;border:1px solid var(--border-strong);box-shadow:0 30px 80px rgba(0,0,0,0.6);}
-.lb-close{position:fixed;top:18px;right:20px;width:44px;height:44px;border-radius:12px;border:1px solid var(--border-strong);
-  background:rgba(12,12,30,0.85);color:#fff;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;}
+.reveal{opacity:0;transform:translateY(20px);filter:blur(6px);transition:opacity .8s var(--ease),transform .8s var(--ease),filter .8s var(--ease);}
+.reveal.in{opacity:1;transform:none;filter:none;}
 
-.preview-tag{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:70;font-size:11.5px;font-weight:600;
-  color:var(--text-2);background:rgba(236,72,153,0.14);border:1px solid rgba(236,72,153,0.4);border-radius:100px;padding:7px 16px;letter-spacing:.02em;}
-
-/* ── Project detail affordance + modal ── */
-.pcard{cursor:pointer;}
-.pcard-demo{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;
- font-size:12px;font-weight:600;color:var(--violet-2);text-decoration:none;
- border:1px solid rgba(139,92,246,0.32);border-radius:100px;padding:6px 13px;margin-bottom:14px;
- transition:background .2s,border-color .2s,color .2s;}
-.pcard-demo:hover{background:rgba(139,92,246,0.13);border-color:rgba(139,92,246,0.6);color:var(--text);}
-[data-theme="light"] .pcard-demo{color:var(--violet-deep);border-color:rgba(139,92,246,0.4);}
-.pcard-more{font-size:12.5px;font-weight:600;color:var(--violet-2);white-space:nowrap;}
-[data-theme="light"] .pcard-more{color:var(--violet-deep);}
-.feat-more{align-self:flex-start;margin-top:16px;font-size:13.5px;font-weight:600;color:var(--violet-2);cursor:pointer;}
-.feat-more:hover{color:var(--text);}
-[data-theme="light"] .feat-more{color:var(--violet-deep);}
-.lb{z-index:120;}
-.pm{position:fixed;inset:0;z-index:110;display:none;align-items:center;justify-content:center;padding:22px;
-  background:rgba(4,4,14,0.86);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);}
-.pm.open{display:flex;}
-.pm-panel,.lb{overscroll-behavior:contain;}
-.pm-panel{position:relative;max-width:740px;width:100%;max-height:88vh;overflow:hidden;border-radius:24px;
-  background:var(--bg);border:1px solid var(--border-strong);box-shadow:0 40px 100px rgba(0,0,0,0.65);padding:0;}
-#pm-body{max-height:88vh;overflow-y:auto;overscroll-behavior:contain;padding:38px;}
-[data-theme="light"] .pm-panel{background:#fff;}
-/* petits caches d'angle : masquent le liseré du poucet de la scrollbar qui affleure les coins arrondis */
-.pm-panel::before,.pm-panel::after{content:'';position:absolute;right:0;width:18px;height:16px;background:var(--bg);z-index:1;pointer-events:none;}
-.pm-panel::before{top:0;border-top-right-radius:24px;}
-.pm-panel::after{bottom:0;border-bottom-right-radius:24px;}
-[data-theme="light"] .pm-panel::before,[data-theme="light"] .pm-panel::after{background:#fff;}
-.pm-close{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:11px;border:1px solid var(--border-strong);
-  background:var(--surface);color:var(--text-2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;z-index:2;}
-.pm-close:hover{color:var(--text);}
-/* mentions légales */
-.legal-link{font-size:13px;color:var(--text-3);cursor:pointer;transition:.16s;}
-.legal-link:hover{color:var(--violet-2);}
-[data-theme="light"] .legal-link:hover{color:var(--violet-deep);}
-.legal-body{max-height:88vh;overflow-y:auto;overscroll-behavior:contain;padding:38px;}
-.legal-body h3{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;margin-bottom:6px;}
-.legal-body h4{font-size:12.5px;font-weight:700;letter-spacing:.02em;color:var(--text);margin:20px 0 5px;text-transform:uppercase;}
-.legal-body p{color:var(--text-2);font-size:14px;margin-bottom:3px;}
-.legal-body a{color:var(--violet-2);}
-[data-theme="light"] .legal-body a{color:var(--violet-deep);}
-.pm-cat{display:inline-flex;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--violet-2);padding:5px 11px;border-radius:8px;background:rgba(139,92,246,0.10);border:1px solid rgba(139,92,246,0.22);margin-bottom:16px;}
-.pm-panel h3{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;margin-bottom:6px;}
-.pm-sub{color:var(--violet-3);font-size:14px;font-weight:600;margin-bottom:18px;}
-[data-theme="light"] .pm-sub{color:var(--violet-deep);}
-.pm-desc{color:var(--text-2);font-size:14.5px;margin-bottom:20px;}
-.pm-shots{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin:0 0 22px;}
-.pm-shots figure{margin:0;display:flex;flex-direction:column;align-items:center;}
-.phone{width:176px;border-radius:24px;overflow:hidden;border:3px solid rgba(255,255,255,0.14);background:#05050f;
-  box-shadow:0 20px 44px rgba(0,0,0,0.5);cursor:zoom-in;transition:transform .25s,border-color .25s;}
-.phone:hover{transform:translateY(-4px);border-color:var(--violet);}
-.phone img{width:100%;display:block;}
-.pm-shots figcaption{text-align:center;font-size:11.5px;color:var(--text-3);margin-top:8px;max-width:190px;line-height:1.4;}
-.pm-metrics{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
-.pm-metric{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 15px;min-width:92px;}
-.pm-metric .mv{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:var(--cyan);line-height:1;}
-[data-theme="light"] .pm-metric .mv{color:#0891b2;}
-.pm-metric .ml{font-size:10.5px;color:var(--text-3);margin-top:4px;text-transform:uppercase;letter-spacing:.03em;}
-.pm-hh{font-family:'Syne',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin:2px 0 12px;}
-.pm-feats{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
-.pm-feats li{position:relative;padding-left:24px;color:var(--text-2);font-size:14px;}
-.pm-feats li::before{content:'';position:absolute;left:4px;top:8px;width:7px;height:7px;border-radius:2px;background:var(--grad-pink);}
-.pm-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;}
-.pm-tech{display:flex;flex-wrap:wrap;gap:7px;}
-.pm-repo{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;padding:10px 16px;border-radius:12px;
-  background:var(--surface);border:1px solid var(--border);color:var(--text);white-space:nowrap;}
-.pm-repo:hover{border-color:var(--border-strong);}
-.pm-repo.priv{color:var(--text-3);cursor:default;}
-.pm-repo svg{width:15px;height:15px;}
-
-/* responsive */
-@media(max-width:920px){
-  .hero-grid{grid-template-columns:1fr;gap:56px;}
-  .hero-card{max-width:460px;margin:0 auto;}
-  .value{grid-template-columns:1fr;gap:28px;}
-  .bento{grid-template-columns:1fr 1fr;}.bento .cell.wide{grid-column:span 2;}
-  .feat,.feat.rev{grid-template-columns:1fr;}
-  .feat .fvis,.feat.rev .fvis{border-left:none;border-right:none;border-top:1px solid var(--border);order:2;}
-  .feat .fbody,.feat.rev .fbody{order:1;}
-  .pgrid{grid-template-columns:1fr 1fr;}
-  .xp-metrics{grid-template-columns:1fr 1fr;}.xp-feat{grid-template-columns:1fr;}
+@media(max-width:1100px){ .work-grid{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:900px){ .tool-grid{grid-template-columns:1fr;} .xp-intro{grid-template-columns:1fr;} }
+@media(max-width:800px){
+  .nav-links,.nav-cta{display:none;}
+  .menu-btn{display:flex;}
+  section{padding:76px 0;}
+  .hsec{padding:76px 0;}
+  .hsticky{position:static;height:auto;overflow:visible;}
+  .hhead{flex-direction:column;align-items:flex-start;}
+  .hcount{display:none;}
+  .hview{overflow-x:auto;justify-content:flex-start;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:0 24px 14px;}
+  .htrack,.htrack.d-xp,.htrack.d-feat{display:flex;gap:16px;width:max-content;height:auto;position:static;}
+  .htrack .hcard{position:static;inset:auto;pointer-events:auto;transform:none!important;opacity:1!important;
+    scroll-snap-align:start;width:300px;height:480px;box-shadow:none;}
+  .htrack .hcard.text-only{width:290px;height:420px;}
+  .hc-vis{height:150px;flex:0 0 150px;}
+  .work-grid{grid-template-columns:1fr;}
+  .pm-metrics{grid-template-columns:1fr;}
+  .pm-panel{padding:28px 22px;}
+  .cta-band{padding:46px 24px;}
+  .foot-grid{flex-direction:column;align-items:flex-start;}
+  .foot-meta{align-items:flex-start;text-align:left;}
 }
-@media(max-width:680px){
-  .nav-links{display:none;}.menu-btn{display:inline-flex;}
-  .nav-links.open{display:flex;position:absolute;top:calc(100% + 8px);left:0;right:0;flex-direction:column;
-    background:rgba(10,10,30,0.97);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:18px;padding:8px;}
-  [data-theme="light"] .nav-links.open{background:rgba(248,246,255,0.98);}
-  .hero{padding:120px 0 50px;}
-  .bento{grid-template-columns:1fr;}.bento .cell.wide{grid-column:span 1;}
-  .pgrid{grid-template-columns:1fr;}
-  .xp-metrics{grid-template-columns:1fr 1fr;}
-  .fbody{padding:28px 24px;}.xp{padding:28px 22px;}
-  section{padding:56px 0;}
-  .marquee-track span{font-size:16px;}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  .hsticky{position:static;height:auto;overflow:visible;}
+  .hview{overflow-x:auto;}
+  .htrack{transform:none!important;}
+  .marquee-in{animation:none;}
+  .reveal{opacity:1;transform:none;filter:none;}
 }
 </style>
 </head>
 <body>
+<div class="grain" aria-hidden="true"></div>
 <div class="bg-scene" aria-hidden="true">
-  <div class="bg-glow"></div>
-  <div class="bg-sheen"></div>
   <div class="bg-grid"></div>
 </div>
 
-<!-- NAV (capsule) -->
-<div class="nav-shell" id="navshell">
+<div class="nav-shell">
   <nav>
     <a class="brand" href="#top">
-      <svg class="mk" viewBox="0 0 100 100" width="24" height="24" fill="none"><circle cx="50" cy="50" r="38" stroke="#a78bfa" stroke-width="4"/><circle cx="50" cy="50" r="13" fill="#8b5cf6"/><g class="dot"><circle cx="50" cy="12" r="8" fill="#f3f1fa"/></g></svg>
+      <svg class="star" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true"><path d="M50 3 C56 40 60 44 97 50 C60 56 56 60 50 97 C44 60 40 56 3 50 C40 44 44 40 50 3 Z"/></svg>
       Rémy Grabet
     </a>
-    <div class="nav-sep"></div>
+    <div class="nav-sep" aria-hidden="true"></div>
     <div class="nav-links" id="navlinks">
-      <a href="#experience" onclick="cm()">Experience</a>
-      <a href="#skills" onclick="cm()">Skills</a>
-      <a href="#work" onclick="cm()">Work</a>
-      <a href="#projects" onclick="cm()">Projects</a>
+      <a href="#experience" data-fr="Expérience">Experience</a>
+      <a href="#featSec" data-fr="Réalisations">Work</a>
+      <a href="#projects" data-fr="Projets">Projects</a>
+      <a href="#education" data-fr="Formation">Education</a>
     </div>
-    <a class="nav-ico lang-ico" href="index-fr.html" title="Passer en français" aria-label="Version française">FR</a>
-    <button class="nav-ico" onclick="tt()" aria-label="Theme"><svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
-    <a class="nav-cta" href="#contact">Get in touch</a>
-    <button class="nav-ico menu-btn" onclick="mm()" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    <a class="nav-cta" href="#contact" data-fr-text="Me contacter">Get in touch
+      <span class="circ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></span>
+    </a>
+    <button class="lang-btn" id="langBtn" type="button" aria-label="Changer de langue">FR</button>
+    <button class="menu-btn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </nav>
 </div>
-<span id="top"></span>
 
-<!-- HERO -->
-<header class="hero"><div class="wrap"><div class="hero-grid">
-  <div class="hero-copy">
-    <div class="badge reveal"><span class="pulse"></span>Open to data roles · Data Analyst / Scientist</div>
-    <h1 class="reveal">Make data<br/><span class="p">actually useful.</span></h1>
-    <p class="lede reveal">I'm Rémy Grabet — I collect, analyse and visualise data, then build the full tools around it. Dashboards, ML models and automations that don't just sit in a notebook: the data work your team actually uses.</p>
-    <div class="cta-row reveal">
-      <a class="btn btn-primary" href="#work"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>View my work</a>
-      <a class="btn btn-ghost" href="#contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Get in touch</a>
-    </div>
-    <div class="trust reveal">
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Data science graduate</span>
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>6 systems shipped</span>
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Available now</span>
-    </div>
-    <div class="proof reveal">
-      <span class="edu">🎓 Mines Saint-Étienne&nbsp;·&nbsp;Institut Polytechnique de Paris</span>
-    </div>
+<header class="hero" id="top">
+  <span class="eyebrow" data-fr="&lt;span class=&quot;dot blink&quot;&gt;&lt;/span&gt;Ouvert aux postes data · Data Analyst / Scientist"><span class="dot blink"></span>Open to data roles · Data Analyst / Scientist</span>
+  <h1 data-fr="Des données brutes, transformées en &lt;span class=&quot;mut&quot;&gt;décisions.&lt;/span&gt;">Raw data, turned into <span class="mut">decisions.</span></h1>
+  <p data-fr="Je mène la donnée jusqu'au bout — de sources éparses à un modèle propre, un tableau de bord clair, et une décision sur laquelle on peut agir. De bout en bout, testé, et honnête sur ce que disent vraiment les chiffres.">I take data the whole way — from scattered sources to a clean model, a clear dashboard, and a call someone can act on. End to end, tested, and honest about what the numbers say.</p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="#experience" data-fr-text="Voir mes travaux">See the work
+      <span class="circ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
+    </a>
   </div>
-  <div class="hero-card reveal">
-    <div class="glow"></div>
-    <div class="float-chip fc-1"><span class="fc-dot">▲</span><div><div class="n">+126%</div><div class="l">Portfolio tracked</div></div></div>
-    <div class="device"><img src="assets/shots/orbit_trading_dashboard.webp" alt="Orbit — a data dashboard I built"/></div>
-    <div class="float-chip fc-2"><span class="fc-dot">7k</span><div><div class="n">7,399</div><div class="l">Facilities analysed</div></div></div>
-  </div>
-</div>
-<!-- marquee -->
-<div class="marquee reveal">
-  <div class="marquee-label">The stack I build with</div>
-  <div class="marquee-track">
-    <span>Python</span><span>SQL</span><span>PostgreSQL</span><span>Supabase</span><span>Pandas</span><span>scikit-learn</span><span>Power BI</span><span>FastAPI</span><span>REST APIs</span><span>GeoPandas</span><span>Plotly</span><span>Jupyter</span><span>Git</span><span>Linux</span><span>Docker-free</span>
-    <span>Python</span><span>SQL</span><span>PostgreSQL</span><span>Supabase</span><span>Pandas</span><span>scikit-learn</span><span>Power BI</span><span>FastAPI</span><span>REST APIs</span><span>GeoPandas</span><span>Plotly</span><span>Jupyter</span><span>Git</span><span>Linux</span><span>Docker-free</span>
-  </div>
-</div>
-</div></header>
+</header>
 
-<!-- VALUE / WHAT I DO -->
-<section id="how"><div class="wrap"><div class="value">
-  <div class="reveal">
-    <div class="kicker">How I work</div>
-    <h2 class="sec-title">From raw data<br/>to <span class="p">decisions.</span></h2>
-    <p class="sec-desc">Most data never makes it out of a spreadsheet. I take it the whole way — from scattered sources to a clean model, a clear dashboard, and a decision someone can act on. End to end, tested, and honest about what the numbers do and don't say.</p>
-  </div>
-  <div class="value-list reveal">
-    <div class="row"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v4H4zM4 12h16v4H4zM4 20h10"/></svg></div><div><h4>Collect &amp; clean</h4><p>Scraping, APIs, entity resolution &amp; fuzzy matching into a single clean source.</p></div></div>
-    <div class="row"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div><div><h4>Analyse &amp; model</h4><p>Statistics, machine learning and rigorous out-of-sample validation.</p></div></div>
-    <div class="row"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div><div><h4>Visualise</h4><p>Interactive dashboards &amp; maps that make the insight obvious.</p></div></div>
-    <div class="row"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg></div><div><h4>Automate &amp; deploy</h4><p>Ship it as a running service — cloud Linux, scheduled, monitored.</p></div></div>
-  </div>
-</div></div></section>
-
-<!-- EXPERIENCE -->
-<section id="experience"><div class="wrap">
-  <div class="sec-head reveal">
-    <div class="kicker">Experience</div>
-    <h2 class="sec-title">Where I've done this <span class="p">for real</span></h2>
-  </div>
-  <div class="xp reveal">
-    <div class="xp-top">
+<!-- EXPERIENCE (intro) -->
+<section id="experience" style="padding-bottom:0">
+  <div class="shold"><div class="shold-in"><div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker" data-fr="Expérience">Experience</div>
+      <h2 data-fr="Là où je l'ai fait pour de vrai.">Where I&#39;ve done this for real.</h2>
+    </div>
+    <div class="xp-intro reveal">
       <div>
-        <h3>Data Science Consultant · Internship</h3>
-        <div class="xp-org">BDO · Data &amp; Analytics consulting</div>
+        <h3 data-fr="Consultant Data Science · BDO">Data Science Consultant · BDO</h3>
+        <p data-fr="Stage de fin d'études dans une équipe de conseil Data &amp; Analytics. Cinq missions clients — santé, énergie, tech et économie territoriale — de la donnée brute au livrable d'aide à la décision.">End-of-studies internship in a Data &amp; Analytics consulting team. Five client missions across health, energy, tech and territorial economics — from raw data to decision-support deliverables.</p>
       </div>
-      <div class="xp-meta">Mar – Sep 2025 · 6 months · France</div>
+      <div class="xp-facts">
+        <div><span data-fr="Période">Period</span><b data-fr="Mars → Sep 2025">Mar → Sep 2025</b></div>
+        <div><span data-fr="Durée">Duration</span><b data-fr="6 mois">6 months</b></div>
+        <div><span data-fr="Lieu">Location</span><b>Paris, France</b></div>
+        <div><span>Missions</span><b>5 clients</b></div>
+      </div>
     </div>
-    <p>End-of-studies internship: I built an end-to-end data platform mapping the French nursing-home (EHPAD) market for investors — from scattered public sources to a clean facility-level database, ML models and interactive decision-support dashboards.</p>
-    <div class="xp-metrics">
-      <div class="xp-metric"><div class="mv">7,399</div><div class="ml">Facilities mapped</div></div>
-      <div class="xp-metric"><div class="mv">86</div><div class="ml">Variables</div></div>
-      <div class="xp-metric"><div class="mv">×12</div><div class="ml">Faster pipeline</div></div>
-      <div class="xp-metric"><div class="mv">&gt;94%</div><div class="ml">Entity match</div></div>
-    </div>
-    <ul class="xp-feat">
-      <li>Full ETL pipeline &amp; multithreaded scraper (~4 h → ~20 min).</li>
-      <li>Fuzzy matching across 5+ public sources (&gt;94% auto-match).</li>
-      <li>K-means segmentation, Random Forest / Gradient Boosting, Isolation Forest.</li>
-      <li>Interactive maps &amp; a financial-prediction tool for the consulting team.</li>
-    </ul>
-    <div class="tags"><span class="chip">Python</span><span class="chip">scikit-learn</span><span class="chip">GeoPandas</span><span class="chip">Pandas</span><span class="chip">Web scraping</span><span class="chip">Data viz</span></div>
-  </div>
-</div></section>
 
-<!-- SKILLS BENTO -->
-<section id="skills"><div class="wrap">
-  <div class="sec-head center reveal">
-    <div class="kicker">Toolbox</div>
-    <h2 class="sec-title">What I can do for you</h2>
-    <p class="sec-desc">Six things I do well — all drawn from projects I actually built, tested and deployed.</p>
-  </div>
-  <div class="bento">
-    <div class="cell wide reveal">
-      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div>
-      <h4>Data analysis &amp; visualization</h4>
-      <p>Turning messy data into clean dashboards, maps and reports that surface the story — the part decision-makers actually read.</p>
-      <div class="tags"><span class="chip">Pandas</span><span class="chip">Power BI</span><span class="chip">Plotly</span><span class="chip">Dashboards</span><span class="chip">Excel</span><span class="chip">Data viz</span></div>
+    <div class="cal reveal">
+      <div class="cal-head">
+        <span class="cal-label">2025</span>
+        <div class="cal-months"><span data-fr="Mars">Mar</span><span data-fr="Avr">Apr</span><span data-fr="Mai">May</span><span data-fr="Juin">Jun</span><span data-fr="Juil">Jul</span><span data-fr="Août">Aug</span><span data-fr="Sep">Sep</span></div>
+      </div>
+      <div class="cal-row"><span class="cal-name">Vision'Air</span><span class="cal-track"><i style="--s:1;--l:1"></i></span></div>
+      <div class="cal-row"><span class="cal-name">Clean Hydrogen</span><span class="cal-track"><i style="--s:1;--l:2"></i></span></div>
+      <div class="cal-row"><span class="cal-name">Numeum</span><span class="cal-track"><i style="--s:2;--l:2"></i></span></div>
+      <div class="cal-row"><span class="cal-name">IES Guadeloupe</span><span class="cal-track"><i style="--s:3;--l:2"></i></span></div>
+      <div class="cal-row flag"><span class="cal-name">EHPAD</span><span class="cal-track"><i style="--s:3;--l:4"></i></span></div>
     </div>
-    <div class="cell reveal">
-      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
-      <h4>Machine learning</h4>
-      <p>Clustering, regression &amp; anomaly detection — validated, not overfit.</p>
-      <div class="tags"><span class="chip">scikit-learn</span><span class="chip">K-means</span><span class="chip">Random Forest</span><span class="chip">Isolation Forest</span></div>
+  </div></div></div>
+</section>
+
+<!-- EXPERIENCE (défilement horizontal) -->
+<section class="hsec" id="xpSec" aria-label="Internship missions">
+  <div class="hsticky">
+    <div class="hhead">
+      <div class="htitle"><h2 data-fr="Cinq missions clients.">Five client missions.</h2><p data-fr="Six mois chez BDO, d'un premier modèle R à une plateforme de données complète.">Six months at BDO, from a first R model to a full data platform.</p></div>
+      <div class="hcount"><span id="xpIdx">01</span> / 05 <span class="bar"><i id="xpBar"></i></span></div>
     </div>
-    <div class="cell reveal">
-      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v4H4zM4 12h16v4H4zM4 20h10"/></svg></div>
-      <h4>Data pipelines / ETL</h4>
-      <p>Scraping, cleaning &amp; joining 5+ sources into one reliable dataset.</p>
-      <div class="tags"><span class="chip">Web scraping</span><span class="chip">Fuzzy matching</span><span class="chip">SQL</span><span class="chip">PostgreSQL</span><span class="chip">Supabase</span><span class="chip">SQLite</span><span class="chip">GeoPandas</span></div>
+    <div class="hview"><div class="htrack d-xp" id="xpTrack"></div></div>
+  </div>
+</section>
+
+<!-- FEATURED (défilement horizontal) -->
+<section class="hsec" id="featSec" aria-label="Featured work">
+  <div class="hsticky">
+    <div class="hhead">
+      <div class="htitle"><h2 data-fr="Réalisations.">Featured work.</h2><p data-fr="Construits sur mon temps libre, livrés et utilisés au quotidien. Cliquez sur une carte pour le détail.">Built on my own time, shipped and used daily. Click a card for the full story.</p></div>
+      <div class="hcount"><span id="featIdx">01</span> / 04 <span class="bar"><i id="featBar"></i></span></div>
     </div>
-    <div class="cell reveal">
-      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></div>
-      <h4>Full-stack &amp; apps</h4>
-      <p>From FastAPI backends to interactive front-ends &amp; desktop tools.</p>
-      <div class="tags"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">JavaScript</span><span class="chip">Qt</span></div>
+    <div class="hview"><div class="htrack d-feat" id="featTrack"></div></div>
+  </div>
+</section>
+
+<!-- TOOLBOX -->
+<section id="skills">
+  <div class="shold"><div class="shold-in"><div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker" data-fr="Boîte à outils">Toolbox</div>
+      <h2 data-fr="Ce que je peux faire pour vous.">What I can do for you.</h2>
+      <p data-fr="Six choses que je fais bien — toutes issues de projets réellement construits, testés et déployés.">Six things I do well — each drawn from projects I actually built, tested and deployed.</p>
     </div>
-    <div class="cell wide reveal">
-      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/></svg></div>
-      <h4>Cloud, DevOps &amp; rigor</h4>
-      <p>Deploying to Linux cloud servers with systemd, monitoring and secrets kept safe — plus the scientific method that keeps results honest: hypotheses tested, biases hunted, ideas invalidated with numbers.</p>
-      <div class="tags"><span class="chip">Linux</span><span class="chip">Oracle Cloud</span><span class="chip">systemd</span><span class="chip">SSH</span><span class="chip">Git</span><span class="chip">Out-of-sample validation</span></div>
+    <div class="tool-grid">
+      <div class="tool reveal">
+        <div class="tn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4v16h16"/><path d="M7 14l4-4 3 3 5-6"/></svg></div>
+        <h4 data-fr="Analyse &amp; visualisation">Data analysis &amp; viz</h4>
+        <p data-fr="Transformer des données en désordre en tableaux de bord, cartes et rapports qui font ressortir l'essentiel.">Messy data into clean dashboards, maps and reports that surface the story.</p>
+        <div class="stack-t"><span class="t">Pandas</span><span class="t">Power BI</span><span class="t">Plotly</span><span class="t">GeoPandas</span><span class="t">Excel</span><span class="t">Kibana</span></div>
+      </div>
+      <div class="tool reveal">
+        <div class="tn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
+        <h4 data-fr="Machine learning">Machine learning</h4>
+        <p data-fr="Clustering, régression et détection d'anomalies — validés, pas surappris.">Clustering, regression and anomaly detection — validated, not overfit.</p>
+        <div class="stack-t"><span class="t">scikit-learn</span><span class="t">K-means</span><span class="t">Random Forest</span><span class="t">Isolation Forest</span></div>
+      </div>
+      <div class="tool reveal">
+        <div class="tn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16M4 12h16M4 19h10"/></svg></div>
+        <h4 data-fr="Pipelines de données / ETL">Data pipelines / ETL</h4>
+        <p data-fr="Scraping, nettoyage et jointure de 5+ sources en un jeu de données fiable.">Scraping, cleaning and joining 5+ sources into one reliable dataset.</p>
+        <div class="stack-t"><span class="t">SQL</span><span class="t">PostgreSQL</span><span class="t">Supabase</span><span class="t">Web scraping</span><span class="t">Fuzzy matching</span><span class="t">Elasticsearch</span></div>
+      </div>
+      <div class="tool reveal">
+        <div class="tn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></div>
+        <h4 data-fr="Full-stack &amp; applications">Full-stack &amp; apps</h4>
+        <p data-fr="Backends FastAPI, interfaces web interactives et outils de bureau.">FastAPI backends, interactive front-ends and desktop tools.</p>
+        <div class="stack-t"><span class="t">Python</span><span class="t">FastAPI</span><span class="t">JavaScript</span><span class="t">REST APIs</span><span class="t">R</span></div>
+      </div>
+      <div class="tool reveal">
+        <div class="tn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="3" width="20" height="8" rx="2"/><rect x="2" y="13" width="20" height="8" rx="2"/><path d="M6 7h.01M6 17h.01"/></svg></div>
+        <h4 data-fr="Cloud, DevOps &amp; IA locale">Cloud, DevOps &amp; local AI</h4>
+        <p data-fr="Serveurs Linux avec systemd et cron, secrets protégés — dont un LLM auto-hébergé sur une instance ARM gratuite.">Linux cloud servers with systemd and cron, secrets kept safe — including a self-hosted LLM running on a free ARM instance.</p>
+        <div class="stack-t"><span class="t">Linux</span><span class="t">Oracle Cloud</span><span class="t">systemd</span><span class="t">cron</span><span class="t">Ollama</span><span class="t">SSH</span><span class="t">Git</span></div>
+      </div>
+      <div class="tool reveal">
+        <div class="tn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l8 4v5c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h4 data-fr="Rigueur &amp; méthode">Rigor &amp; method</h4>
+        <p data-fr="La méthode scientifique qui garde les résultats honnêtes — hypothèses testées, biais traqués, idées invalidées par les chiffres.">The scientific method that keeps results honest — hypotheses tested, biases hunted, ideas invalidated with numbers.</p>
+        <div class="stack-t"><span class="t">Statistics</span><span class="t">pytest</span><span class="t">Out-of-sample</span></div>
+      </div>
+    </div>
+  </div></div></div>
+  <div class="marquee reveal" aria-hidden="true">
+    <div class="marquee-mask">
+      <div class="marquee-in" id="mqTrack">
+        <div class="mq-set"><span>Python</span><span>SQL</span><span>PostgreSQL</span><span>Supabase</span><span>Pandas</span><span>scikit-learn</span><span>Power BI</span><span>FastAPI</span><span>GeoPandas</span><span>Plotly</span><span>R</span><span>Elasticsearch</span><span>Jupyter</span><span>Git</span><span>Linux</span></div>
+      </div>
     </div>
   </div>
-</div></section>
+</section>
 
-<!-- FEATURED WORK (showcase) -->
-<section id="work"><div class="wrap">
-  <div class="sec-head reveal">
-    <div class="kicker">Featured work</div>
-    <h2 class="sec-title">Projects I designed &amp; built</h2>
-    <p class="sec-desc">A few personal projects taken end to end — from first idea to a working, deployed system.</p>
-  </div>
-  <div class="showcase">
-    <!-- Orbit -->
-    <article class="feat reveal">
-      <div class="fbody">
-        <span class="ftag">🛰️ Flagship — a hub of data apps</span>
-        <h3>Orbit</h3>
-        <div class="fsub">A personal data hub: trading, budget, planning &amp; market news</div>
-        <p>A FastAPI launcher serving several HTML/CSS/JS dashboards in one hub — each turning raw data into charts, KPIs and projections. Plus a crypto-news watch summarised by a local LLM (Ollama), all running on my own machine.</p>
-        <div class="fmetrics">
-          <div class="fmetric"><div class="mv">6 apps</div><div class="ml">In one hub</div></div>
-          <div class="fmetric"><div class="mv">Local LLM</div><div class="ml">On-device AI</div></div>
-          <div class="fmetric"><div class="mv">9k→1.75k</div><div class="ml">Lines refactored</div></div>
-        </div>
-        <div class="tags"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Data viz</span><span class="chip">Ollama · LLM</span><span class="chip">SQLite</span></div>
-        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:16px">
-          <span class="feat-more" data-proj="orbit" style="margin-top:0">View full details →</span>
-          <a class="feat-more" href="https://orbit-demo.remy-grabet.com/" target="_blank" rel="noopener" style="margin-top:0">✦ Live demo ↗</a>
-        </div>
-      </div>
-      <div class="fvis">
-        <div class="gallery-mini">
-          <img class="zoomable" loading="lazy" src="assets/shots/orbit_budget_projection.webp" alt="Orbit — wealth projection"/>
-          <img class="zoomable" loading="lazy" src="assets/shots/orbit_trading_analytics.webp" alt="Orbit — trading analytics"/>
-          <img class="zoomable" loading="lazy" src="assets/shots/orbit_budget_dashboard.webp" alt="Orbit — budget overview"/>
-          <img class="zoomable" loading="lazy" src="assets/shots/orbit_polymarket.webp" alt="Orbit — capital tracker"/>
-        </div>
-      </div>
-    </article>
-    <!-- KeyMint -->
-    <article class="feat rev reveal">
-      <div class="fbody">
-        <span class="ftag">🔑 Applied cryptography</span>
-        <h3>KeyMint</h3>
-        <div class="fsub">Strong secrets, generated offline, never stored</div>
-        <p>A password &amp; passphrase generator that runs entirely offline — on the phone (installable PWA) and on Windows (.exe). It shows the real entropy in bits rather than an arbitrary gauge, using unbiased rejection sampling proven with a chi-square test, and a French wordlist rebuilt from scratch across four linguistic signals.</p>
-        <div class="fmetrics">
-          <div class="fmetric"><div class="mv">99 bits</div><div class="ml">16-char entropy</div></div>
-          <div class="fmetric"><div class="mv">χ² 500k</div><div class="ml">Proven bias-free</div></div>
-          <div class="fmetric"><div class="mv">0 stored</div><div class="ml">Nothing persisted</div></div>
-        </div>
-        <div class="tags"><span class="chip">JavaScript</span><span class="chip">Web Crypto API</span><span class="chip">PWA</span><span class="chip">Python</span><span class="chip">Applied cryptography</span></div>
-        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:16px">
-          <span class="feat-more" data-proj="keymint" style="margin-top:0">View full details →</span>
-          <a class="feat-more" href="https://keymint.remy-grabet.com/" target="_blank" rel="noopener" style="margin-top:0">✦ Live demo ↗</a>
-        </div>
-      </div>
-      <div class="fvis">
-        <div class="gallery-mini">
-          <img class="zoomable" loading="lazy" src="assets/shots/keymint_password.webp" alt="KeyMint — password mode with entropy in bits"/>
-          <img class="zoomable" loading="lazy" src="assets/shots/keymint_passphrase.webp" alt="KeyMint — passphrase mode, rebuilt French wordlist"/>
-        </div>
-      </div>
-    </article>
-    <!-- VM Antivirus -->
-    <article class="feat reveal">
-      <div class="fbody">
-        <span class="ftag">🛡️ Security — malware triage</span>
-        <h3>VM Antivirus</h3>
-        <div class="fsub">Should I run this download? A verdict in three layers — without executing it</div>
-        <p>A desktop tool that decides whether an untrusted executable is safe, fusing static analysis, threat-intelligence reputation and behavioural sandbox detonation into one plain-language verdict. Suspicious files are detonated inside a disposable, isolated Windows VM to watch what they actually do — persistence, credential theft, network exfiltration — then the VM self-destructs.</p>
-        <div class="fmetrics">
-          <div class="fmetric"><div class="mv">3 layers</div><div class="ml">Static · reputation · sandbox</div></div>
-          <div class="fmetric"><div class="mv">72+ AV</div><div class="ml">via VirusTotal</div></div>
-          <div class="fmetric"><div class="mv">disposable VM</div><div class="ml">Behavioural detonation</div></div>
-        </div>
-        <div class="tags"><span class="chip">Python</span><span class="chip">PE analysis</span><span class="chip">VirusTotal API</span><span class="chip">Windows Sandbox</span><span class="chip">PowerShell</span></div>
-        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:16px">
-          <span class="feat-more" data-proj="vmantivirus" style="margin-top:0">View full details →</span>
-          <a class="feat-more" href="vm-antivirus/index.html" target="_blank" rel="noopener" style="margin-top:0">✦ Live simulation ↗</a>
-        </div>
-      </div>
-      <div class="fvis">
-        <div class="gallery-mini">
-          <img class="zoomable" loading="lazy" src="assets/shots/vmantivirus_verdict.webp" alt="VM Antivirus — malware verdict with threat intelligence"/>
-          <img class="zoomable" loading="lazy" src="assets/shots/vmantivirus_sandbox.webp" alt="VM Antivirus — sandbox detonation behaviour"/>
-          <img class="zoomable" loading="lazy" src="assets/shots/vmantivirus_quota.webp" alt="VM Antivirus — API quota and cost preview"/>
-          <img class="zoomable" loading="lazy" src="assets/shots/vmantivirus_keys.webp" alt="VM Antivirus — reputation API keys, kept local"/>
-        </div>
-      </div>
-    </article>
-  </div>
-</div></section>
+<!-- MORE PROJECTS -->
+<section id="projects">
+  <div class="shold"><div class="shold-in"><div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker" data-fr="Tous les projets">The full toolbox</div>
+      <h2 data-fr="Tout le reste de ce que j'ai construit.">Everything else I&#39;ve built.</h2>
+      <p data-fr="Recherche, moteurs, tableaux de bord et expérimentations — cliquez sur une carte pour le détail.">Research, engines, dashboards and experiments — click any card for the details.</p>
+    </div>
+    <div class="work-grid" id="workGrid"></div>
+  </div></div></div>
+</section>
 
-<!-- PROJECTS GRID (tools catalog) -->
-<section id="projects"><div class="wrap">
-  <div class="sec-head reveal">
-    <div class="kicker">More projects</div>
-    <h2 class="sec-title">The full toolbox</h2>
-    <p class="sec-desc">Other things I've built — from cloud bots to data-viz dashboards.</p>
-  </div>
-  <div class="pgrid">
-    <div class="pcard reveal" data-proj="polybot"><div class="top"><div class="emoji">📊</div><span class="cat">Quantitative research</span></div><h4>Polybot-Tracker</h4><p>End-to-end research on prediction-market strategies: a full data pipeline &amp; backtesting suite, reverse-engineering a pro bot from ~36k trades, validated out-of-sample.</p><div class="foot"><span class="metric"><b>5.5M</b> trades</span><span class="pcard-more">View details →</span></div></div>
-    <div class="pcard reveal" data-proj="rnglab"><div class="top"><div class="emoji">🎲</div><span class="cat">Cryptanalysis · Statistics</span></div><h4>RNG Lab</h4><p>A bench of 8 random generators, 8 statistical tests written from scratch, and an attack that predicts 100 % of Mersenne Twister's output.</p><a class="pcard-demo" href="rng-lab/index.en.html" target="_blank" rel="noopener">✦ Live demo ↗</a><div class="foot"><span class="metric"><b>5 000/5 000</b> predicted</span><span class="pcard-more">View details →</span></div></div>
-    <div class="pcard reveal" data-proj="tdl"><div class="top"><div class="emoji">📱</div><span class="cat">PWA + Windows · Sync</span></div><h4>TDL — My tasks</h4><p>A to-do list on phone &amp; PC: one OKX design across a PWA and a native Windows app, offline-first Supabase sync, synced pinning.</p><a class="pcard-demo" href="https://tdl.remy-grabet.com/" target="_blank" rel="noopener">✦ Live demo ↗</a><div class="foot"><span class="metric"><b>Supabase</b> sync</span><span class="pcard-more">View details →</span></div></div>
-    <div class="pcard reveal" data-proj="polycheat"><div class="top"><div class="emoji">🤖</div><span class="cat">Deployed</span></div><h4>Polycheat</h4><p>On-chain copy-trading bot on a 24/7 cloud server — real-time detection over WebSocket, safe-by-design, systemd on Oracle Cloud.</p><div class="foot"><span class="metric"><b>~1.3s</b> latency</span><span class="pcard-more">View details →</span></div></div>
-    <div class="pcard reveal" data-proj="arbitrage"><div class="top"><div class="emoji">⚖️</div><span class="cat">Research</span></div><h4>Arbitrage &amp; Fair-Value Lab</h4><p>Latency-aware arbitrage &amp; a Black-Scholes fair-value model — showing the apparent edge was an artefact, not alpha.</p><div class="foot"><span class="metric"><b>44h</b> live data</span><span class="pcard-more">View details →</span></div></div>
-    <div class="pcard reveal" data-proj="strategy"><div class="top"><div class="emoji">🎯</div><span class="cat">Engine</span></div><h4>Strategy Engine</h4><p>Modular backtesting framework — market structure, FVGs, volume profile, metrics &amp; validation, all unit-tested with pytest.</p><div class="foot"><span class="metric"><b>pytest</b> tested</span><span class="pcard-more">View details →</span></div></div>
-    <div class="pcard reveal" data-proj="iot"><div class="top"><div class="emoji">🌾</div><span class="cat">IoT · Power BI</span></div><h4>IoT — Rice Fields, Japan</h4><p>Data visualisation from sensors implanted in rice fields in Kumamoto, Japan, with Power BI and Python.</p><div class="foot"><span class="metric">Internship · Japan</span><span class="pcard-more">View details →</span></div></div>
-    <div class="pcard reveal" data-proj="investment"><div class="top"><div class="emoji">📈</div><span class="cat">Power BI</span></div><h4>Investment Dashboard</h4><p>A Power BI dashboard to monitor and analyse investments across markets — clean KPIs and breakdowns.</p><div class="foot"><span class="metric">Personal</span><span class="pcard-more">View details →</span></div></div>
-    <div class="pcard reveal" data-proj="elk"><div class="top"><div class="emoji">🌍</div><span class="cat">ELK Stack</span></div><h4>Global Product Trends</h4><p>A dashboard on the ELK Stack showing objectives, data distribution by country and key sales indicators.</p><div class="foot"><span class="metric">Elasticsearch · Kibana</span><span class="pcard-more">View details →</span></div></div>
-  </div>
-</div></section>
+<!-- EDUCATION -->
+<section id="education">
+  <div class="shold"><div class="shold-in"><div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker" data-fr="Formation">Education</div>
+      <h2 data-fr="Un double diplôme, ingénieur et data science.">A double degree, engineering and data science.</h2>
+    </div>
+    <div class="edu-grid">
+      <div class="edu reveal">
+        <div class="edu-top"><span class="edu-deg">MSc Data Science</span><span class="edu-when" data-fr="Sep 2024 — Août 2025">Sep 2024 — Aug 2025</span></div>
+        <h3>Institut Polytechnique de Paris</h3>
+        <p data-fr="Deuxième année du master Data Science, dispensée à l'École Polytechnique, l'ENSAE et Télécom Paris.">Second year of the Data Science master&#39;s, taught across École Polytechnique, ENSAE and Télécom Paris.</p>
+        <div class="tags"><span class="chip" data-fr="Modélisation statistique">Statistical modelling</span><span class="chip">Machine learning</span><span class="chip" data-fr="Frameworks big data">Big data frameworks</span><span class="chip">AI</span></div>
+      </div>
+      <div class="edu reveal">
+        <div class="edu-top"><span class="edu-deg" data-fr="Diplôme d'ingénieur">Master of Engineering</span><span class="edu-when" data-fr="Sep 2022 — Août 2025">Sep 2022 — Aug 2025</span></div>
+        <h3>Mines Saint-Étienne</h3>
+        <p data-fr="Diplôme d'ingénieur de l'École Nationale Supérieure des Mines de Saint-Étienne.">Engineering degree from the École Nationale Supérieure des Mines de Saint-Étienne.</p>
+        <div class="tags"><span class="chip" data-fr="Statistiques &amp; probabilités">Statistics &amp; probability</span><span class="chip" data-fr="Méthodes numériques">Numerical methods</span><span class="chip" data-fr="Bases de données">Databases</span><span class="chip">Data science</span></div>
+      </div>
+    </div>
+    <div class="edu-foot reveal">
+      <span class="edu-prep" data-fr="&lt;b&gt;Lycée Montaigne&lt;/b&gt; — Classes préparatoires, mathématiques &amp; physique · 2019 — 2022"><b>Lycée Montaigne</b> — Classes préparatoires, mathematics &amp; physics · 2019 — 2022</span>
+      <span class="edu-lang" data-fr="Français natif · Anglais C1 (TOEIC 955/990) · Espagnol B1/B2">French native · English C1 (TOEIC 955/990) · Spanish B1/B2</span>
+      <a class="btn btn-ghost" id="cvLink" href="assets/cv-remy-grabet-en.pdf" data-href-fr="assets/cv-remy-grabet-fr.pdf" target="_blank" rel="noopener" download="CV-Remy-Grabet-EN.pdf">Download my CV ↓</a>
+    </div>
+  </div></div></div>
+</section>
 
-<!-- BIG CTA -->
-<section id="contact"><div class="wrap"><div class="cta-band reveal">
-  <h2>Let's turn your data<br/>into <span class="p">decisions.</span></h2>
-  <p>Open to Data Analyst, Data Scientist and Data Consultant roles. The fastest way to reach me is email.</p>
-  <div class="cta-btns">
-    <a class="btn btn-primary" href="mailto:r.grabet@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>r.grabet@gmail.com</a>
-    <a class="btn btn-ghost" href="https://www.linkedin.com/in/remy-grabet-832375289/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 20.4h-3.5v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9v5.7H9.4V9h3.3v1.6h.1c.5-.9 1.6-1.9 3.3-1.9 3.5 0 4.2 2.3 4.2 5.3v6.4zM5.3 7.4a2 2 0 1 1 0-4.1 2 2 0 0 1 0 4.1zM7.1 20.4H3.6V9h3.5v11.4z"/></svg>LinkedIn</a>
-    <a class="btn btn-ghost" href="https://github.com/thespicyy" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>GitHub</a>
+<!-- CONTACT -->
+<section id="contact">
+  <div class="shold"><div class="shold-in"><div class="wrap">
+    <div class="cta-band reveal">
+      <h2 data-fr="Transformons vos données en décisions.">Let&#39;s turn your data into decisions.</h2>
+      <div class="cta-lines">
+        <span data-fr="Ouvert aux postes de Data Analyst, Data Scientist et Data Consultant.">Open to Data Analyst, Data Scientist and Data Consultant roles.</span>
+        <span data-fr="Le plus simple pour me joindre reste l'e-mail.">The fastest way to reach me is email.</span>
+      </div>
+      <div class="hero-cta">
+        <a class="btn btn-primary ext" href="mailto:r.grabet@gmail.com">r.grabet@gmail.com
+          <span class="circ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></span>
+        </a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/remy-grabet-832375289/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </div></div></div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <a class="noir-sig" href="#top" aria-label="NOIR"><img class="noir-logo" src="assets/noir-logo.webp" alt="NOIR" width="720" height="156"/></a>
+      <div class="foot-meta reveal">
+        <a href="mailto:r.grabet@gmail.com">r.grabet@gmail.com</a>
+        <a href="https://www.linkedin.com/in/remy-grabet-832375289/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/thespicyy" target="_blank" rel="noopener">GitHub</a>
+        <span class="cr">© 2026 Rémy Grabet — France</span>
+      </div>
+    </div>
   </div>
-</div>
-<footer><div class="foot">
-  <span class="cr">© <span id="yr"></span> Rémy Grabet</span>
-  <a href="#" id="legal-link" class="legal-link">Legal notice</a>
-  <span class="loc">France</span>
-</div></footer>
-</div></section>
+</footer>
 
-<!-- Legal notice modal -->
-<div class="pm" id="legalmodal"><div class="pm-panel"><button class="pm-close" id="legal-close" aria-label="Close">✕</button>
-<div class="legal-body">
-  <span class="pm-cat">Legal notice</span>
-  <h3>Legal notice</h3>
-  <div class="pm-sub">Last updated August 2026</div>
-  <h4>Publisher</h4>
-  <p>Rémy Grabet — France</p>
-  <p>Contact: <a href="mailto:r.grabet@gmail.com">r.grabet@gmail.com</a></p>
-  <h4>Hosting</h4>
-  <p>GitHub Pages — GitHub, Inc.</p>
-  <p>88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA</p>
-  <h4>Intellectual property</h4>
-  <p>The content of this site (text, screenshots, source code) is © Rémy Grabet, unless otherwise stated. Third-party names and logos (technologies, projects) belong to their respective owners.</p>
-  <h4>Personal data &amp; cookies</h4>
-  <p>This is a static showcase site: no account, no audience measurement, no tracking cookies. The only browser storage used is your theme preference (light / dark), kept locally on your device and never transmitted.</p>
-</div></div></div>
+<button class="fab" id="to-top" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+<button class="fab" id="theme-fab" aria-label="Switch theme">
+  <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+  <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+</button>
 
-<!-- Project modal -->
-<div class="pm" id="projmodal"><div class="pm-panel"><button class="pm-close" id="pm-close" aria-label="Close">✕</button><div id="pm-body"></div></div></div>
-<script type="application/json" id="projdata">
+<div class="pm" id="pm"><div class="pm-panel"><button class="pm-close" id="pmClose" aria-label="Close">✕</button><div id="pmBody"></div></div></div>
+<div class="lb" id="lb"><img id="lbImg" alt=""/></div>
+
+<script>
+/* ouverture toujours en haut de page : le navigateur ne restaure pas la position,
+   et les hauteurs calculées après chargement ne décalent plus le défilement */
+(function(){
+  try{ if('scrollRestoration' in history) history.scrollRestoration='manual'; }catch(e){}
+  if(!location.hash){
+    window.scrollTo(0,0);
+    window.addEventListener('load',function(){ if(!location.hash) window.scrollTo(0,0); });
+  }
+}());
+</script>
+<script type="application/json" id="xpdata-fr">
+{"ehpad": {"title": "Plateforme d'investissement EHPAD", "cat": "Santé · plateforme de données", "flag": "Mission phare", "per": "Juin – Sep 2025 · 4 mois", "sub": "Cartographier le marché privé des EHPAD pour des investisseurs", "desc": "La plus grosse mission de mon stage : une plateforme de données de bout en bout qui cartographie le marché français des EHPAD privés, pour que des investisseurs voient où sont réellement les opportunités. J'ai construit toute la chaîne — collecte, résolution d'entités, modélisation financière, machine learning et les visuels d'aide à la décision.", "metrics": [["7 399", "établissements"], ["86", "variables"], ["×12", "pipeline accéléré"], [">94 %", "appariement auto"]], "feats": ["Infrastructure de scraping multithreadé avec repli exponentiel — le temps de traitement passe de ~4 h à ~20 min (×12), avec ~88 % de réussite.", "Fuzzy matching et résolution d'entités sur 5+ sources publiques, réconciliant les identifiants FINESS (administratif) et SIRET (commercial) malgré ~10 % d'identifiants manquants, des abréviations, fautes de frappe et variations de casse.", "Algorithme de redistribution financière : le chiffre d'affaires d'un groupe (ex. 4,2 Md€ pour 270 établissements) réparti établissement par établissement, par pondération du nombre de lits et ajustement géographique.", "Clustering territorial K-means segmentant la France en cinq profils d'investissement — des zones urbaines très demandées aux territoires ruraux sous-dotés.", "Modèles supervisés (Random Forest / Gradient Boosting) pour estimer chiffre d'affaires et rentabilité des établissements sans données financières, plus Isolation Forest pour la détection d'anomalies et le contrôle qualité.", "Cartes interactives et outil de prédiction financière livrés à l'équipe de conseil."], "tech": ["Python", "Pandas", "scikit-learn", "K-means", "Random Forest", "Isolation Forest", "GeoPandas", "Web scraping", "Fuzzy matching"]}, "ies": {"title": "IES Guadeloupe", "cat": "Économie territoriale", "per": "Juin – Juil 2025 · 2 mois", "sub": "L'empreinte économique d'un aéroport, projetée à 2038", "desc": "Une étude d'impact économique qui quantifie ce que l'aéroport de Guadeloupe apporte au territoire — dépenses des visiteurs, part qui devient du PIB local, et emplois associés — puis projette cette empreinte à mesure que le trafic passagers augmente.", "metrics": [["782 M€", "dépenses visiteurs"], ["344 M€", "de PIB local généré"], ["12 700", "emplois projetés en 2038"], ["3 M", "passagers modélisés"]], "feats": ["Quantification des dépenses des visiteurs dans les îles et de la part convertie en PIB local.", "Modélisation de l'empreinte économique de l'aéroport à quatre horizons — 2021, 2024, 2035 et 2038 — avec et sans scénarios de CAPEX.", "Construction des données et visuels d'un livrable d'aide à la décision destiné au client."], "tech": ["Analyse de données", "Modélisation économique", "Excel", "Data viz"]}, "numeum": {"title": "Numeum — fiches régionales", "cat": "Industrie tech · data viz", "per": "Mai – Juin 2025 · 2 mois", "sub": "Les fiches chiffres clés 2025 du numérique français", "desc": "Numeum est le syndicat du numérique français. J'ai produit leurs fiches régionales 2025 : une fiche de chiffres clés par région couvrant le poids économique du secteur, l'emploi, le financement et l'innovation — refaites chaque année, au gré de l'évolution des statistiques publiques.", "metrics": [["2025", "édition livrée"], ["Multi-région", "fiches chiffres clés"], ["R&D", "nouvel indicateur"], ["3 sources", "INSEE · ACOSS · DARES"]], "feats": ["Collecte et réconciliation de données issues de plusieurs sources statistiques publiques (INSEE, ACOSS, DARES).", "Ajout d'un nouvel indicateur de dépenses en R&D à l'édition 2025.", "Gestion des ruptures de séries : les chiffres INSEE 2022 des non-salariés n'ayant pas été actualisés, je leur ai substitué les données ACOSS 2024 des auto-entrepreneurs ; la nomenclature DARES ayant changé, la série est restreinte aux techniciens et cadres.", "Gros travail sur Excel — tableaux croisés dynamiques et modèles pilotés par formules alimentant chaque graphique publié."], "tech": ["Excel", "Tableaux croisés dynamiques", "INSEE / ACOSS / DARES", "Data viz", "Reporting"]}, "ch2p": {"title": "Clean Hydrogen Partnership", "cat": "Énergie · appel d'offres", "per": "Avr – Mai 2025 · 2 mois", "sub": "Répondre à un appel d'offres européen sur l'hydrogène", "desc": "Une réponse à un appel d'offres européen sur la compétitivité de l'hydrogène. Le sujet : comment introduire l'hydrogène dans le transport routier à travers l'Europe — les poids lourds en particulier. Mon rôle : aider à bâtir la proposition démontrant que BDO pouvait y répondre de façon crédible — structurer l'argumentaire, l'analyse à l'appui, et la présentation elle-même.", "metrics": [["Europe", "périmètre de l'appel d'offres"], ["Poids lourds", "application visée"], ["Chaîne de valeur", "économie cartographiée"], ["Proposition", "livrée"]], "feats": ["Cartographie du cadre réglementaire et politique européen — incitations financières et non financières qui soutiennent la recherche, l'innovation et le déploiement le long de la chaîne de valeur de l'hydrogène.", "Analyse de la répartition de la valeur économique le long de cette chaîne en Europe.", "Construction de la présentation au format imposé par le client, en transformant la recherche en un argumentaire clair et défendable.", "Montée en compétence sur le volet conseil : structurer une proposition, écrire pour convaincre, présenter une analyse à un public non technique."], "tech": ["Recherche", "Politique européenne", "Analyse de chaîne de valeur", "Présentation de conseil"]}, "visionair": {"title": "Vision'Air — flotte de poids lourds", "cat": "Mobilité · modélisation R", "per": "Avr 2025 · 1 mois", "sub": "Projeter le mix de carburants des poids lourds européens à 2040", "desc": "Ma première mission. Une étude sur l'évolution de la flotte européenne de poids lourds et sur les carburants qui l'alimenteront d'ici 2035–2040. Une partie du modèle existait déjà en R à mon arrivée : je l'ai actualisé avec des données récentes et étendu, puis j'ai contribué à transformer les résultats en livrable client.", "metrics": [["2040", "horizon de projection"], ["Europe", "périmètre géographique"], ["R", "langage de modélisation"], ["2 scénarios", "futurs possibles"]], "feats": ["Travail en R sur un modèle de flotte existant — mise à jour des jeux de données et extension de l'analyse.", "Projection du mix de carburants de la flotte européenne de poids lourds selon deux scénarios à l'horizon 2040.", "Contribution à l'analyse des besoins en bornes de recharge en France.", "Apprentissage clé : reprendre le code de quelqu'un d'autre et le faire produire des chiffres fiables et actuels."], "tech": ["R", "Modélisation de données", "Analyse de scénarios", "Data viz"]}}
+</script>
+<script type="application/json" id="projdata-fr">
+{"orbit": {"title": "Orbit", "cat": "Full-stack · IA auto-hébergée", "sub": "Un hub personnel, plus un brief d'actu rédigé par une IA chaque matin", "desc": "Pas seulement un tableau de bord de trading — Orbit réunit quatre apps derrière un backend FastAPI : journal de trading, budget avec projection d'actifs, planification de tâches et suivi de capital Polymarket. S'y ajoute un pipeline d'IA entièrement auto-hébergé qui me rédige un brief d'actualité thématique chaque matin — sans API payante, sans GPU, sans qu'aucune donnée ne quitte la machine.", "metrics": [["7 h 30", "brief IA quotidien"], ["11 sources", "agrégées et lues"], ["Modèle 8B", "sur 2 cœurs ARM, sans GPU"], ["0 €", "aucune API d'IA payante"]], "feats": ["Un brief matinal auto-hébergé : chaque jour à 7 h 30, les dernières 24 h de 11 médias sont agrégées, lues et synthétisées en un paragraphe par thème avec sources numérotées, puis envoyées sur Telegram — le tout sur une instance ARM gratuite d'Oracle Cloud, donc sans dépendre de mon PC.", "Faire tourner un modèle 8B (Ollama, qwen3) sur 2 cœurs ARM sans GPU : mesuré à 3,5 tokens/s, un digest complet prend ~11 minutes. Inutilisable en interactif, parfaitement viable en tâche planifiée — ce qui a orienté toute l'architecture vers l'asynchrone (cron + timeouts larges) plutôt que vers un modèle plus petit et moins bon.", "Sortie structurée fiable : schéma JSON strict, mode « raisonnement » du modèle désactivé car il polluait la sortie, et un parseur tolérant qui récupère les paragraphes complets même quand la génération est tronquée.", "Deux obstacles d'infrastructure résolus : les médias qui bloquent les IP de datacenter (429/403) basculent proprement vers le résumé de leur flux RSS au lieu d'être perdus ; et comme Oracle récupère les instances gratuites jugées inactives, un service systemd maintient une charge de fond mesurée à 16 % en priorité « idle », sans jamais voler de CPU au travail réel.", "Infrastructure as code via le SDK Python d'OCI, avec un retry tenant compte du throttling — les instances ARM gratuites sont rares, il a fallu 468 tentatives — et découverte dynamique du compartiment, du sous-réseau, de l'image et des domaines de disponibilité plutôt que des valeurs codées en dur.", "Sécurité : secrets transmis par tunnel SSH sans jamais toucher un fichier intermédiaire, permissions 600, rien dans le dépôt, et validation d'URL par liste blanche de domaines (anti-SSRF).", "Le reste du hub : journal de trading avec courbe d'équité, budget avec projection multi-comptes, suivi de capital Polymarket, planification de tâches, API protégée par jeton et sauvegarde/restauration en un clic."], "tech": ["Python", "FastAPI", "Ollama", "qwen3:8b", "Oracle Cloud", "SDK OCI", "systemd", "cron", "Ingénierie de prompt", "RSS / Atom", "trafilatura", "API Telegram", "JavaScript"]}, "keymint": {"title": "KeyMint", "cat": "Cryptographie appliquée", "sub": "Des secrets solides, générés hors-ligne, jamais stockés", "desc": "Un générateur de mots de passe et de phrases secrètes qui fonctionne entièrement hors-ligne — sur le téléphone (PWA installable) et sur Windows (.exe). Il affiche l'entropie réelle en bits plutôt qu'une jauge arbitraire, grâce à un tirage sans biais prouvé par un test du khi-deux, et une liste de mots français reconstruite de zéro.", "metrics": [["99 bits", "entropie sur 16 caractères"], ["χ² 500k", "absence de biais prouvée"], ["0 stocké", "rien n'est conservé"], ["2 min", "effacement du presse-papiers"]], "feats": ["Tirage uniforme sans biais par rejection sampling sur des mots de 32 bits, uniformité prouvée par un test du khi-deux sur 500 000 tirages.", "Liste de mots français reconstruite de zéro à partir de quatre signaux linguistiques (wordfreq, morphologie, comparaison FR/EN, étiquetage grammatical spaCy).", "L'aléa provient uniquement du CSPRNG du système — Math.random est interdit et la compilation échoue s'il apparaît.", "Content-Security-Policy stricte, aucune requête réseau, presse-papiers effacé après 2 minutes.", "Un seul moteur partagé par la PWA et l'application Windows (pywebview sur 127.0.0.1)."], "tech": ["JavaScript", "Web Crypto API", "PWA", "Python", "pywebview", "Cryptographie appliquée"]}, "vmav": {"title": "VM Antivirus", "cat": "Sécurité défensive", "sub": "Un verdict en trois couches sur un fichier téléchargé", "desc": "Un outil de bureau qui répond à une seule question — ce fichier téléchargé est-il sûr ? — en croisant trois couches d'analyse indépendantes, sans jamais l'exécuter sur la vraie machine. Construit autour du problème difficile : distinguer un crack inoffensif d'un véritable voleur de données.", "metrics": [["3 couches", "statique · réputation · bac à sable"], ["72+ AV", "moteurs via VirusTotal"], ["VM jetable", "détonation comportementale"], ["Empreinte seule", "le fichier n'est jamais envoyé"]], "feats": ["Dissection statique du PE : sections, entropie de Shannon pour repérer les packers, imports d'API Windows regroupés par intention (injection, keylogging, déchiffrement d'identifiants).", "Réputation sur 70+ moteurs via VirusTotal, interrogé par empreinte uniquement — le fichier lui-même n'est jamais téléversé — avec MalwareBazaar comme seconde source indépendante.", "Détonation comportementale dans un Windows Sandbox jetable : un moniteur PowerShell natif enregistre les processus fils, les connexions sortantes, la persistance et les fichiers déposés, puis la VM s'autodétruit.", "Attribution parent→enfant des processus pour ne compter que les actions du fichier lui-même — ce qui a éliminé deux vrais faux positifs pendant les tests.", "Usage économe du quota : les appels de réputation ne sont dépensés que sur les fichiers qui comptent, avec une projection du coût avant lancement."], "tech": ["Python", "pefile", "Entropie de Shannon", "API VirusTotal", "Windows Sandbox", "PowerShell", "Tkinter"]}, "tdl": {"title": "TDL — Mes tâches", "cat": "PWA + Windows · multi-appareils", "sub": "Une seule liste, synchronisée entre téléphone et PC", "desc": "Une to-do list épurée qui vit sur mon téléphone (PWA installable) et sur mon PC (un volet dans la barre des tâches) — la même liste partout, éditable hors-ligne, qui se réconcilie automatiquement au retour du réseau. J'ai conçu et construit tout le moteur de synchro offline-first de zéro.", "metrics": [["Supabase", "synchro Postgres"], ["Offline-first", "LWW + tombstones"], ["Tél + PC", "2 clients"], ["0 compte", "RLS + secret"]], "feats": ["Synchronisation multi-appareils en temps réel via Supabase (PostgreSQL managé).", "Moteur offline-first construit de zéro : « dernière modification gagne » sur un horodatage serveur faisant autorité, suppressions propagées par tombstones, file d'attente locale et résolution de conflits.", "Sécurité sans comptes : Row-Level Security PostgreSQL gardée par un secret transmis en en-tête HTTP — aucun secret dans le dépôt public.", "Épinglage synchronisé, tâches récurrentes, édition multi-ligne en place et délai de grâce avant disparition des tâches terminées.", "Deux clients : une PWA installable (service worker, hors-ligne) et une application Windows (Python + Tkinter/pystray, packagée en .exe avec PyInstaller)."], "tech": ["JavaScript", "PWA", "Service Worker", "Supabase", "PostgreSQL", "SQL", "RLS", "Python", "PyInstaller"]}, "polybot": {"title": "Polybot-Tracker", "cat": "Recherche quantitative", "sub": "Rétro-ingénierie d'un bot professionnel de marchés prédictifs", "desc": "Une recherche de bout en bout sur les stratégies de marchés prédictifs : un pipeline de données complet et une suite de backtesting qui reconstituent le fonctionnement d'un bot professionnel à partir de son historique de transactions on-chain, puis valident les conclusions hors échantillon.", "metrics": [["5,5 M", "transactions analysées"], ["~36 k", "transactions du bot étudiées"], ["Hors échantillon", "validé"], ["Sport en direct", "verrouillage de paires"]], "feats": ["Pipeline d'ingestion complet sur l'API Polymarket, avec ses pièges documentés gérés.", "Suite de backtesting reconstituant le verrouillage de paires du bot sur les marchés sportifs en direct.", "Modélisation tenant compte des frais pour séparer l'avantage réel des artefacts.", "Validation hors échantillon pour éviter le surapprentissage sur l'historique observé."], "tech": ["Python", "Pandas", "Backtesting", "API REST", "Statistiques"]}, "polycheat": {"title": "Polycheat", "cat": "Déployé · copy-trading", "sub": "Un bot de copy-trading sûr par conception, actif 24/7", "desc": "Un bot de copy-trading on-chain tournant sur un serveur cloud 24/7 — détection en temps réel par WebSocket, dimensionnement des positions selon la conviction, et un scanner à mémoire d'exclusion. Simulé d'abord, puis déployé avec systemd sur Oracle Cloud.", "metrics": [["~1,3 s", "latence de détection"], ["24/7", "systemd sur Oracle Cloud"], ["Simulation", "avant le direct"], ["Sûr", "par conception"]], "feats": ["Détection des transactions en temps réel par WebSocket.", "Dimensionnement des positions relatif à la conviction.", "Scanner des meilleurs portefeuilles avec mémoire d'exclusion.", "Déployé sur une instance Oracle Cloud gratuite avec systemd, secrets isolés du dépôt."], "tech": ["Python", "WebSocket", "systemd", "Oracle Cloud"]}, "arbitrage": {"title": "Arbitrage & Fair-Value Lab", "cat": "Signal ou artefact ?", "sub": "Arbitrage tenant compte de la latence et juste valeur Black-Scholes", "desc": "Des outils de recherche sur deux stratégies : l'arbitrage de paires et la juste valeur d'options crypto. Une sonde d'exécution sur papier mesure ce qui serait réellement exécuté compte tenu de la latence, et un modèle de Black-Scholes valorise les marchés Polymarket « BTC Up or Down » face au spot Binance en direct.", "metrics": [["44 h", "de données en direct"], ["2 jambes", "micro-exécuteur"], ["Black-Scholes", "juste valeur"], ["Artefact", "et non de l'alpha"]], "feats": ["Micro-exécuteur à 2 jambes avec gestion du risque de jambe (débouclage automatique si une seule est exécutée).", "Sonde d'exécution sur papier tenant compte de la latence, mesurant les exécutions réalistes.", "Collecteur d'écart Black-Scholes comparant volatilité implicite et réalisée sur environ 44 h de données en direct.", "Conclusion clé : l'avantage apparent est un artefact de cotations périmées et de volatilité — pas de l'alpha exploitable."], "tech": ["Python", "Black-Scholes", "Volatilité", "Microstructure", "WebSocket", "API Binance"]}, "strategy": {"title": "Strategy Engine", "cat": "Moteur · backtesting", "sub": "Un framework de backtesting modulaire et testé unitairement", "desc": "Un framework de backtesting modulaire couvrant la structure de marché, les fair-value gaps et le volume profile, avec métriques et validation — le tout testé unitairement avec pytest pour que les résultats soient fiables.", "metrics": [["pytest", "entièrement testé"], ["Modulaire", "stratégies enfichables"], ["Donchian", "cassure 20/10 retenue"], ["Hors échantillon", "validation"]], "feats": ["Modules de structure de marché, de fair-value gaps et de volume profile.", "Métriques et validation hors échantillon intégrées au moteur.", "Stratégie retenue : cassure de Donchian 20/10, avec une version Pine et un signal en direct.", "Entièrement testé unitairement avec pytest."], "tech": ["Python", "backtesting.py", "ccxt", "pytest"]}, "rnglab": {"title": "RNG Lab", "cat": "Cryptanalyse · statistiques", "sub": "Réussir les tests ne veut pas dire être sûr", "desc": "Un banc d'essai comparatif de 8 générateurs de nombres aléatoires soumis à 8 tests statistiques implémentés de zéro, puis à une attaque cryptanalytique. Le livrable est un rapport HTML autonome qui établit expérimentalement que réussir les tests statistiques ne prouve rien sur la sécurité.", "metrics": [["5 000/5 000", "sorties MT19937 prédites"], ["0 bit", "d'entropie et pourtant 8/8"], ["8 tests", "implémentés de zéro"], ["NIST", "SP 800-22"]], "feats": ["Prédit 100 % de la sortie du Mersenne Twister après observation de 624 valeurs, en inversant sa fonction de tempering.", "Montre qu'une source d'entropie nulle conditionnée par SHA-256 réussit tous les tests — les tests mesurent le conditionneur, pas la source.", "8 tests NIST SP 800-22 écrits à la main, avec des p-valeurs recoupées avec SciPy.", "Chaque test éprouvé sur des séquences volontairement défectueuses dont le défaut est connu d'avance."], "tech": ["Python", "NumPy", "Cryptanalyse", "NIST SP 800-22", "Théorie de l'information"]}, "iot": {"title": "IoT — Rizières, Japon", "cat": "IoT · Power BI", "sub": "Visualisation de données de capteurs — stage au Japon", "desc": "Visualisation de données issues de capteurs implantés dans des rizières à Kumamoto, au Japon, avec Power BI et Python — transformer des flux de capteurs bruts en tableaux de bord lisibles pour le suivi et la décision.", "metrics": [["Japon", "stage de recherche"], ["Power BI", "+ Python"], ["Capteurs", "télémétrie de terrain"], ["Tableaux de bord", "suivi"]], "feats": ["Collecte et nettoyage des flux de données de capteurs sur le terrain.", "Construction de tableaux de bord Power BI pour le suivi et la prise de décision."], "tech": ["Power BI", "Python", "IoT"]}, "investment": {"title": "Tableau de bord d'investissement", "cat": "Power BI", "sub": "Suivi personnel de portefeuille", "desc": "Un tableau de bord Power BI pour suivre et analyser des investissements en bourse et en cryptomonnaies — KPI clairs, répartitions et vues de performance.", "metrics": [["Power BI", "tableau de bord"], ["Multi-actifs", "suivi"], ["KPI", "répartition"], ["Personnel", "projet"]], "feats": ["Vue consolidée d'un portefeuille multi-actifs.", "KPI, répartition et analyses de performance."], "tech": ["Power BI", "Finance"]}, "elk": {"title": "Tendances produits mondiales", "cat": "Stack ELK", "sub": "Tableau de bord d'analyse des ventes sur la stack ELK", "desc": "Un tableau de bord bâti sur la stack ELK (Elasticsearch, Logstash, Kibana) présentant les objectifs, la répartition des données par pays et les indicateurs de vente clés.", "metrics": [["ELK", "stack"], ["Kibana", "tableaux de bord"], ["Par pays", "répartition"], ["Ventes", "indicateurs"]], "feats": ["Ingestion et indexation avec la stack ELK.", "Tableaux de bord Kibana : objectifs, répartition par pays, indicateurs de vente."], "tech": ["Elasticsearch", "Logstash", "Kibana"]}}
+</script>
+<script type="application/json" id="xpdata">
 {
- "vmantivirus":{"title":"VM Antivirus","cat":"🛡️ Defensive security · Malware triage","sub":"A three-layer verdict on untrusted downloads — without running them",
-  "shots":[{"src":"assets/shots/vmantivirus_verdict.webp","cap":"Batch verdict — VirusTotal + MalwareBazaar + sandbox reasoning, in plain language"},{"src":"assets/shots/vmantivirus_sandbox.webp","cap":"Sandbox detonation — child processes, network and persistence attributed to the file"},{"src":"assets/shots/vmantivirus_quota.webp","cap":"API-quota bar with a translucent cost projection before you spend a request"},{"src":"assets/shots/vmantivirus_keys.webp","cap":"Two independent reputation sources, keys kept local"}],
-  "desc":"A desktop app that answers one question — is this downloaded executable safe to run? — by fusing three independent layers of analysis while never executing the file on the real machine. The hard problem it is built around: telling a harmless crack (which always trips antivirus) apart from a genuine data stealer.",
-  "feats":["Three complementary layers: static PE dissection (sections, Shannon entropy to spot packers, Windows-API imports grouped by intent — injection, keylogging, DPAPI credential decryption), reputation across 70+ engines via VirusTotal, and behavioural detonation.","Behavioural detonation in a disposable Windows Sandbox: the file runs in an isolated, throw-away VM while a 100% native PowerShell monitor (CIM/WMI, Get-NetTCPConnection, registry, scheduled tasks) records child processes, outbound connections, persistence and dropped files — then the VM self-destructs.","Parent→child process-tree attribution so only the file's own actions count — which killed two real false positives found in testing: a game's LAN traffic, and Windows' own crash reporter phoning home to Microsoft.","The crack-vs-stealer problem, solved by a layered verdict: detection-label analysis separates 'riskware / keygen' from 'RedLine / trojan-PSW', and only public-IP connections (not LAN) count as exfiltration.","Privacy by design: VirusTotal is queried by hash only — the file itself is never uploaded — and a second source, MalwareBazaar, confirms known-malware families independently.","Smart quota use: reputation is only spent on the files that matter (executables, installers, flagged files), cutting a 60-file folder to a handful of requests; a live quota bar projects the cost of a scan, translucently, before you launch it.","Shipped as a polished product: OKX-style dark UI with rounded widgets (anti-aliased Pillow images) and a native dark title bar via DWM, packaged to a one-file .exe (PyInstaller) with a Start-menu entry."],
-  "metrics":[["3 layers","static · reputation · sandbox"],["72+ AV","engines via VirusTotal"],["disposable VM","behavioural detonation"],["hash-only","file never uploaded"]],
-  "tech":["Python","pefile · PE analysis","Shannon entropy","IOC extraction","VirusTotal API","MalwareBazaar API","Windows Sandbox",".wsb config","PowerShell","CIM / WMI","Tkinter","Pillow","ctypes / DWM","PyInstaller","Threat intelligence"],
-  "repo":null,"demo":"vm-antivirus/index.html"},
- "keymint":{"title": "KeyMint — password generator", "cat": "🔑 Offline · PWA + Windows app", "sub": "Strong secrets, generated offline, never stored", "shots": [{"src": "assets/shots/keymint_password.webp", "cap": "Password mode — real entropy in bits"}, {"src": "assets/shots/keymint_passphrase.webp", "cap": "Passphrase mode — 4151-word French list"}], "desc": "A password and passphrase generator that runs entirely offline, on the phone (installable PWA) and on Windows (standalone .exe). It shows the real entropy in bits and an order of magnitude for the cracking time under an explicitly stated assumption — rather than an arbitrary weak/strong gauge. Nothing is ever stored or transmitted.", "feats": ["Unbiased uniform sampling: a naive rand() % alphabet_size statistically favours the first characters of the alphabet. KeyMint uses rejection sampling over 32-bit words, and a chi-square test on 500 000 draws proves the distribution stays uniform.","The passphrase wordlist was rebuilt from scratch. Off-the-shelf French Diceware lists are built on a frequency lexicon without filtering by part of speech, so they yield unmemorable phrases (rare words, conjugated verb forms). The new list crosses four independent signals — real usage frequency (wordfreq), morphological filters, a French/English comparison to drop loanwords, part-of-speech tagging (spaCy) to keep only common nouns and adjectives, and dictionary validation exploiting capitalisation to remove proper nouns. 4151 everyday words, merged with the Diceware list from diceware.fr (CC BY 4.0) after filtering out slurs, vulgarities and conjugated forms.", "Randomness comes exclusively from the OS CSPRNG (crypto.getRandomValues). Math.random() is banned, and a test fails the build if it ever appears in the engine.", "No composition constraint (no forced digit): forcing a character class removes entropy instead of adding it.", "Zero attack surface by design: strict Content-Security-Policy (default-src 'none'), no network request at all, no secret persisted, clipboard wiped automatically after 2 minutes.","Preferences carry the size of the wordlist they were chosen with. When the list was rebuilt, a stored setting of 5 words silently dropped from 63 to 57 bits — the kind of regression that reports nothing. The app now resets the word count when the list changes, and keeps every other preference untouched.","Mobile lifecycle handled explicitly: a phone suspends the page the moment you leave the app, so the wipe timer never fires and the clipboard API requires focus anyway. The copy is timestamped and a second trigger runs on return to the app (visibilitychange / focus / pageshow), catching up the elapsed time — with the remaining platform limitation documented rather than hidden.", "One engine shared by both platforms: the Windows app serves the same code through pywebview over 127.0.0.1 — a secure context, which file:// is not, and which the clipboard API requires.", "27 automated tests, including chi-square on the sampler, on the Fisher-Yates shuffle and on the characters actually produced."], "metrics": [["99 bits", "16 chars, 76-symbol alphabet"], ["χ² 500k", "proven bias-free"], ["0 stored", "nothing persisted"], ["2 min", "clipboard auto-wipe"]], "tech": ["JavaScript", "Web Crypto API", "PWA", "Service Worker", "Content-Security-Policy", "Python", "pywebview", "PyInstaller", "Node.js tests", "Applied cryptography"], "repo": "https://github.com/thespicyy/keymint", "demo": "https://keymint.remy-grabet.com/"},
- "rnglab":{"title": "RNG Lab — statistical vs cryptographic randomness", "cat": "🎲 Cryptanalysis · Inferential statistics", "sub": "Passing the tests is not being secure — proven on a bench", "shots": [{"src": "assets/shots/rnglab_matrix.webp", "cap": "Results matrix — 8 generators × 8 statistical tests"}], "desc": "A comparative bench of 8 random number generators, put through a battery of 8 statistical tests implemented from scratch, then through a cryptanalytic attack. The deliverable is a self-contained HTML report with hand-written SVG figures. It establishes experimentally a counter-intuitive result: passing the statistical tests proves nothing about security.", "feats": ["Mersenne Twister — the generator behind Python, PHP, Ruby and Excel — passes all 8 tests without a weakness, and 100 % of its future output is predicted after observing 624 values, by inverting its tempering function to rebuild the internal state.", "An entropy source containing exactly zero entropy, conditioned through SHA-256, also passes all 8 tests. The tests measure the conditioner, never the source — which is precisely why a homemade hardware generator is dangerous.", "Two findings on building a real physical source: on Windows the 100 ns clock granularity silently zeroes the entropy of a naive jitter TRNG (min-entropy measured at 0.000 bit/bit), and after von Neumann debiasing the stream stays imbalanced at 0.467 — proving the raw bits are not independent, which is the method's own assumption.", "The 8 tests follow NIST SP 800-22 (monobit, runs, longest run, chi-square, spectral DFT, autocorrelation with Bonferroni correction, incompressibility). P-values rest on a regularised incomplete gamma function written by hand and cross-validated against SciPy.", "Every test is exercised on deliberately defective sequences whose flaw is known in advance — a test that never rejects anything is worthless."], "metrics": [["5 000/5 000", "MT19937 outputs predicted"], ["0 bits", "of entropy still scoring 8/8"], ["8 tests", "implemented from scratch"], ["590 000×", "CSPRNG vs software TRNG"]], "tech": ["Python", "NumPy", "Cryptanalysis", "Inferential statistics", "NIST SP 800-22", "NIST SP 800-90B", "Numerical analysis", "Information theory", "Hand-written SVG"], "repo": null, "demo": "rng-lab/index.en.html"},
- "tdl":{"title":"TDL — My tasks","cat":"📱 PWA + Windows · Multi-device to-do","sub":"One synced list on phone & PC, with a full OKX redesign",
-  "shots":[{"src":"assets/shots/tdl_okx_mobile.webp","cap":"OKX theme — mobile PWA (pinned task, recurring badges)"},{"src":"assets/shots/tdl_okx_web.webp","cap":"The same app on desktop — full feature parity"}],
-  "desc":"A clean to-do list that lives on my phone (installable PWA) and my PC (a Windows tray app): the same list everywhere, editable offline, reconciling automatically when the network returns. I built the whole offline-first sync engine from scratch, then gave both apps a shared OKX design language and a set of features kept in parity across two very different codebases.",
-  "feats":["One design system, two toolkits: an OKX black-and-white identity (with a dedicated pixel-mark logo) reproduced identically on a vanilla-JS PWA and a Python/Tkinter native app.","Rounded native UI despite Tkinter's limits: cards, pills and checkboxes are rounded via anti-aliased RGBA images generated on the fly (Pillow, 4× supersampling), plus native Windows 11 window corners through DWM (DwmSetWindowAttribute) and clean Segoe MDL2 icons.","Pinning, synced: double-click / double-tap to pin a task (glowing outline, floated to the top). Adding it meant a live schema migration (ALTER TABLE ADD COLUMN pinned) then wiring the field into both clients — with the column's existence probed via the REST API first, so production sync could never break.","Offline-first sync engine built from scratch: last-write-wins on a server-authoritative timestamp, deletions propagated via tombstones, a local change queue and conflict resolution — over Supabase (managed PostgreSQL), with Row-Level Security gated by a header secret (no accounts, no secret in the public repo).","Interaction details: single-click vs double-click disambiguated by a cancellable delay; a unified 10-minute grace period where a ticked task stays struck-through before a normal one is deleted and a recurring one is rescheduled; multi-line inline editing so the whole message is visible.","Two clients: an installable PWA (versioned service worker, offline) and a portable Windows tray app (Python + Tkinter/pystray, packaged to .exe with PyInstaller, data stored next to the exe)."],
-  "metrics":[["1 design","2 codebases"],["Supabase","Postgres, offline-first"],["Live schema","migration in prod"],["Phone + PC","feature parity"]],
-  "tech":["JavaScript","PWA","Service Worker","Supabase","PostgreSQL","SQL","RLS","REST API","Python","Tkinter","Pillow","ctypes / DWM","PyInstaller","Design system"],"repo":null,"demo":"https://tdl.remy-grabet.com/"},
- "orbit":{"title":"Orbit","cat":"🛰️ Flagship project","sub":"A personal data hub of six apps plus a live bot",
-  "desc":"A full local command-center built from scratch: a FastAPI launcher serving several HTML/CSS/JS dashboards in one hub, each turning raw data into charts, KPIs and projections.",
-  "feats":["Six apps in one hub: trading journal and analytics, budget with asset projection, to-do and planning, Polymarket capital tracker, a crypto-news watch, and a Hyperliquid trading bot piloted from Telegram.","Crypto-news watch with a local LLM: RSS aggregation summarised in French by a model running on my own GPU (Ollama), 100% on-device.","Security: token-based API auth, HTTP headers (CSP, X-Frame-Options), secrets kept out of Git.","One-click global backup & restore: export all local data (localStorage + IndexedDB images) to a file via a FastAPI endpoint with atomic writes, and re-import it fully — for safely switching devices.","Refactored a 9,000-line monolith into clean HTML/CSS/JS — down to about 1,750 lines, zero regressions; fixed a periodic canvas-animation freeze."],
-  "metrics":[["6 apps","In one hub"],["Local LLM","On-device AI"],["9k to 1.75k","Lines refactored"],["Real","Orders placed"]],
-  "tech":["Python","FastAPI","JavaScript","WebSocket","SQLite","Ollama · LLM","Hyperliquid API","Telegram"],"repo":null,"demo":"https://orbit-demo.remy-grabet.com/"},
- "polybot":{"title":"Polybot-Tracker","cat":"📊 Quantitative research","sub":"End-to-end research on prediction-market strategies",
-  "shots":[{"src":"assets/img/strategy1_equity.png","cap":"Real out-of-sample backtest equity curve"}],
-  "desc":"A full data pipeline and backtesting suite to study strategy profitability on Polymarket. I reverse-engineered a professional bot from about 36,000 trades, then stress-tested every hypothesis on real historical fills — not theoretical quotes.",
-  "feats":["Backtested 5.5M real trades across 8,500+ resolved markets using prices actually paid.","Split-half out-of-sample validation, robustness tests, bias detection (survivorship, look-ahead, favorite-longshot).","Five strategies invalidated with numbers — and one survivor precisely characterised.","Paper-trading bot with persistent SQLite state; interactive Jupyter/Plotly parameter explorer."],
-  "metrics":[["5.5M","Trades analysed"],["8.5k+","Markets"],["1 / 6","Survived"],["36k","Trades reversed"]],
-  "tech":["Python","Pandas","SQLite","Jupyter","Plotly","Statistics"],"repo":null},
- "polycheat":{"title":"Polycheat","cat":"🤖 Deployed in production","sub":"On-chain copy-trading bot on a 24/7 cloud server",
-  "desc":"A bot that mirrors high-performing traders detected on-chain in real time (about 1.3s) over WebSocket. Clean architecture separates engine, simulation and real execution — safe by design, dry-run by default, deployed on a free-forever Linux VM.",
-  "feats":["Real-time on-chain detection of many wallets at once via QuickNode RPC WebSocket.","'Model B' position sizing — stake proportional to the copied trader's conviction, capped.","Wallet scanner with SQLite exclusion memory: scans thousands of wallets, never re-analyses a rejected one.","Per-order / per-session / daily caps, file kill-switch, private key only from environment variables.","Deployed on Oracle Cloud (capacity won after 27 automated retries), systemd Restart=always, swap and SSH monitoring."],
-  "metrics":[["~1.3s","Detection latency"],["27","Retries to deploy"],["systemd","Always-on"]],
-  "tech":["Python","WebSocket","On-chain / RPC","SQLite","Oracle Cloud","systemd","SSH"],"repo":null},
- "arbitrage":{"title":"Arbitrage & Fair-Value Lab","cat":"⚖️ Signal vs. artefact","sub":"Latency-aware arbitrage and Black-Scholes fair value",
-  "desc":"Research tools on two strategies: pair arbitrage and crypto-option fair value. A paper-execution probe measures what would really get filled given latency, and a Black-Scholes model prices Polymarket 'BTC Up or Down' against live Binance spot.",
-  "feats":["2-leg micro-executor with leg-risk handling (auto-flatten if only one leg fills).","Latency-aware paper-execution probe measuring realistic fills.","Black-Scholes edge collector comparing implied vs realised volatility over about 44h of live data.","Key finding: the apparent edge is a stale-quote / volatility artefact — not exploitable alpha."],
-  "metrics":[["44h","Live data"],["2-leg","Executor"],["B-S","Fair value"]],
-  "tech":["Python","Black-Scholes","Volatility","Microstructure","WebSocket","Binance API"],"repo":null},
- "strategy":{"title":"Strategy Engine","cat":"🎯 Backtesting engine","sub":"Modular price-action / ICT backtesting framework",
-  "desc":"A modular engine to quantify and validate a technical trading strategy — from market-structure detection to a full metrics and validation layer, all unit-tested with pytest.",
-  "feats":["Clean module split: structure, swings, fvg, volume_profile, signals, metrics, validation.","Equity curves, drawdown, R-multiple distribution and monthly P&L breakdowns.","Data download, candle plotting and per-trade review tooling."],
-  "metrics":[["pytest","Unit-tested"],["7","Modules"]],
-  "tech":["Python","Pandas","pytest","matplotlib"],"repo":null},
- "iot":{"title":"IoT — Rice Fields, Japan","cat":"🌾 IoT · Power BI","sub":"Sensor data visualization — internship in Japan",
-  "desc":"Data visualisation from multiple sensors implanted in rice fields in Kumamoto, Japan, using Power BI and Python — turning raw sensor feeds into readable dashboards for monitoring and decisions.",
-  "feats":["Collected and cleaned sensor data streams.","Built Power BI dashboards for monitoring and decision-making."],
-  "metrics":[["Japan","Internship"],["Power BI","+ Python"]],
-  "tech":["Power BI","Python","IoT"],"repo":"https://github.com/thespicyy/IOT-Project"},
- "investment":{"title":"Investment Dashboard","cat":"📈 Power BI","sub":"Personal investment tracking dashboard",
-  "desc":"A Power BI dashboard to monitor and analyse investments across the stock market and cryptocurrencies — clean KPIs, allocation breakdowns and performance views.",
-  "feats":["Consolidated multi-asset portfolio view.","KPIs, allocation and performance breakdowns."],
-  "metrics":[["Power BI","Dashboard"],["Multi-asset","Tracking"]],
-  "tech":["Power BI","Finance"],"repo":"https://github.com/thespicyy/Investment-dashboard"},
- "elk":{"title":"Global Product Trends","cat":"🌍 ELK Stack","sub":"Sales analytics dashboard on the ELK Stack",
-  "desc":"A dashboard built on the ELK Stack (Elasticsearch, Logstash, Kibana) showing objectives, data distribution by country and key sales indicators.",
-  "feats":["Ingestion and indexing with the ELK Stack.","Kibana dashboards: objectives, country distribution, sales KPIs."],
-  "metrics":[["ELK","Stack"],["Kibana","Dashboards"]],
-  "tech":["Elasticsearch","Logstash","Kibana"],"repo":"https://github.com/thespicyy/elk_dashboard"}
+ "ehpad":{"title":"EHPAD investment platform","cat":"Health · data platform","flag":"Flagship","per":"Jun – Sep 2025 · 4 months",
+  "sub":"Mapping the French private nursing-home market for investors",
+  "desc":"The largest mission of my internship: an end-to-end data platform that maps the French private nursing-home (EHPAD) market so investors can see where the opportunities actually are. I built the whole chain — collection, entity resolution, financial modelling, machine learning and the decision-support visuals on top.",
+  "metrics":[["7,399","facilities mapped"],["86","variables"],["×12","faster pipeline"],[">94%","auto entity match"]],
+  "feats":["Multithreaded web scraping infrastructure with exponential backoff — runtime went from ~4 hours to ~20 minutes (×12), at a ~88% success rate.","Fuzzy matching and entity resolution across 5+ public sources, reconciling FINESS (administrative) and SIRET (commercial) identifiers despite ~10% missing IDs, abbreviations, typos and case variations.","A financial redistribution algorithm: group-level revenue (e.g. €4.2B across 270 facilities) redistributed facility by facility using weighted bed allocation and geographical adjustment.","K-means territorial clustering segmenting France into five investment profiles — from high-demand urban areas to underserved rural regions.","Supervised models (Random Forest / Gradient Boosting) to estimate revenue and profitability for facilities missing financial data, plus Isolation Forest for outlier and data-quality detection.","Interactive maps and a financial-prediction tool handed over to the consulting team."],
+  "tech":["Python","Pandas","scikit-learn","K-means","Random Forest","Isolation Forest","GeoPandas","Web scraping","Fuzzy matching"]},
+ "ies":{"title":"IES Guadeloupe","cat":"Territorial economics","per":"Jun – Jul 2025 · 2 months",
+  "sub":"Economic footprint of an airport, projected to 2038",
+  "desc":"An economic-impact study quantifying what Guadeloupe's airport brings to the territory — visitor spending, the share that becomes local GDP, and the jobs behind it — then projecting that footprint forward as passenger traffic grows.",
+  "metrics":[["€782M","visitor spending"],["€344M","local GDP generated"],["12,700","jobs projected by 2038"],["3M","passengers modelled"]],
+  "feats":["Quantified visitor spending across the islands and the share converting into local GDP.","Modelled the airport's economic footprint at four horizons — 2021, 2024, 2035 and 2038 — with and without CAPEX scenarios.","Built the supporting data and visuals for a client-facing decision deliverable."],
+  "tech":["Data analysis","Economic modelling","Excel","Data viz"]},
+ "numeum":{"title":"Numeum — regional fact sheets","cat":"Tech industry · data viz","per":"May – Jun 2025 · 2 months",
+  "sub":"The 2025 key-figures sheets for France's digital industry",
+  "desc":"Numeum is the French digital-industry union. I produced their 2025 regional fact sheets: one key-figures sheet per region covering the sector's economic weight, employment, financing and innovation — rebuilt each year as the underlying public statistics change.",
+  "metrics":[["2025","edition delivered"],["Multi-region","fact sheets"],["R&D","new indicator added"],["3 sources","INSEE · ACOSS · DARES"]],
+  "feats":["Collected and reconciled data from several public statistical sources (INSEE, ACOSS, DARES).","Added a new R&D-spending indicator to the 2025 edition.","Handled source discontinuities: INSEE 2022 non-salaried figures were not refreshed, so I substituted ACOSS 2024 self-employment data; the DARES nomenclature changed, restricting the series to technicians and managers.","Heavy Excel work — pivot tables and formula-driven models feeding every published chart."],
+  "tech":["Excel","Pivot tables","INSEE / ACOSS / DARES","Data viz","Reporting"]},
+ "ch2p":{"title":"Clean Hydrogen Partnership","cat":"Energy · call for tender","per":"Apr – May 2025 · 2 months",
+  "sub":"Bidding on European hydrogen competitiveness",
+  "desc":"A response to a European call for tender on hydrogen competitiveness. The subject: how to bring hydrogen into road transport across Europe — heavy trucks in particular. My job was to help build the proposal that showed BDO could credibly answer it: structuring the argument, the supporting analysis and the deck itself.",
+  "metrics":[["EU-wide","scope of the tender"],["Heavy trucks","target application"],["Value chain","economics mapped"],["Proposal","delivered"]],
+  "feats":["Mapped the EU policy and regulatory framework — financial and non-financial incentives driving research, innovation and deployment across the hydrogen value chain.","Analysed how economic value is distributed along that value chain in Europe.","Built the proposal deck to the client's template, turning research into a clear, defensible argument.","Sharpened the consulting side of the job: structuring a pitch, writing to persuade, presenting analysis to a non-technical audience."],
+  "tech":["Research","EU policy","Value-chain analysis","Consulting deck"]},
+ "visionair":{"title":"Vision'Air — heavy-truck fleet","cat":"Mobility · R modelling","per":"Apr 2025 · 1 month",
+  "sub":"Projecting Europe's truck fuel mix to 2040",
+  "desc":"My first mission. A study on how Europe's heavy-goods-vehicle fleet evolves, and which fuels power it out to 2035–2040. Part of the model already existed in R when I arrived: I refreshed it with current data and extended it, then helped turn the output into the client-facing results.",
+  "metrics":[["2040","projection horizon"],["Europe","geographic scope"],["R","modelling language"],["2 scenarios","possible futures"]],
+  "feats":["Worked in R on an existing fleet model — updating the datasets and extending the analysis.","Projected the fuel mix of Europe's heavy-truck fleet under two scenarios out to 2040.","Contributed to the downstream analysis of charging-infrastructure needs in France.","Learned to pick up someone else's codebase and make it produce trustworthy, current numbers."],
+  "tech":["R","Data modelling","Scenario analysis","Data viz"]}
 }
 </script>
 
-<!-- FABs + lightbox -->
-<button class="fab" id="to-top" onclick="stt()" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-<button class="fab" id="theme-fab" onclick="tt()" aria-label="Theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
-<div class="lb" id="lightbox"><button class="lb-close" id="lb-close">✕</button><img id="lb-img" src="" alt=""/></div>
-<script>
-document.getElementById('yr').textContent=new Date().getFullYear();
-// mentions légales : modale
-(function(){var link=document.getElementById('legal-link'),modal=document.getElementById('legalmodal'),close=document.getElementById('legal-close');if(!link||!modal)return;
-function op(e){if(e)e.preventDefault();modal.classList.add('open');document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';}
-function sh(){modal.classList.remove('open');document.documentElement.style.overflow='';document.body.style.overflow='';}
-link.addEventListener('click',op);if(close)close.addEventListener('click',sh);
-modal.addEventListener('click',function(e){if(e.target===modal)sh();});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))sh();});})();
-function tt(){var l=document.documentElement.getAttribute('data-theme')==='light';if(l){document.documentElement.removeAttribute('data-theme');localStorage.setItem('pf2_theme','dark');}else{document.documentElement.setAttribute('data-theme','light');localStorage.setItem('pf2_theme','light');}}
-(function(){var s=localStorage.getItem('pf2_theme');if(s==='light')document.documentElement.setAttribute('data-theme','light');else if(!s&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)document.documentElement.setAttribute('data-theme','light');})();
-function mm(){document.getElementById('navlinks').classList.toggle('open');}
-function cm(){document.getElementById('navlinks').classList.remove('open');}
-function stt(){window.scrollTo({top:0,behavior:'smooth'});}
-var tb=document.getElementById('to-top');
-window.addEventListener('scroll',function(){if(tb)tb.classList.toggle('show',window.scrollY>500);},{passive:true});
-// scroll-spy + indicateur mobile « goutte d'eau »
-(function(){var nl=document.getElementById('navlinks');if(!nl)return;
-var links=[].slice.call(nl.querySelectorAll('a'));
-var secs=links.map(function(a){return document.getElementById((a.getAttribute('href')||'').slice(1));});
-var ind=document.createElement('span');ind.className='nav-ind';ind.setAttribute('aria-hidden','true');nl.insertBefore(ind,nl.firstChild);
-var cur=-1,dt=null,brand=document.querySelector('.brand');
-function rowLayout(){return nl.offsetParent!==null&&getComputedStyle(nl).flexDirection==='row';}
-function place(idx,changed){
-  if(idx<0||!rowLayout()){ind.classList.remove('on');return;}
-  var el=links[idx];
-  ind.style.left=el.offsetLeft+'px';ind.style.top=el.offsetTop+'px';
-  ind.style.width=el.offsetWidth+'px';ind.style.height=el.offsetHeight+'px';
-  ind.classList.add('on');
-  if(changed){ind.classList.add('drop');clearTimeout(dt);dt=setTimeout(function(){ind.classList.remove('drop');},240);}
+<script type="application/json" id="projdata">
+{
+ "orbit":{"title":"Orbit","cat":"Full-stack · self-hosted AI","sub":"A personal hub, plus a self-hosted AI news brief every morning","cover":"assets/shots/orbit_trading_dashboard.webp",
+  "desc":"Not just a trading dashboard — Orbit bundles four apps behind one FastAPI backend: a trading journal, a budget tool with asset projection, to-do planning, and a Polymarket capital tracker. On top of it runs a fully self-hosted AI pipeline that writes me a themed news brief every morning — no paid API, no GPU, no data leaving the machine.",
+  "metrics":[["7:30 am","daily AI brief"],["11 sources","aggregated & read"],["8B model","on 2 ARM cores, no GPU"],["€0","no paid AI API"]],
+  "feats":["A self-hosted morning brief: every day at 7:30, the last 24 h from 11 news outlets are aggregated, read and synthesized into one paragraph per theme with numbered sources, then pushed to Telegram — running on a free Oracle Cloud ARM instance, so nothing depends on my PC being on.","Running an 8B model (Ollama, qwen3) on 2 ARM cores without a GPU: measured at 3.5 tokens/s, a full digest takes ~11 minutes. Unusable interactively, perfectly viable as a scheduled job — which drove the whole architecture toward async (cron + wide timeouts) rather than falling back to a smaller, weaker model.","Reliable structured output from the model: a strict JSON schema, the model's 'thinking' mode disabled because it polluted the output, and a tolerant parser that still recovers the complete paragraphs when generation is cut off mid-stream.","Two infrastructure obstacles solved: outlets that block datacenter IPs (429/403) degrade gracefully to their RSS summary instead of being dropped; and since Oracle reclaims free instances judged idle, a systemd service holds a measured 16 % background load at idle scheduling priority so it never steals CPU from real work.","Infrastructure as code via the OCI Python SDK, with throttling-aware retry — free ARM instances are scarce, it took 468 attempts — and dynamic discovery of compartment, subnet, image and availability domains instead of hardcoded values.","Security: secrets passed over an SSH tunnel without ever touching an intermediate file, 600 permissions, nothing in the repo, and URL validation against a domain allow-list (anti-SSRF).","The rest of the hub: trading journal with equity curve, budget app with multi-account asset projection, Polymarket capital tracker, to-do planning, token-protected API and one-click backup & restore."],
+  "shots":[{"src":"assets/shots/orbit_trading_dashboard.webp","cap":"Trading journal"},{"src":"assets/shots/orbit_budget_projection.webp","cap":"Budget — asset projection"},{"src":"assets/shots/orbit_polymarket.webp","cap":"Polymarket capital tracker"},{"src":"assets/shots/orbit_budget_actifs.webp","cap":"Assets overview"}],
+  "tech":["Python","FastAPI","Ollama","qwen3:8b","Oracle Cloud","OCI SDK","systemd","cron","Prompt engineering","RSS / Atom","trafilatura","Telegram API","JavaScript"],"demo":"https://orbit-demo.remy-grabet.com/"},
+ "keymint":{"title":"KeyMint","cat":"Applied cryptography","sub":"Strong secrets, generated offline, never stored","cover":"assets/shots/keymint_password.webp",
+  "desc":"A password and passphrase generator that runs entirely offline — on the phone (installable PWA) and on Windows (.exe). It shows real entropy in bits rather than an arbitrary gauge, using unbiased rejection sampling proven with a chi-square test, and a French wordlist rebuilt from scratch.",
+  "metrics":[["99 bits","16-char entropy"],["χ² 500k","proven bias-free"],["0 stored","nothing persisted"],["2 min","clipboard auto-wipe"]],
+  "feats":["Unbiased uniform sampling via rejection sampling over 32-bit words, proven uniform by a chi-square test on 500,000 draws.","French wordlist rebuilt from scratch across four linguistic signals (wordfreq, morphology, FR/EN comparison, spaCy POS tagging).","Randomness only from the OS CSPRNG — Math.random is banned and the build fails if it appears.","Strict Content-Security-Policy, zero network requests, clipboard wiped after 2 minutes.","One engine shared by the PWA and the Windows app (pywebview over 127.0.0.1)."],
+  "shots":[{"src":"assets/shots/keymint_password.webp","cap":"Password mode — real entropy in bits"},{"src":"assets/shots/keymint_passphrase.webp","cap":"Passphrase mode — rebuilt French wordlist"}],
+  "tech":["JavaScript","Web Crypto API","PWA","Python","pywebview","Applied cryptography"],"demo":"https://keymint.remy-grabet.com/"},
+ "vmav":{"title":"VM Antivirus","cat":"Defensive security","sub":"A three-layer verdict on untrusted downloads","cover":"assets/shots/vmantivirus_verdict.webp",
+  "desc":"A desktop tool that answers one question — is this downloaded executable safe to run? — by fusing three independent layers of analysis while never executing the file on the real machine. Built around the hard problem: telling a harmless crack apart from a genuine data stealer.",
+  "metrics":[["3 layers","static · reputation · sandbox"],["72+ AV","engines via VirusTotal"],["disposable VM","behavioural detonation"],["hash-only","file never uploaded"]],
+  "feats":["Static PE dissection: sections, Shannon entropy to spot packers, Windows-API imports grouped by intent (injection, keylogging, credential decryption).","Reputation across 70+ engines via VirusTotal, queried by hash only — the file itself is never uploaded — with MalwareBazaar as an independent second source.","Behavioural detonation inside a disposable Windows Sandbox: a native PowerShell monitor records child processes, outbound connections, persistence and dropped files, then the VM self-destructs.","Parent→child process attribution so only the file's own actions count — which killed two real false positives during testing.","Smart quota use: reputation calls spent only on files that matter, with a live projection before you launch a scan."],
+  "shots":[{"src":"assets/shots/vmantivirus_verdict.webp","cap":"Batch verdict in plain language"},{"src":"assets/shots/vmantivirus_sandbox.webp","cap":"Sandbox detonation — attributed behaviour"},{"src":"assets/shots/vmantivirus_quota.webp","cap":"API-quota projection before spending"}],
+  "tech":["Python","pefile","Shannon entropy","VirusTotal API","Windows Sandbox","PowerShell","Tkinter"],"demo":"vm-antivirus/index.html"},
+ "tdl":{"title":"TDL — My tasks","cat":"PWA + Windows · multi-device","sub":"One synced list on phone and PC","cover":"assets/shots/tdl_list.webp",
+  "desc":"A clean to-do list that lives on my phone (installable PWA) and my PC (a taskbar panel) — the same list everywhere, editable offline, reconciling automatically when the network returns. I designed and built the whole offline-first sync engine from scratch.",
+  "metrics":[["Supabase","Postgres sync"],["Offline-first","LWW + tombstones"],["Phone + PC","2 clients"],["0 accounts","RLS + secret"]],
+  "feats":["Real-time multi-device sync via Supabase (managed PostgreSQL).","Offline-first engine built from scratch: last-write-wins on an authoritative server timestamp, deletions propagated by tombstones, local queue and conflict resolution.","Security without accounts: Postgres Row-Level Security gated by a secret passed in an HTTP header — no secret in the public repo.","Synchronised pinning, recurring tasks, inline multi-line editing and a grace delay before completed tasks disappear.","Two clients: an installable PWA (service worker, offline) and a Windows app (Python + Tkinter/pystray, packaged as an .exe with PyInstaller)."],
+  "shots":[{"src":"assets/shots/tdl_list.webp","cap":"Task list — pinned task, recurring items"},{"src":"assets/shots/tdl_sync.webp","cap":"Sync panel — device-level sync code"}],
+  "tech":["JavaScript","PWA","Service Worker","Supabase","PostgreSQL","SQL","RLS","Python","PyInstaller"],"demo":"https://tdl.remy-grabet.com/"},
+ "polybot":{"title":"Polybot-Tracker","cat":"Quantitative research","sub":"Reverse-engineering a professional prediction-market bot",
+  "desc":"End-to-end research on prediction-market strategies: a full data pipeline and backtesting suite that reverse-engineers a professional bot from its on-chain trade history, then validates the findings out-of-sample.",
+  "metrics":[["5.5M","trades analysed"],["~36k","bot trades studied"],["Out-of-sample","validated"],["Live sport","pair-locking logic"]],
+  "feats":["Full ingestion pipeline over the Polymarket API, handling its documented pitfalls.","Backtesting suite reconstructing the bot's pair-locking behaviour on live sports markets.","Fee-aware modelling to separate real edge from artefacts.","Out-of-sample validation to avoid overfitting to the observed history."],
+  "tech":["Python","Pandas","Backtesting","REST APIs","Statistics"],"demo":null},
+ "polycheat":{"title":"Polycheat","cat":"Deployed · copy-trading","sub":"A safe-by-design copy-trading bot, running 24/7",
+  "desc":"An on-chain copy-trading bot running on a 24/7 cloud server — real-time detection over WebSocket, conviction-based sizing, and a scanner with an exclusion memory. Simulated first, then deployed with systemd on Oracle Cloud.",
+  "metrics":[["~1.3s","detection latency"],["24/7","systemd on Oracle Cloud"],["Sim-first","then live"],["Safe","by design"]],
+  "feats":["Real-time trade detection over WebSocket.","Conviction-relative position sizing.","Top-wallet scanner with an exclusion memory.","Deployed on a free Oracle Cloud instance with systemd, secrets isolated from the repo."],
+  "tech":["Python","WebSocket","systemd","Oracle Cloud"],"demo":null},
+ "arbitrage":{"title":"Arbitrage & Fair-Value Lab","cat":"Signal vs. artefact","sub":"Latency-aware arbitrage and Black-Scholes fair value",
+  "desc":"Research tools on two strategies: pair arbitrage and crypto-option fair value. A paper-execution probe measures what would really get filled given latency, and a Black-Scholes model prices Polymarket 'BTC Up or Down' against live Binance spot.",
+  "metrics":[["44h","of live data"],["2-leg","micro-executor"],["Black-Scholes","fair value"],["Artefact","not alpha"]],
+  "feats":["2-leg micro-executor with leg-risk handling (auto-flatten if only one leg fills).","Latency-aware paper-execution probe measuring realistic fills.","Black-Scholes edge collector comparing implied vs realised volatility over about 44h of live data.","Key finding: the apparent edge is a stale-quote / volatility artefact — not exploitable alpha."],
+  "tech":["Python","Black-Scholes","Volatility","Microstructure","WebSocket","Binance API"],"demo":null},
+ "strategy":{"title":"Strategy Engine","cat":"Engine · backtesting","sub":"A modular, unit-tested backtesting framework",
+  "desc":"A modular backtesting framework covering market structure, fair-value gaps and volume profile, with metrics and validation — all unit-tested with pytest so the results can be trusted.",
+  "metrics":[["pytest","fully tested"],["Modular","pluggable strategies"],["Donchian","20/10 breakout retained"],["Out-of-sample","validation"]],
+  "feats":["Market-structure, fair-value-gap and volume-profile modules.","Metrics and out-of-sample validation baked into the engine.","Retained strategy: Donchian breakout 20/10, with a Pine version and a live signal.","Fully unit-tested with pytest."],
+  "tech":["Python","backtesting.py","ccxt","pytest"],"demo":null},
+ "rnglab":{"title":"RNG Lab","cat":"Cryptanalysis · statistics","sub":"Passing the tests is not being secure","cover":"assets/shots/rnglab_matrix.webp",
+  "desc":"A comparative bench of 8 random-number generators put through 8 statistical tests implemented from scratch, then a cryptanalytic attack. The deliverable is a self-contained HTML report that establishes, experimentally, that passing the statistical tests proves nothing about security.",
+  "metrics":[["5,000/5,000","MT19937 outputs predicted"],["0 bits","of entropy still scoring 8/8"],["8 tests","implemented from scratch"],["NIST","SP 800-22"]],
+  "feats":["Predicts 100% of Mersenne-Twister output after observing 624 values, by inverting its tempering function.","Shows a zero-entropy source conditioned through SHA-256 still passes every test — the tests measure the conditioner, not the source.","8 NIST SP 800-22 tests written by hand, with p-values cross-validated against SciPy.","Every test exercised on deliberately defective sequences whose flaw is known in advance."],
+  "shots":[{"src":"assets/shots/rnglab_matrix.webp","cap":"Results matrix — 8 generators × 8 tests"}],
+  "tech":["Python","NumPy","Cryptanalysis","NIST SP 800-22","Information theory"],"demo":null},
+ "iot":{"title":"IoT — Rice Fields, Japan","cat":"IoT · Power BI","sub":"Sensor data visualization — internship in Japan",
+  "desc":"Data visualisation from multiple sensors implanted in rice fields in Kumamoto, Japan, using Power BI and Python — turning raw sensor feeds into readable dashboards for monitoring and decisions.",
+  "metrics":[["Japan","internship"],["Power BI","+ Python"],["Sensors","field telemetry"],["Dashboards","monitoring"]],
+  "feats":["Collected and cleaned sensor data streams from the field.","Built Power BI dashboards for monitoring and decision-making."],
+  "tech":["Power BI","Python","IoT"],"demo":null},
+ "investment":{"title":"Investment Dashboard","cat":"Power BI","sub":"Personal investment tracking dashboard",
+  "desc":"A Power BI dashboard to monitor and analyse investments across the stock market and cryptocurrencies — clean KPIs, allocation breakdowns and performance views.",
+  "metrics":[["Power BI","dashboard"],["Multi-asset","tracking"],["KPIs","allocation"],["Personal","project"]],
+  "feats":["Consolidated multi-asset portfolio view.","KPIs, allocation and performance breakdowns."],
+  "tech":["Power BI","Finance"],"demo":null},
+ "elk":{"title":"Global Product Trends","cat":"ELK Stack","sub":"Sales analytics dashboard on the ELK Stack",
+  "desc":"A dashboard built on the ELK Stack (Elasticsearch, Logstash, Kibana) showing objectives, data distribution by country and key sales indicators.",
+  "metrics":[["ELK","stack"],["Kibana","dashboards"],["By country","distribution"],["Sales","KPIs"]],
+  "feats":["Ingestion and indexing with the ELK Stack.","Kibana dashboards: objectives, country distribution, sales KPIs."],
+  "tech":["Elasticsearch","Logstash","Kibana"],"demo":null}
 }
-function spy(){var line=120,idx=-1;for(var i=0;i<secs.length;i++){var s=secs[i];if(s&&s.getBoundingClientRect().top<=line)idx=i;}
-  for(var j=0;j<links.length;j++)links[j].classList.toggle('active',j===idx);
-  if(brand)brand.classList.toggle('at-top',idx<0);place(idx,idx!==cur);cur=idx;}
-window.addEventListener('scroll',spy,{passive:true});window.addEventListener('resize',spy);spy();})();
-// reveal
-(function(){var els=document.querySelectorAll('.reveal');if(!('IntersectionObserver'in window)){els.forEach(e=>e.classList.add('in'));return;}
-var io=new IntersectionObserver(function(en){en.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});els.forEach(e=>io.observe(e));})();
-// lightbox + project modal
+</script>
+
+<script>
 (function(){
-  var lb=document.getElementById('lightbox'),im=document.getElementById('lb-img');
-  var _locks=0;
-  function lock(){_locks++;document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';}
-  function unlock(){_locks=Math.max(0,_locks-1);if(!_locks){document.documentElement.style.overflow='';document.body.style.overflow='';}}
-  function op(s){im.src=s;lb.classList.add('open');lock();}
-  function cl(){lb.classList.remove('open');im.src='';unlock();}
-  window.__lb=op;
-  [].slice.call(document.querySelectorAll('img.zoomable')).forEach(function(x){x.addEventListener('click',function(){op(x.currentSrc||x.src);});});
-  document.getElementById('lb-close').addEventListener('click',cl);
-  lb.addEventListener('click',function(e){if(e.target===lb)cl();});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&lb.classList.contains('open'))cl();});
-  // project modal
-  var pm=document.getElementById('projmodal'),body=document.getElementById('pm-body'),DATA={};
-  try{DATA=JSON.parse(document.getElementById('projdata').textContent);}catch(e){}
-  function openP(id){var p=DATA[id];if(!p)return;
-    var shots=(p.shots||[]).map(function(s){return '<figure><div class="phone" onclick="__lb(\''+s.src+'\')"><img loading="lazy" src="'+s.src+'" alt=""/></div><figcaption>'+s.cap+'</figcaption></figure>';}).join('');
-    var mets=(p.metrics||[]).map(function(m){return '<div class="pm-metric"><div class="mv">'+m[0]+'</div><div class="ml">'+m[1]+'</div></div>';}).join('');
-    var feats=(p.feats||[]).map(function(f){return '<li>'+f+'</li>';}).join('');
-    var tech=(p.tech||[]).map(function(t){return '<span class="chip">'+t+'</span>';}).join('');
-    var repo=p.repo?'<a class="pm-repo" href="'+p.repo+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5z"/></svg>View on GitHub</a>':'<span class="pm-repo priv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Private repository</span>';
-    var demo=p.demo?'<a class="pm-repo" href="'+p.demo+'" target="_blank" rel="noopener" style="border-color:rgba(139,92,246,.55);color:var(--violet-2)">✦ Live demo ↗</a>':'';
-    body.innerHTML='<span class="pm-cat">'+p.cat+'</span><h3>'+p.title+'</h3><div class="pm-sub">'+p.sub+'</div>'+(shots?'<div class="pm-shots">'+shots+'</div>':'')+'<p class="pm-desc">'+p.desc+'</p>'+(mets?'<div class="pm-metrics">'+mets+'</div>':'')+'<div class="pm-hh">What I built</div><ul class="pm-feats">'+feats+'</ul><div class="pm-foot"><div class="pm-tech">'+tech+'</div>'+demo+repo+'</div>';
-    pm.classList.add('open');lock();var pnl=pm.querySelector('#pm-body')||pm.querySelector('.pm-panel');if(pnl)pnl.scrollTop=0;}
-  function closeP(){pm.classList.remove('open');unlock();}
-  [].slice.call(document.querySelectorAll('[data-proj]')).forEach(function(el){el.addEventListener('click',function(e){if(e.target.closest('a[href],img.zoomable'))return;openP(el.getAttribute('data-proj'));});});
-  document.getElementById('pm-close').addEventListener('click',closeP);
-  pm.addEventListener('click',function(e){if(e.target===pm)closeP();});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&pm.classList.contains('open')&&!lb.classList.contains('open'))closeP();});
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var STAR='M50 3 C56 40 60 44 97 50 C60 56 56 60 50 97 C44 60 40 56 3 50 C40 44 44 40 50 3 Z';
+  var XP={},PROJ={};
+  try{ XP=JSON.parse(document.getElementById('xpdata').textContent); }catch(e){}
+  try{ PROJ=JSON.parse(document.getElementById('projdata').textContent); }catch(e){}
+  var ALL={}; for(var a in XP)ALL['xp:'+a]=XP[a]; for(var b in PROJ)ALL['pj:'+b]=PROJ[b];
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+
+  /* ---- cartes horizontales ---- */
+  function buildTrack(trackId, data, order, prefix, textOnly){
+    var t=document.getElementById(trackId); if(!t) return;
+    order.forEach(function(key,i){
+      var d=data[key]; if(!d) return;
+      var el=document.createElement('article');
+      el.className='hcard'+(textOnly?' text-only':'');
+      el.setAttribute('data-key',prefix+':'+key);
+      el.setAttribute('role','button'); el.setAttribute('tabindex','0');
+      var num=(i+1<10?'0':'')+(i+1);
+      var mets=(d.metrics||[]).slice(0,2).map(function(m){
+        return '<div class="hc-m"><b>'+esc(m[0])+'</b><span>'+esc(m[1])+'</span></div>';}).join('');
+      var demo=d.demo?'<a class="btn-sm demo-btn" href="'+d.demo+'" target="_blank" rel="noopener" data-stop>Live demo ↗</a>':'';
+      var vis=textOnly?'':'<div class="hc-vis"><span class="hc-num">'+num+'</span>'+
+        (d.cover?'<img src="'+d.cover+'" alt="'+esc(d.title)+'" loading="lazy"/>':'')+'</div>';
+      el.innerHTML=vis+
+        '<div class="hc-body">'+
+          '<div class="hc-top"><span class="hc-cat">'+esc(d.cat)+'</span>'+(d.flag?'<span class="hc-flag">'+esc(d.flag)+'</span>':'')+
+            '<svg class="hc-star" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true"><path d="'+STAR+'"/></svg></div>'+
+          '<h3>'+esc(d.title)+'</h3>'+
+          (d.per?'<span class="hc-per">'+esc(d.per)+'</span>':'')+
+          '<p class="hc-desc">'+esc(d.desc)+'</p>'+
+          '<div class="hc-metrics">'+mets+'</div>'+
+          '<div class="hc-foot"><span class="hc-more">View details →</span>'+demo+'</div>'+
+        '</div>';
+      t.appendChild(el);
+    });
+  }
+  buildTrack('xpTrack', XP, ['ehpad','ies','numeum','ch2p','visionair'], 'xp', true);
+  buildTrack('featTrack', PROJ, ['orbit','keymint','vmav','tdl'], 'pj', false);
+
+  /* ---- grille : tous les autres projets ---- */
+  var grid=document.getElementById('workGrid');
+  if(grid){
+    ['polybot','polycheat','arbitrage','strategy','rnglab','iot','investment','elk'].forEach(function(k){
+      var d=PROJ[k]; if(!d) return;
+      var m0=(d.metrics&&d.metrics[0])?d.metrics[0]:['',''];
+      var el=document.createElement('div');
+      el.className='pcard reveal'; el.setAttribute('data-key','pj:'+k);
+      el.setAttribute('role','button'); el.setAttribute('tabindex','0');
+      el.innerHTML='<div class="ptop"><span class="cat">'+esc(d.cat)+'</span><svg class="pstar" viewBox="0 0 100 100" fill="currentColor"><path d="'+STAR+'"/></svg></div>'+
+        '<h4>'+esc(d.title)+'</h4><p>'+esc(d.sub)+'.</p>'+
+        '<div class="pfoot"><span class="metric"><b>'+esc(m0[0])+'</b> '+esc(m0[1])+'</span><span class="more">Details →</span></div>';
+      grid.appendChild(el);
+    });
+  }
+
+  /* ---- reveal ---- */
+  var rv=document.querySelectorAll('.reveal');
+  if('IntersectionObserver'in window && !reduce){
+    var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{threshold:0.02,rootMargin:'0px 0px 14% 0px'});
+    rv.forEach(function(e){io.observe(e);});
+  } else { rv.forEach(function(e){e.classList.add('in');}); }
+
+  /* ---- deck rotatif piloté par le scroll (fini, sans boucle) ---- */
+  function initDeck(secId, trackId, idxId, barId){
+    var sec=document.getElementById(secId), track=document.getElementById(trackId);
+    var idxEl=document.getElementById(idxId), barEl=document.getElementById(barId);
+    if(!sec||!track) return;
+    var cards=[].slice.call(track.querySelectorAll('.hcard'));
+    var N=cards.length; if(!N) return;
+    var target=0, cur=0, running=false;
+    function small(){ return window.innerWidth<=800 || reduce; }
+    var PER=1.15, DEAD=0.55;               // viewport par carte / temps mort en début et fin
+    function measure(){
+      if(small()){
+        sec.style.height='';
+        cards.forEach(function(c){c.style.transform='';c.style.opacity='';c.style.zIndex='';c.classList.add('is-front');});
+        return;
+      }
+      // animation finie : temps mort, une "page" par carte, temps mort
+      sec.style.height=(window.innerHeight*(1 + 2*DEAD + (N-1)*PER))+'px';
+    }
+    function onScroll(){
+      if(small()) return;
+      var r=sec.getBoundingClientRect();
+      var total=sec.offsetHeight-window.innerHeight;
+      target=total>0?Math.min(1,Math.max(0,-r.top/total)):0;
+      if(!running){running=true;requestAnimationFrame(frame);}
+    }
+    // palier : la carte reste stable un moment, puis bascule, puis se stabilise
+    function hold(x){
+      var a=0.16, y=(x-a)/(1-2*a);
+      if(y<=0)return 0; if(y>=1)return 1;
+      return y*y*(3-2*y);
+    }
+    function apply(p){
+      var units=p*(2*DEAD+(N-1)*PER);
+      var t=(units-DEAD)/PER;              // index continu, temps mort compris
+      t=Math.max(0,Math.min(N-1,t));
+      var ti=Math.floor(t); t=(ti>=N-1)?(N-1):(ti+hold(t-ti));
+      var w=track.clientWidth||392;
+      for(var i=0;i<N;i++){
+        var c=cards[i], d=i-t, x, y, s, o, rot, z;
+        if(d>=0){                          // en attente : empilées légèrement à droite, en retrait
+          var dd=Math.min(d,3);
+          x=dd*40; y=-dd*9; s=1-dd*0.055; rot=dd*2.2;
+          o=(d>3.2)?0:Math.max(0,1-dd*0.28);
+          z=200-Math.round(d*10);
+        }else{                             // déjà passée : part vers la gauche en s'effaçant
+          var k=-d;
+          x=-(k*(w*0.62+80)); y=0; s=Math.max(0.72,1-k*0.05); rot=-k*7;
+          o=Math.max(0,1-k*1.05);
+          z=200-Math.round(k*10);
+        }
+        c.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,0) scale('+s.toFixed(3)+') rotate('+rot.toFixed(2)+'deg)';
+        c.style.opacity=o.toFixed(3);
+        c.style.zIndex=z;
+        c.classList.toggle('is-front', Math.abs(d)<0.5);
+      }
+      if(idxEl){var n=Math.min(N,Math.round(t)+1);idxEl.textContent=(n<10?'0':'')+n;}
+      if(barEl){barEl.style.width=(p*100).toFixed(1)+'%';}
+    }
+    function frame(){
+      cur+=(target-cur)*0.13;
+      if(Math.abs(target-cur)<0.0004){cur=target;running=false;}
+      apply(cur);
+      if(running)requestAnimationFrame(frame);
+    }
+    window.addEventListener('scroll',onScroll,{passive:true});
+    window.addEventListener('resize',function(){measure();onScroll();apply(cur);});
+    function boot(){measure();onScroll();apply(cur);}
+    if(document.readyState==='complete')boot(); else window.addEventListener('load',boot);
+  }
+  initDeck('xpSec','xpTrack','xpIdx','xpBar');
+  initDeck('featSec','featTrack','featIdx','featBar');
+
+  /* ---- modal + lightbox ---- */
+  var pm=document.getElementById('pm'), pmBody=document.getElementById('pmBody'), pmClose=document.getElementById('pmClose');
+  var lb=document.getElementById('lb'), lbImg=document.getElementById('lbImg');
+  var locks=0;
+  function lock(){locks++;document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';}
+  function unlock(){locks=Math.max(0,locks-1);if(!locks){document.documentElement.style.overflow='';document.body.style.overflow='';}}
+  var lastKey=null;
+  function openModal(key){
+    var d=ALL[key]; if(!d) return;
+    lastKey=key;
+    var h='<span class="pm-cat">'+esc(d.cat)+'</span><h3>'+esc(d.title)+'</h3><div class="pm-sub">'+esc(d.sub)+(d.per?' · '+esc(d.per):'')+'</div>';
+    h+='<p class="pm-desc">'+esc(d.desc)+'</p>';
+    if(d.shots&&d.shots.length){
+      h+='<div class="pm-shots">';
+      d.shots.forEach(function(s){h+='<figure><span class="ph"><img src="'+s.src+'" alt="'+esc(s.cap)+'" loading="lazy"/></span><figcaption>'+esc(s.cap)+'</figcaption></figure>';});
+      h+='</div>';
+    }
+    if(d.metrics&&d.metrics.length){h+='<div class="pm-metrics">';d.metrics.forEach(function(m){h+='<div class="pm-metric"><b>'+esc(m[0])+'</b><span>'+esc(m[1])+'</span></div>';});h+='</div>';}
+    if(d.feats&&d.feats.length){h+='<ul class="pm-feats">';d.feats.forEach(function(f){h+='<li>'+esc(f)+'</li>';});h+='</ul>';}
+    if(d.tech&&d.tech.length){h+='<div class="tags" style="margin-bottom:22px">';d.tech.forEach(function(t){h+='<span class="chip">'+esc(t)+'</span>';});h+='</div>';}
+    if(d.demo){h+='<div class="pm-actions"><a class="btn btn-primary ext" href="'+d.demo+'" target="_blank" rel="noopener">Live demo <span class="circ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M17 7H8M17 7V16"/></svg></span></a></div>';}
+    pmBody.innerHTML=h; pmBody.parentNode.scrollTop=0; pm.classList.add('open'); lock();
+  }
+  function shutModal(){if(pm.classList.contains('open')){pm.classList.remove('open');unlock();}}
+  function shutLb(){if(lb.classList.contains('open')){lb.classList.remove('open');unlock();}}
+  document.addEventListener('click',function(e){
+    if(e.target.closest('[data-stop]')) return;
+    var img=e.target.closest('.pm-shots img');
+    if(img){ lbImg.src=img.getAttribute('src'); lbImg.alt=img.getAttribute('alt')||''; lb.classList.add('open'); lock(); return; }
+    if(e.target===lb||e.target===lbImg){ shutLb(); return; }
+    var card=e.target.closest('[data-key]');
+    if(card){ openModal(card.getAttribute('data-key')); return; }
+    if(e.target===pm) shutModal();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){ if(lb.classList.contains('open'))shutLb(); else shutModal(); }
+    var ae=document.activeElement;
+    if((e.key==='Enter'||e.key===' ')&&ae&&ae.hasAttribute&&ae.hasAttribute('data-key')){e.preventDefault();openModal(ae.getAttribute('data-key'));}
+  });
+  if(pmClose) pmClose.addEventListener('click',shutModal);
+
+  /* ---- arrêt du scroll : la section entière reste à l'écran ~3 crans ---- */
+  (function(){
+    function deckTop(){                              // position du haut des cartes quand le deck est épinglé
+      var st=document.querySelector('#xpSec .hsticky'); if(!st) return null;
+      var head=st.querySelector('.hhead'), view=st.querySelector('.hview'); if(!head||!view) return null;
+      var hh=head.getBoundingClientRect().height+view.getBoundingClientRect().height+34;
+      if(!hh) return null;
+      return Math.max(84,Math.round((window.innerHeight-hh)/2));
+    }
+    var HOLD=380;                                   // ≈ 4 crans de molette
+    var ids=['experience','skills','projects','education'];   // pas de pause sur le contact (bas de page)
+    function setup(){
+      ids.forEach(function(id){
+        var sec=document.getElementById(id); if(!sec) return;
+        var hold=sec.querySelector('.shold'); if(!hold) return;
+        var inner=hold.firstElementChild, content=inner.firstElementChild;
+        sec.classList.remove('has-hold'); hold.style.height=''; inner.style.top='';
+        if(window.innerWidth<=800||reduce) return;
+        var h=content.getBoundingClientRect().height;
+        if(h>window.innerHeight-12) return;          // ne tient pas à l'écran : pas de pause
+        sec.classList.add('has-hold');
+        hold.style.height=Math.round(h+HOLD)+'px';                 // juste le contenu + le maintien
+        // alignement sur le haut des cartes du deck, mais un bloc haut est remonté
+        // pour rester équilibré (autant d'espace au-dessus qu'en dessous)
+        var shellEl=document.querySelector('.nav-shell');
+        var navH=shellEl?Math.round(shellEl.getBoundingClientRect().height):88;
+        var ref=deckTop();
+        var centre=Math.round((window.innerHeight-h)/2);                          // position équilibrée
+        var plafond=navH+8;                                                       // jamais sous la capsule de nav
+        var top=(ref===null)?Math.max(plafond,centre):Math.min(ref,Math.max(plafond,centre));
+        top=Math.max(84,Math.min(top,Math.max(84,window.innerHeight-h-20)));      // jamais coupé en bas
+        inner.style.top=top+'px';
+      });
+    }
+    setup();
+    // après le maintien, le bloc s'échappe vers le haut en s'effaçant
+    function flyaway(){
+      ids.forEach(function(id){
+        var sec=document.getElementById(id); if(!sec) return;
+        var hold=sec.querySelector('.shold'); if(!hold) return;
+        var inner=hold.firstElementChild;
+        if(!sec.classList.contains('has-hold')){ inner.style.transform=''; inner.style.opacity=''; return; }
+        var h=inner.firstElementChild.getBoundingClientRect().height;
+        var top=parseFloat(inner.style.top)||0;
+        var past=(top+h)-hold.getBoundingClientRect().bottom;      // pixels au-delà de la libération
+        var f=Math.max(0,Math.min(1,past/300));
+        inner.style.transform=f?('translateY('+(-f*90).toFixed(1)+'px)'):'';
+        inner.style.opacity=f?(1-f*0.95).toFixed(3):'';
+      });
+    }
+    window.addEventListener('scroll',flyaway,{passive:true});
+    flyaway();
+    var rt; window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){setup();flyaway();},180);});
+    if(document.readyState!=='complete') window.addEventListener('load',setup);
+  })();
+
+  /* ---- bandeau : boucle exacte, quelle que soit la largeur d'écran ---- */
+  (function(){
+    var track=document.getElementById('mqTrack'); if(!track) return;
+    var master=track.querySelector('.mq-set'); if(!master) return;
+    var proto=master.cloneNode(true);
+    function build(){
+      while(track.children.length>1) track.removeChild(track.lastChild);
+      var w=track.firstElementChild.getBoundingClientRect().width;   // largeur d'un jeu, marge comprise
+      if(!w) return;
+      var need=Math.ceil((window.innerWidth*2)/w)+1;                 // de quoi couvrir 2 écrans
+      for(var i=1;i<need;i++) track.appendChild(proto.cloneNode(true));
+      track.style.setProperty('--shift', w+'px');                    // translation = exactement 1 jeu
+      track.style.animationDuration=(w/55)+'s';                      // vitesse constante ~55 px/s
+    }
+    build();
+    var rt; window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(build,180);});
+    if(document.readyState!=='complete') window.addEventListener('load',build);
+  })();
+
+
+  /* ---- bascule FR / EN ---- */
+  var FR_XP={},FR_PJ={};
+  try{ FR_XP=JSON.parse(document.getElementById('xpdata-fr').textContent); }catch(e){}
+  try{ FR_PJ=JSON.parse(document.getElementById('projdata-fr').textContent); }catch(e){}
+  var EN_XP=XP, EN_PJ=PROJ;
+  var LANG='fr';
+  try{ LANG=localStorage.getItem('noir_lang')||'fr'; }catch(e){}
+
+  var T={
+    details:{en:'View details →', fr:'Voir le détail →'},
+    demo:{en:'Live demo ↗', fr:'Démo live ↗'},
+    demoBig:{en:'Live demo', fr:'Démo live'},
+    cv:{en:'Download my CV ↓', fr:'Télécharger mon CV ↓'}
+  };
+
+  function txtNode(el,val){                       // remplace le 1er nœud texte (garde les enfants)
+    for(var i=0;i<el.childNodes.length;i++){
+      var n=el.childNodes[i];
+      if(n.nodeType===3 && n.nodeValue.trim()){ n.nodeValue=val; return; }
+    }
+  }
+
+  function applyLang(l){
+    LANG=l;
+    document.documentElement.setAttribute('lang',l);
+    try{ localStorage.setItem('noir_lang',l); }catch(e){}
+
+    // 1) textes statiques
+    [].slice.call(document.querySelectorAll('[data-fr]')).forEach(function(el){
+      if(el.dataset.en===undefined) el.dataset.en=el.innerHTML;
+      el.innerHTML=(l==='fr')?el.dataset.fr:el.dataset.en;
+    });
+    [].slice.call(document.querySelectorAll('[data-fr-text]')).forEach(function(el){
+      if(el.dataset.enText===undefined){
+        for(var i=0;i<el.childNodes.length;i++){
+          var n=el.childNodes[i];
+          if(n.nodeType===3 && n.nodeValue.trim()){ el.dataset.enText=n.nodeValue; break; }
+        }
+      }
+      txtNode(el,(l==='fr')?el.dataset.frText:el.dataset.enText);
+    });
+
+    // 2) source des données des fiches
+    XP=(l==='fr')?FR_XP:EN_XP; PROJ=(l==='fr')?FR_PJ:EN_PJ;
+    ALL={}; for(var a in XP)ALL['xp:'+a]=XP[a]; for(var b in PROJ)ALL['pj:'+b]=PROJ[b];
+
+    // 3) cartes (mise à jour en place, la structure ne change pas)
+    [].slice.call(document.querySelectorAll('.hcard[data-key]')).forEach(function(c){
+      var d=ALL[c.getAttribute('data-key')]; if(!d) return;
+      var q=function(s){return c.querySelector(s);};
+      if(q('.hc-cat')) q('.hc-cat').textContent=d.cat;
+      if(q('.hc-flag')&&d.flag) q('.hc-flag').textContent=d.flag;
+      if(q('h3')) q('h3').textContent=d.title;
+      if(q('.hc-per')&&d.per) q('.hc-per').textContent=d.per;
+      if(q('.hc-desc')) q('.hc-desc').textContent=d.desc;
+      var ms=c.querySelectorAll('.hc-m');
+      (d.metrics||[]).slice(0,2).forEach(function(m,i){
+        if(ms[i]){ ms[i].querySelector('b').textContent=m[0]; ms[i].querySelector('span').textContent=m[1]; }
+      });
+      if(q('.hc-more')) q('.hc-more').textContent=T.details[l];
+      if(q('.demo-btn')) q('.demo-btn').textContent=T.demo[l];
+    });
+    [].slice.call(document.querySelectorAll('.pcard[data-key]')).forEach(function(c){
+      var d=ALL[c.getAttribute('data-key')]; if(!d) return;
+      c.querySelector('.cat').textContent=d.cat;
+      c.querySelector('h4').textContent=d.title;
+      c.querySelector('p').textContent=d.sub+'.';
+      var m0=(d.metrics&&d.metrics[0])?d.metrics[0]:['',''];
+      var met=c.querySelector('.metric');
+      met.innerHTML='<b>'+esc(m0[0])+'</b> '+esc(m0[1]);
+      c.querySelector('.more').textContent=(l==='fr')?'Détail →':'Details →';
+    });
+
+    // 4) CV selon la langue
+    var cv=document.getElementById('cvLink');
+    if(cv){
+      cv.textContent=T.cv[l];
+      var en=cv.getAttribute('data-href-en')||cv.getAttribute('href');
+      if(!cv.getAttribute('data-href-en')) cv.setAttribute('data-href-en',en);
+      var fr=cv.getAttribute('data-href-fr');
+      cv.setAttribute('href',(l==='fr'&&fr)?fr:cv.getAttribute('data-href-en'));
+      cv.setAttribute('download',(l==='fr')?'CV-Remy-Grabet-FR.pdf':'CV-Remy-Grabet-EN.pdf');
+    }
+
+    // 5) bouton : affiche la langue vers laquelle on bascule
+    var lb=document.getElementById('langBtn');
+    if(lb){ lb.textContent=(l==='fr')?'EN':'FR'; lb.setAttribute('aria-label',(l==='fr')?'Switch to English':'Passer en français'); }
+
+    // 6) la fiche ouverte suit la langue
+    if(pm.classList.contains('open')&&lastKey) openModal(lastKey);
+
+    // 7) les largeurs d'onglets ont changé : la bulle doit se replacer
+    try{ window.dispatchEvent(new Event('noir:lang')); }catch(e){}
+  }
+
+  var lb=document.getElementById('langBtn');
+  if(lb) lb.addEventListener('click',function(){ applyLang(LANG==='fr'?'en':'fr'); });
+  applyLang(LANG);
+
+  /* ---- nav : bulle qui glisse (le nom compris, en haut de page) ---- */
+  (function(){
+    var navEl=document.querySelector('nav'), nl=document.getElementById('navlinks');
+    if(!navEl||!nl) return;
+    var brand=navEl.querySelector('.brand');
+    var links=[].slice.call(nl.querySelectorAll('a'));
+    var ctaBtn=navEl.querySelector('.nav-cta');
+    var targets=[brand].concat(links).concat(ctaBtn?[ctaBtn]:[]);     // 0 = le nom, dernier = le CTA
+    var secs=[null].concat(links.map(function(a){return document.getElementById((a.getAttribute('href')||'').slice(1));}))
+                   .concat(ctaBtn?[document.getElementById('contact')]:[]);
+    var ind=document.createElement('span');
+    ind.className='nav-ind no-anim'; ind.setAttribute('aria-hidden','true');
+    navEl.insertBefore(ind,navEl.firstChild);
+    var cur=-2,t=null,ctaT=null;
+    function row(){return nl.offsetParent!==null && getComputedStyle(nl).flexDirection==='row';}
+    function place(i,changed){
+      if(i<0||!row()){ind.classList.remove('on');return;}
+      var el=targets[i], r=el.getBoundingClientRect(), rn=navEl.getBoundingClientRect();
+      var padX=(i===0)?9:0, padY=(i===0)?6:0;                         // la bulle ne déborde qu'autour du nom
+      ind.style.left=(r.left-rn.left-padX)+'px';
+      ind.style.top=(r.top-rn.top-padY)+'px';
+      ind.style.width=(r.width+padX*2)+'px';
+      ind.style.height=(r.height+padY*2)+'px';
+      ind.classList.add('on');
+      var estCTA=(i===targets.length-1);
+      clearTimeout(ctaT);
+      if(estCTA){
+        // le bouton s'allume tout de suite…
+        if(ctaBtn) ctaBtn.classList.add('lit');
+        // …mais la bulle reste visible pendant tout son trajet, et ne s'efface qu'à l'arrivée
+        ctaT=setTimeout(function(){
+          if(cur!==targets.length-1) return;                 // l'utilisateur a déjà quitté
+          ind.classList.add('on-cta');
+        },430);                                              // durée du déplacement (.42s)
+      }else{
+        ind.classList.remove('on-cta');
+        if(ctaBtn) ctaBtn.classList.remove('lit');
+      }
+      if(changed){ind.classList.add('pop');clearTimeout(t);t=setTimeout(function(){ind.classList.remove('pop');},240);}
+    }
+    function spy(){
+      var line=140,i=0;                                              // par défaut : le nom
+      for(var k=1;k<secs.length;k++){
+        var sc=secs[k]; if(!sc) continue;
+        // la section contact est la dernière : son haut ne remonte jamais jusqu'à 140 px
+        // (la page s'arrête avant), on la déclenche donc dès qu'elle entre vraiment dans l'écran
+        var lim=(k===secs.length-1)?window.innerHeight*0.62:line;
+        if(sc.getBoundingClientRect().top<=lim) i=k;
+      }
+      for(var j=0;j<links.length;j++)links[j].classList.toggle('active',j===i-1);
+      brand.classList.toggle('lit',i===0);
+      place(i,i!==cur); cur=i;
+    }
+    window.addEventListener('scroll',spy,{passive:true});
+    window.addEventListener('resize',spy);
+    // Retour sur l'onglet : les transitions CSS ont été mises en pause et reprennent
+    // depuis un état intermédiaire (bulle étroite + halo = fine bande verticale).
+    // On la repositionne d'un coup, sans animation.
+    function recaler(){
+      ind.classList.add('no-anim');
+      place(cur,false);
+      setTimeout(function(){ind.classList.remove('no-anim');},90);
+    }
+    // clic direct sur le bouton : il s'allume tout de suite, sans attendre le trajet
+    if(ctaBtn) ctaBtn.addEventListener('click',function(){ctaBtn.classList.add('lit');});
+    document.addEventListener('visibilitychange',recaler);
+    // la bascule FR/EN change la largeur des onglets : on recale la bulle dessus
+    window.addEventListener('noir:lang',function(){recaler();setTimeout(recaler,60);});
+    window.addEventListener('pageshow',recaler);
+    window.addEventListener('focus',recaler);
+    var shell=document.querySelector('.nav-shell');
+    function reveal(){if(shell)shell.classList.add('ready');}
+    function enable(){
+      reveal();                                            // jamais dépendant de requestAnimationFrame
+      setTimeout(function(){ind.classList.remove('no-anim');},60);
+    }
+    function boot(){
+      spy();                                                          // 1er placement, sans animation
+      // les polices web changent la largeur du nom (~10 px) : on repositionne quand elles sont prêtes
+      if(document.fonts&&document.fonts.ready){
+        document.fonts.ready.then(function(){place(cur,false);enable();});
+        setTimeout(function(){place(cur,false);enable();},1200);   // filet de sécurité
+      }else{ enable(); }
+    }
+    if(document.readyState==='complete')boot(); else window.addEventListener('load',boot);
+    setTimeout(reveal,1500);                               // la capsule s'affiche quoi qu'il arrive
+  })();
+
+  /* ---- thème clair / sombre + retour en haut ---- */
+  var tf=document.getElementById('theme-fab');
+  if(tf) tf.addEventListener('click',function(){
+    var light=document.documentElement.getAttribute('data-theme')==='light';
+    if(light){document.documentElement.removeAttribute('data-theme');try{localStorage.setItem('noir_theme','dark');}catch(e){}}
+    else{document.documentElement.setAttribute('data-theme','light');try{localStorage.setItem('noir_theme','light');}catch(e){}}
+  });
+  // les boutons flottants ne passent jamais sous le pied de page
+  (function(){
+    var foot=document.querySelector('footer');
+    var fabs=[document.getElementById('to-top'),document.getElementById('theme-fab')].filter(Boolean);
+    if(!foot||!fabs.length) return;
+    function clamp(){
+      var over=window.innerHeight-foot.getBoundingClientRect().top;   // empiètement du pied de page
+      var b=22+Math.max(0,over+14);
+      fabs.forEach(function(f){f.style.bottom=b+'px';});
+    }
+    window.addEventListener('scroll',clamp,{passive:true});
+    window.addEventListener('resize',clamp);
+    clamp();
+  })();
+
+  var tt=document.getElementById('to-top');
+  if(tt) tt.addEventListener('click',function(){window.scrollTo({top:0,behavior:reduce?'auto':'smooth'});});
+  window.addEventListener('scroll',function(){if(tt)tt.classList.toggle('show',window.scrollY>600);},{passive:true});
 })();
-// fond : décor statique .bg-scene (halo + sheen + grille, en CSS) — plus de canvas animé
+
 </script>
 </body>
 </html>
