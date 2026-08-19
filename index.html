@@ -952,13 +952,22 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
         var sec=document.getElementById(id); if(!sec) return;
         var hold=sec.querySelector('.shold'); if(!hold) return;
         var inner=hold.firstElementChild;
-        if(!sec.classList.contains('has-hold')){ inner.style.transform=''; inner.style.opacity=''; return; }
+        if(!sec.classList.contains('has-hold')){
+          inner.style.transform=''; inner.style.opacity=''; inner.style.visibility=''; inner.style.pointerEvents='';
+          return;
+        }
         var h=inner.firstElementChild.getBoundingClientRect().height;
         var top=parseFloat(inner.style.top)||0;
         var past=(top+h)-hold.getBoundingClientRect().bottom;      // pixels au-delà de la libération
         var f=Math.max(0,Math.min(1,past/300));
-        inner.style.transform=f?('translateY('+(-f*90).toFixed(1)+'px)'):'';
-        inner.style.opacity=f?(1-f*0.95).toFixed(3):'';
+        // l'effacement se termine avant la fin de la course (à 70 %) : sinon, en bas de page,
+        // le bloc restait visible à 5 % d'opacité sur ~200 px de haut
+        var fade=Math.min(1,f/0.7);
+        inner.style.transform=f?('translateY('+(-f*120).toFixed(1)+'px)'):'';
+        inner.style.opacity=f?(1-fade).toFixed(3):'';
+        // une fois effacé, on le retire vraiment : plus de reste visible, et il ne capte plus les clics
+        inner.style.visibility=(fade>=1)?'hidden':'';
+        inner.style.pointerEvents=(fade>=1)?'none':'';
       });
     }
     window.addEventListener('scroll',flyaway,{passive:true});
@@ -1072,8 +1081,8 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
     }
 
     // 5) bouton : affiche la langue vers laquelle on bascule
-    var lb=document.getElementById('langBtn');
-    if(lb){ lb.textContent=(l==='fr')?'EN':'FR'; lb.setAttribute('aria-label',(l==='fr')?'Switch to English':'Passer en français'); }
+    var lbt=document.getElementById('langBtn');   // même piège que plus bas : ne pas l'appeler « lb »
+    if(lbt){ lbt.textContent=(l==='fr')?'EN':'FR'; lbt.setAttribute('aria-label',(l==='fr')?'Switch to English':'Passer en français'); }
 
     // 6) la fiche ouverte suit la langue
     if(pm.classList.contains('open')&&lastKey) openModal(lastKey);
@@ -1082,8 +1091,11 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
     try{ window.dispatchEvent(new Event('noir:lang')); }catch(e){}
   }
 
-  var lb=document.getElementById('langBtn');
-  if(lb) lb.addEventListener('click',function(){ applyLang(LANG==='fr'?'en':'fr'); });
+  /* NE PAS nommer cette variable « lb » : elle écraserait le « lb » de la visionneuse
+     d'images, qui vit dans la même portée — le clic sur une image ajoutait alors la
+     classe « open » au bouton de langue, et bloquait le scroll sans rien afficher. */
+  var langB=document.getElementById('langBtn');
+  if(langB) langB.addEventListener('click',function(){ applyLang(LANG==='fr'?'en':'fr'); });
   applyLang(LANG);
 
   /* ---- nav : bulle qui glisse (le nom compris, en haut de page) ---- */
