@@ -352,18 +352,19 @@ h1 .mut{color:var(--text-3);}
 
 /* footer */
 #contact{padding-top:44px;padding-bottom:140px;}  /* écart identique dessus/dessous, resserré */
-footer{position:relative;background:var(--surface);border-top:1px solid var(--line);padding:64px 0;}
+footer{position:relative;background:var(--surface);border-top:1px solid var(--line);padding:42px 0;}
 .foot-grid{display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap;}
 .noir-sig{display:block;line-height:0;}
-.noir-logo{height:38px;width:auto;opacity:var(--logo-op,.30);filter:invert(var(--logo-inv));transition:opacity .3s var(--ease);}
+.noir-logo{height:32px;width:auto;opacity:var(--logo-op,.30);filter:invert(var(--logo-inv));transition:opacity .3s var(--ease);}
 /* en clair, le logo est inversé (noir sur fond pâle) : il faut plus d'opacité pour le même gris */
 [data-theme="light"] .noir-logo{--logo-op:.52;}
 [data-theme="light"] .noir-sig:hover .noir-logo{opacity:.78;}
 .noir-sig:hover .noir-logo{opacity:.55;}
-.foot-meta{display:flex;flex-direction:column;gap:8px;align-items:flex-end;text-align:right;justify-content:center;}
+.foot-meta{display:flex;flex-direction:column;gap:9px;align-items:flex-end;text-align:right;justify-content:center;}
+.foot-links{display:flex;gap:20px;flex-wrap:wrap;justify-content:flex-end;}
 .foot-meta a{color:var(--text-2);font-size:13.5px;transition:color .25s var(--ease);}
 .foot-meta a:hover{color:var(--text);}
-.foot-meta .cr{color:var(--text-3);font-size:12px;font-family:var(--mono);margin-top:4px;}
+.foot-meta .cr{color:var(--text-3);font-size:11.5px;font-family:var(--mono);}
 
 /* boutons flottants */
 .fab{position:fixed;bottom:22px;z-index:70;width:44px;height:44px;border-radius:100px;display:flex;align-items:center;justify-content:center;
@@ -384,6 +385,7 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
 @media(max-width:1100px){ .work-grid{grid-template-columns:repeat(2,1fr);} }
 @media(max-width:900px){ .tool-grid{grid-template-columns:1fr;} .xp-intro{grid-template-columns:1fr;} }
 @media(max-width:800px){
+  .foot-links{justify-content:flex-start;}
   .nav-links,.nav-cta{display:none;}
   .menu-btn{display:flex;}
   section{padding:76px 0;}
@@ -629,9 +631,11 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
     <div class="foot-grid">
       <a class="noir-sig" href="#top" aria-label="NOIR"><img class="noir-logo" src="assets/noir-logo.webp" alt="NOIR" width="720" height="156"/></a>
       <div class="foot-meta reveal">
-        <a href="mailto:r.grabet@gmail.com">r.grabet@gmail.com</a>
-        <a href="https://www.linkedin.com/in/remy-grabet-832375289/" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/thespicyy" target="_blank" rel="noopener">GitHub</a>
+        <div class="foot-links">
+          <a href="mailto:r.grabet@gmail.com">r.grabet@gmail.com</a>
+          <a href="https://www.linkedin.com/in/remy-grabet-832375289/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/thespicyy" target="_blank" rel="noopener">GitHub</a>
+        </div>
         <span class="cr">© 2026 Rémy Grabet — France</span>
       </div>
     </div>
@@ -1141,10 +1145,14 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
       if(i<0||!row()){ind.classList.remove('on');return;}
       var el=targets[i], r=el.getBoundingClientRect(), rn=navEl.getBoundingClientRect();
       var padX=(i===0)?9:0, padY=(i===0)?6:0;                         // la bulle ne déborde qu'autour du nom
-      ind.style.left=(r.left-rn.left-padX)+'px';
-      ind.style.top=(r.top-rn.top-padY)+'px';
-      ind.style.width=(r.width+padX*2)+'px';
-      ind.style.height=(r.height+padY*2)+'px';
+      // la bulle est positionnée dans la boîte INTÉRIEURE de la nav : on retranche sa bordure,
+      // sinon elle est décalée d'1 px. Arrondi à l'entier pour éviter les fractions de pixel.
+      var cn=getComputedStyle(navEl);
+      var bl=parseFloat(cn.borderLeftWidth)||0, bt=parseFloat(cn.borderTopWidth)||0;
+      ind.style.left=(Math.round(r.left-rn.left-bl)-padX)+'px';
+      ind.style.top=(Math.round(r.top-rn.top-bt)-padY)+'px';
+      ind.style.width=(Math.round(r.width)+padX*2)+'px';
+      ind.style.height=(Math.round(r.height)+padY*2)+'px';
       ind.classList.add('on');
       var estCTA=(i===targets.length-1);
       clearTimeout(ctaT);
