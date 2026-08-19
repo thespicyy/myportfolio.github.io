@@ -971,8 +971,9 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
 
     /* Distance sur laquelle le bloc s'efface. Calculée après coup, une fois toutes les
        hauteurs posées : elle dépend de la position de la section suivante.
-       Objectif : le bloc a fini de disparaître quand la suivante arrive vers le milieu
-       de l'écran — donc bien après son apparition, mais avant le bas de page. */
+       Objectif : le bloc a fini de disparaître quand la suivante est bien installée à
+       l'écran (son haut vers le quart supérieur) — donc largement après son apparition,
+       mais toujours avant le bas de page. */
     function mesureEffacement(){
       var Y=window.scrollY, vh=window.innerHeight;
       var scrollMax=document.documentElement.scrollHeight-vh;
@@ -986,10 +987,10 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
         var relache=hold.getBoundingClientRect().top+Y+hold.offsetHeight-top-h;   // scroll de libération
         var suiv=sec.nextElementSibling;
         while(suiv&&!suiv.matches('section,footer')) suiv=suiv.nextElementSibling;
-        var vise=suiv?(suiv.getBoundingClientRect().top+Y-vh*0.5-relache):460;
-        var len=Math.max(320,Math.min(560,vise));
+        var vise=suiv?(suiv.getBoundingClientRect().top+Y-vh*0.28-relache):640;
+        var len=Math.max(380,Math.min(720,vise));
         var restant=scrollMax-relache;                     // ce qu'il reste à faire défiler après la libération
-        if(restant>0) len=Math.min(len,restant*0.8);       // garantit l'effacement complet avant le bas de page
+        if(restant>0) len=Math.min(len,restant*0.85);      // garantit l'effacement complet avant le bas de page
         sec.dataset.fade=Math.round(Math.max(240,len));
       });
     }
