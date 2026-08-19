@@ -135,6 +135,20 @@ nav{position:relative;transform:translateZ(0);display:flex;align-items:center;ga
   border:1px solid var(--line-2);background:transparent;color:var(--text-2);cursor:pointer;
   font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:.06em;transition:color .25s var(--ease),background .25s var(--ease);}
 .lang-btn:hover{color:var(--text);background:var(--surface-3);}
+/* navigation au clavier : sans ça, 7 éléments sur 12 n'indiquaient pas où était le focus.
+   :focus-visible ne se déclenche pas à la souris, l'aspect au clic est donc inchangé. */
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--text);outline-offset:3px;}
+
+/* menu mobile : le bouton hamburger n'ouvrait rien, la nav était donc inaccessible au téléphone */
+.mmenu{display:none;position:absolute;top:calc(100% + 8px);left:16px;right:16px;flex-direction:column;gap:3px;
+  padding:10px;border-radius:20px;border:1px solid var(--line-2);background:var(--nav-bg);
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);box-shadow:var(--nav-shadow);
+  visibility:hidden;opacity:0;transform:translateY(-8px);pointer-events:none;
+  transition:opacity .26s var(--ease),transform .26s var(--ease),visibility .26s;}
+.mmenu.open{visibility:visible;opacity:1;transform:none;pointer-events:auto;}
+.mmenu a{padding:13px 15px;border-radius:13px;font-size:15.5px;color:var(--text-2);transition:background .2s var(--ease),color .2s var(--ease);}
+.mmenu a:hover,.mmenu a:active{background:var(--surface-2);color:var(--text);}
+.mmenu a.cta{margin-top:5px;background:var(--white);color:var(--btn-fg);font-weight:600;text-align:center;}
 .menu-btn{display:none;width:40px;height:40px;border-radius:100px;border:1px solid var(--line);background:transparent;color:var(--text);align-items:center;justify-content:center;cursor:pointer;}
 .menu-btn svg{width:18px;height:18px;}
 
@@ -397,6 +411,7 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
   .foot-links{justify-content:flex-start;}
   .nav-links,.nav-cta{display:none;}
   .menu-btn{display:flex;}
+  .mmenu{display:flex;}
   section{padding:76px 0;}
   .hsec{padding:76px 0;}
   .hsticky{position:static;height:auto;overflow:visible;}
@@ -450,6 +465,13 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
     <button class="lang-btn" id="langBtn" type="button" aria-label="Changer de langue">FR</button>
     <button class="menu-btn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </nav>
+  <div class="mmenu" id="mmenu">
+    <a href="#experience" data-fr="Expérience">Experience</a>
+    <a href="#featSec" data-fr="Réalisations">Work</a>
+    <a href="#projects" data-fr="Projets">Projects</a>
+    <a href="#education" data-fr="Formation">Education</a>
+    <a class="cta" href="#contact" data-fr="Me contacter">Get in touch</a>
+  </div>
 </div>
 
 <header class="hero" id="top">
@@ -1214,6 +1236,25 @@ footer{position:relative;background:var(--surface);border-top:1px solid var(--li
 
   var tt=document.getElementById('to-top');
   if(tt) tt.addEventListener('click',function(){window.scrollTo({top:0,behavior:reduce?'auto':'smooth'});});
+
+  /* ---- menu mobile ---- */
+  (function(){
+    var btn=document.querySelector('.menu-btn'), panneau=document.getElementById('mmenu');
+    if(!btn||!panneau) return;
+    function ferme(){ panneau.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+    btn.setAttribute('aria-expanded','false');
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      var ouvert=panneau.classList.toggle('open');
+      btn.setAttribute('aria-expanded',ouvert?'true':'false');
+    });
+    panneau.addEventListener('click',function(e){ if(e.target.closest('a')) ferme(); });
+    document.addEventListener('click',function(e){
+      if(panneau.classList.contains('open') && !panneau.contains(e.target) && !btn.contains(e.target)) ferme();
+    });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') ferme(); });
+    window.addEventListener('resize',function(){ if(window.innerWidth>800) ferme(); });
+  }());
   window.addEventListener('scroll',function(){if(tt)tt.classList.toggle('show',window.scrollY>600);},{passive:true});
 })();
 
